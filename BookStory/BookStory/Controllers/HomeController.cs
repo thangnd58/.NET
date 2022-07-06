@@ -40,6 +40,10 @@ namespace BookStory.Controllers
             }
             ViewBag.Stories = stories.Take(16);
             ViewBag.CurrentId = id;
+            List<Chapter> listNewChapters = new();
+            listNewChapters = context.Chapters.OrderByDescending(x => x.UpdatedAt).Take(24).ToList();
+            ViewBag.FullStories = context.Stories.Where(x => x.Status == 1).ToList();
+            ViewBag.ListNewChapters = listNewChapters;
             return View();
         }
     }

@@ -1,4 +1,3 @@
-
 @using BookStory.Models;
 @model X.PagedList.IPagedList<BookStory.Models.Chapter>
 @using Microsoft.AspNetCore.Http
@@ -205,229 +204,49 @@
                 </div>
             </div>
             <div class="visible-md-block visible-lg-block col-md-3 text-center col-truyen-side">
-                <div class="list list-truyen col-xs-12">
-                    <div class="title-list">
-                        <h4>Truyện cùng tác giả</h4>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <span class="glyphicon glyphicon-chevron-right"></span>
-                            <h3>
-                                <a href="https://truyenfull.vn/sau-khi-ly-hon-chong-cu-luon-muon-theo-duoi-toi/"
-                                   title="Sau Khi Ly Hôn Chồng Cũ Luôn Muốn Theo Đuổi Tôi">
-                                    Sau Khi Ly Hôn Chồng Cũ Luôn
-                                    Muốn Theo Đuổi Tôi
-                                </a>
-                            </h3>
+                @if (ViewBag.StoryAuthors.Count > 0)
+                {
+                    <div class="list list-truyen col-xs-12">
+                        <div class="title-list">
+                            <h4>Truyện cùng tác giả</h4>
                         </div>
+                        @foreach (Story s in ViewBag.StoryAuthors)
+                        {
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <span class="glyphicon glyphicon-chevron-right"></span>
+                                    <h3>
+                                        <a href="/Story/Detail/@s.Sid"
+                                   title="@s.Name">
+                                            @s.Name
+                                        </a>
+                                    </h3>
+                                </div>
+                            </div>
+                        }
                     </div>
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <span class="glyphicon glyphicon-chevron-right"></span>
-                            <h3>
-                                <a href="https://truyenfull.vn/vo-cu-mang-thai-anh-yeu-em/"
-                                   title="Vợ Cũ Mang Thai Anh Yêu Em">Vợ Cũ Mang Thai Anh Yêu Em</a>
-                            </h3>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <span class="glyphicon glyphicon-chevron-right"></span>
-                            <h3>
-                                <a href="https://truyenfull.vn/su-hap-dan-cua-tong-tai/"
-                                   title="Sự Hấp Dẫn Của Tổng Tài">Sự Hấp Dẫn Của Tổng Tài</a>
-                            </h3>
-                        </div>
-                    </div>
-                </div>
+                }
                 <div class="list list-truyen list-side col-xs-12">
                     <div class="title-list">
                         <h4>Truyện đang hot</h4>
                     </div>
-                    <div class="row top-nav" data-limit="10">
-                        <div class="col-xs-4 active" data-type="day">Ngày</div>
-                        <div class="col-xs-4" data-type="month">Tháng</div>
-                        <div class="col-xs-4" data-type="all">All time</div>
-                    </div>
-                    <div class="row top-item">
-                        <div class="col-xs-12">
-                            <div class="top-num top-1">1</div>
-                            <div class="s-title">
-                                <h3>
-                                    <a href="https://truyenfull.vn/me-vo-khong-loi-ve-914117/"
-                                       title="Mê Vợ Không Lối Về">Mê Vợ Không Lối Về</a>
-                                </h3>
-                            </div>
-                            <div>
-                                <a itemprop="genre" href="https://truyenfull.vn/the-loai/ngon-tinh/"
-                                   title="Ngôn Tình">Ngôn Tình</a>, <a itemprop="genre"
-                                                                       href="https://truyenfull.vn/the-loai/nguoc/" title="Ngược">Ngược</a>, <a itemprop="genre" href="https://truyenfull.vn/the-loai/sung/" title="Sủng">Sủng</a>
+                    @for (var i = 1; i <= ViewBag.StoryHighestView.Count - 1; i++)
+                    {
+                        <div class="row top-item">
+                            <div class="col-xs-12">
+                                <div class="top-num top-@i">@i</div>
+                                <div class="s-title">
+                                    <h3>
+                                        <a href="/Story/Detail/@ViewBag.StoryHighestView[i].Sid"
+                                       title="@ViewBag.StoryHighestView[i].Name">@ViewBag.StoryHighestView[i].Name</a> 
+                                    </h3>
+                                </div>
+                                <div>
+                                    @ViewBag.StoryHighestView[i].View lượt xem
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row top-item">
-                        <div class="col-xs-12">
-                            <div class="top-num top-2">2</div>
-                            <div class="s-title">
-                                <h3>
-                                    <a href="https://truyenfull.vn/than-dao-dan-ton/" title="Thần Đạo Đan Tôn">
-                                        Thần Đạo
-                                        Đan Tôn
-                                    </a>
-                                </h3>
-                            </div>
-                            <div>
-                                <a itemprop="genre" href="https://truyenfull.vn/the-loai/tien-hiep/"
-                                   title="Tiên Hiệp">Tiên Hiệp</a>, <a itemprop="genre"
-                                                                       href="https://truyenfull.vn/the-loai/huyen-huyen/" title="Huyền Huyễn">
-                                    Huyền
-                                    Huyễn
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row top-item">
-                        <div class="col-xs-12">
-                            <div class="top-num top-3">3</div>
-                            <div class="s-title">
-                                <h3>
-                                    <a href="https://truyenfull.vn/the-gioi-hoan-my/" title="Thế Giới Hoàn Mỹ">
-                                        Thế Giới
-                                        Hoàn Mỹ
-                                    </a>
-                                </h3>
-                            </div>
-                            <div>
-                                <a itemprop="genre" href="https://truyenfull.vn/the-loai/tien-hiep/"
-                                   title="Tiên Hiệp">Tiên Hiệp</a>, <a itemprop="genre"
-                                                                       href="https://truyenfull.vn/the-loai/kiem-hiep/" title="Kiếm Hiệp">Kiếm Hiệp</a>, <a itemprop="genre" href="https://truyenfull.vn/the-loai/huyen-huyen/"
-                                                                                                                                                            title="Huyền Huyễn">Huyền Huyễn</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row top-item">
-                        <div class="col-xs-12">
-                            <div class="top-num top-4">4</div>
-                            <div class="s-title">
-                                <h3>
-                                    <a href="https://truyenfull.vn/truyen-dau-pha-thuong-khung/"
-                                       title="Đấu Phá Thương Khung">Đấu Phá Thương Khung</a>
-                                </h3>
-                            </div>
-                            <div>
-                                <a itemprop="genre" href="https://truyenfull.vn/the-loai/tien-hiep/"
-                                   title="Tiên Hiệp">Tiên Hiệp</a>, <a itemprop="genre"
-                                                                       href="https://truyenfull.vn/the-loai/di-gioi/" title="Dị Giới">Dị Giới</a>, <a itemprop="genre" href="https://truyenfull.vn/the-loai/huyen-huyen/"
-                                                                                                                                                      title="Huyền Huyễn">Huyền Huyễn</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row top-item">
-                        <div class="col-xs-12">
-                            <div class="top-num top-5">5</div>
-                            <div class="s-title">
-                                <h3>
-                                    <a href="https://truyenfull.vn/linh-vu-thien-ha/" title="Linh Vũ Thiên Hạ">
-                                        Linh Vũ
-                                        Thiên Hạ
-                                    </a>
-                                </h3>
-                            </div>
-                            <div>
-                                <a itemprop="genre" href="https://truyenfull.vn/the-loai/tien-hiep/"
-                                   title="Tiên Hiệp">Tiên Hiệp</a>, <a itemprop="genre"
-                                                                       href="https://truyenfull.vn/the-loai/di-gioi/" title="Dị Giới">Dị Giới</a>, <a itemprop="genre" href="https://truyenfull.vn/the-loai/huyen-huyen/"
-                                                                                                                                                      title="Huyền Huyễn">Huyền Huyễn</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row top-item">
-                        <div class="col-xs-12">
-                            <div class="top-num top-6">6</div>
-                            <div class="s-title">
-                                <h3>
-                                    <a href="https://truyenfull.vn/co-vo-ngot-ngao-co-chut-bat-luong-vo-moi-bat-luong-co-chut-ngot/"
-                                       title="Cô Vợ Ngọt Ngào Có Chút Bất Lương (Vợ Mới Bất Lương Có Chút Ngọt)">
-                                        Cô Vợ
-                                        Ngọt Ngào Có Chút Bất Lương (Vợ Mới Bất Lương Có Chút Ngọt)
-                                    </a>
-                                </h3>
-                            </div>
-                            <div>
-                                <a itemprop="genre" href="https://truyenfull.vn/the-loai/ngon-tinh/"
-                                   title="Ngôn Tình">Ngôn Tình</a>, <a itemprop="genre"
-                                                                       href="https://truyenfull.vn/the-loai/trong-sinh/" title="Trọng Sinh">Trọng Sinh</a>,
-                                <a itemprop="genre" href="https://truyenfull.vn/the-loai/sung/" title="Sủng">Sủng</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row top-item">
-                        <div class="col-xs-12">
-                            <div class="top-num top-7">7</div>
-                            <div class="s-title">
-                                <h3>
-                                    <a href="https://truyenfull.vn/re-quy-troi-cho-480197/" title="Rể Quý Trời Cho">
-                                        Rể
-                                        Quý Trời Cho
-                                    </a>
-                                </h3>
-                            </div>
-                            <div>
-                                <a itemprop="genre" href="https://truyenfull.vn/the-loai/ngon-tinh/"
-                                   title="Ngôn Tình">Ngôn Tình</a>, <a itemprop="genre"
-                                                                       href="https://truyenfull.vn/the-loai/do-thi/" title="Đô Thị">Đô Thị</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row top-item">
-                        <div class="col-xs-12">
-                            <div class="top-num top-8">8</div>
-                            <div class="s-title">
-                                <h3>
-                                    <a href="https://truyenfull.vn/pham-nhan-tu-tien/" title="Phàm Nhân Tu Tiên">
-                                        Phàm
-                                        Nhân Tu Tiên
-                                    </a>
-                                </h3>
-                            </div>
-                            <div>
-                                <a itemprop="genre" href="https://truyenfull.vn/the-loai/tien-hiep/"
-                                   title="Tiên Hiệp">Tiên Hiệp</a>, <a itemprop="genre"
-                                                                       href="https://truyenfull.vn/the-loai/kiem-hiep/" title="Kiếm Hiệp">Kiếm Hiệp</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row top-item">
-                        <div class="col-xs-12">
-                            <div class="top-num top-9">9</div>
-                            <div class="s-title">
-                                <h3>
-                                    <a href="https://truyenfull.vn/nhat-niem-vinh-hang/"
-                                       title="Nhất Niệm Vĩnh Hằng">Nhất Niệm Vĩnh Hằng</a>
-                                </h3>
-                            </div>
-                            <div>
-                                <a itemprop="genre" href="https://truyenfull.vn/the-loai/tien-hiep/"
-                                   title="Tiên Hiệp">Tiên Hiệp</a>, <a itemprop="genre"
-                                                                       href="https://truyenfull.vn/the-loai/huyen-huyen/" title="Huyền Huyễn">
-                                    Huyền
-                                    Huyễn
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row top-item">
-                        <div class="col-xs-12">
-                            <div class="top-num top-10">10</div>
-                            <div class="s-title">
-                                <h3><a href="https://truyenfull.vn/de-ba/" title="Đế Bá">Đế Bá</a></h3>
-                            </div>
-                            <div>
-                                <a itemprop="genre" href="https://truyenfull.vn/the-loai/huyen-huyen/"
-                                   title="Huyền Huyễn">Huyền Huyễn</a>
-                            </div>
-                        </div>
-                    </div>
+                    }
                 </div>
             </div>
         </div>

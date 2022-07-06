@@ -35,6 +35,8 @@ namespace BookStory.Controllers
             ViewBag.Categories = categoriesOfStory;
             ViewBag.AllCategories = listAllCategories;
             ViewBag.Story = s;
+            ViewBag.StoryAuthors = context.Stories.Where(s => s.StoriesAuthors.Where(x => x.Aid == author.Aid && x.Sid != id).Any()).Take(5).ToList();
+            ViewBag.StoryHighestView = context.Stories.OrderByDescending(x => x.View).Take(10).ToList();
             if (page == null) page = 1;
             int pageSize = 10;
             int pageNumber = (page ?? 1);

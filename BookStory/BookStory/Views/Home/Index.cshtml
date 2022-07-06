@@ -144,7 +144,6 @@
                 </form>
             </div>
             <div class="index-intro">
-
                 @foreach (Story s in ViewBag.Stories)
                 {
                     <div class="item top-1" itemscope itemtype="">
@@ -167,65 +166,36 @@
             <div class="list list-truyen list-new col-xs-12 col-sm-12 col-md-8 col-truyen-main">
                 <div class="title-list">
                     <h2>
-                        <a href="https://truyenfull.vn/danh-sach/truyen-moi/" title="Truyện mới">Truyện mới cập nhật</a>
-                    </h2><a href="https://truyenfull.vn/danh-sach/truyen-moi/" title="Truyện mới">
+                        <a href="#" title="Truyện mới">Truyện mới cập nhật</a>
+                    </h2><a href="#" title="Truyện mới">
                         <span class="glyphicon glyphicon-menu-right"></span>
                     </a>
-                    <select id="new-select"
-                                class="form-control new-select" aria-label="Chọn thể loại">
-                        <option value="0">Tất cả</option>
-                        @foreach (Category c in ViewBag.Categories)
-                       {
-                           <option value="@c.Cid" @(ViewBag.CurrentId == c.Cid ?"selected":"")>@c.Title</option>
-                       }
-                    </select>
                 </div>
-                <div class="row" itemscope itemtype="https://schema.org/Book">
+                @foreach (Chapter c in ViewBag.ListNewChapters)
+               {
+                   <div class="row" itemscope itemtype="https://schema.org/Book">
                     <div class="col-xs-9 col-sm-6 col-md-5 col-title">
                         <span class="glyphicon glyphicon-chevron-right"></span>
                         <h3 itemprop="name">
-                            <a href="https://truyenfull.vn/xuyen-thanh-vo-cua-vat-hi-sinh-nam-phu-thap-nien-70/"
-                               title="Xuyên Thành Vợ Của Vật Hi Sinh Nam Phụ Thập Niên 70" itemprop="url">
-                                Xuyên Thành
-                                Vợ Của Vật Hi Sinh Nam Phụ Thập Niên 70
+                            <a href="/Story/Detail/@c.Sid"
+                               title="@c.Name" itemprop="url">
+                                @c.Name
                             </a>
-                        </h3><span class="label-title label-new"></span><span class="label-title label-hot"></span>
+                        </h3><span class="label-title label-new"></span>
                     </div>
                     <div class="hidden-xs col-sm-3 col-md-3 col-cat text-888">
-                        <a itemprop="genre"
-                           href="https://truyenfull.vn/the-loai/ngon-tinh/" title="Ngôn Tình">Ngôn Tình</a>, <a itemprop="genre" href="https://truyenfull.vn/the-loai/nu-phu/" title="Nữ Phụ">Nữ Phụ</a>
+                           <a itemprop="genre"
+                           href="#" title="Ngôn Tình">Ngôn Tình</a>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-2 col-chap text-info">
-                        <a href="https://truyenfull.vn/xuyen-thanh-vo-cua-vat-hi-sinh-nam-phu-thap-nien-70/chuong-23/"
-                           title="Xuyên Thành Vợ Của Vật Hi Sinh Nam Phụ Thập Niên 70 - Chương 23">
-                            <span class="chapter-text"><span>Chương </span></span>23
+                        <a href="/Story/Content/@c.Sid/@c.Chapnumber"
+                           title="@c.Name - Chương @c.Chapnumber">
+                            <span class="chapter-text"><span>Chương </span></span>@c.Chapnumber
                         </a>
                     </div>
-                    <div class="hidden-xs hidden-sm col-md-2 col-time text-888">1 ngày trước </div>
+                    <div class="hidden-xs hidden-sm col-md-2 col-time text-888" id="timer">@c.UpdatedAt</div>
                 </div>
-                <div class="row" itemscope itemtype="https://schema.org/Book">
-                    <div class="col-xs-9 col-sm-6 col-md-5 col-title">
-                        <span class="glyphicon glyphicon-chevron-right"></span>
-                        <h3 itemprop="name">
-                            <a href="https://truyenfull.vn/xuyen-thanh-vo-cua-vat-hi-sinh-nam-phu-thap-nien-70/"
-                               title="Xuyên Thành Vợ Của Vật Hi Sinh Nam Phụ Thập Niên 70" itemprop="url">
-                                Xuyên Thành
-                                Vợ Của Vật Hi Sinh Nam Phụ Thập Niên 70
-                            </a>
-                        </h3><span class="label-title label-new"></span><span class="label-title label-hot"></span>
-                    </div>
-                    <div class="hidden-xs col-sm-3 col-md-3 col-cat text-888">
-                        <a itemprop="genre"
-                           href="https://truyenfull.vn/the-loai/ngon-tinh/" title="Ngôn Tình">Ngôn Tình</a>, <a itemprop="genre" href="https://truyenfull.vn/the-loai/nu-phu/" title="Nữ Phụ">Nữ Phụ</a>
-                    </div>
-                    <div class="col-xs-3 col-sm-3 col-md-2 col-chap text-info">
-                        <a href="https://truyenfull.vn/xuyen-thanh-vo-cua-vat-hi-sinh-nam-phu-thap-nien-70/chuong-23/"
-                           title="Xuyên Thành Vợ Của Vật Hi Sinh Nam Phụ Thập Niên 70 - Chương 23">
-                            <span class="chapter-text"><span>Chương </span></span>23
-                        </a>
-                    </div>
-                    <div class="hidden-xs hidden-sm col-md-2 col-time text-888">1 ngày trước </div>
-                </div>
+               }
             </div>
             <div class="col-md-4 col-truyen-side">
                 <div class="visible-md-block visible-lg-block text-center">
@@ -235,49 +205,23 @@
                             <h4>Thể loại truyện</h4>
                         </div>
                         <div class="row">
-                            <div class="col-xs-6">
-                                <a href="https://truyenfull.vn/the-loai/mat-the/"
-                                   title="Truyện Mạt Thế">Mạt Thế</a>
-                            </div>
-                            <div class="col-xs-6">
-                                <a href="https://truyenfull.vn/the-loai/truyen-teen/"
-                                   title="Truyện Truyện Teen">Truyện Teen</a>
-                            </div>
-                            <div class="col-xs-6">
-                                <a href="https://truyenfull.vn/the-loai/phuong-tay/"
-                                   title="Truyện Phương Tây">Phương Tây</a>
-                            </div>
-                            <div class="col-xs-6">
-                                <a href="https://truyenfull.vn/the-loai/nu-phu/"
-                                   title="Truyện Nữ Phụ">Nữ Phụ</a>
-                            </div>
-                            <div class="col-xs-6">
-                                <a href="https://truyenfull.vn/the-loai/light-novel/"
-                                   title="Truyện Light Novel">Light Novel</a>
-                            </div>
-                            <div class="col-xs-6">
-                                <a href="https://truyenfull.vn/the-loai/viet-nam/"
-                                   title="Truyện Việt Nam">Việt Nam</a>
-                            </div>
-                            <div class="col-xs-6">
-                                <a href="https://truyenfull.vn/the-loai/doan-van/"
-                                   title="Truyện Đoản Văn">Đoản Văn</a>
-                            </div>
-                            <div class="col-xs-6">
-                                <a href="https://truyenfull.vn/the-loai/khac/"
-                                   title="Truyện Khác">Khác</a>
-                            </div>
+                            @foreach (Category c in ViewBag.Categories)
+                            {
+                                <div class="col-xs-6">
+                                    <a href="#"
+                                   title="@c.Title">@c.Title</a>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="clearfix"></div>
         <div class="container" id="truyen-slide">
             <div class="list list-thumbnail col-xs-12">
                 <div class="title-list">
                     <h2>
-                        <a href="https://truyenfull.vn/danh-sach/truyen-full/" title="Truyện full">
+                        <a href="#" title="Truyện full">
                             Truyện đã hoàn
                             thành
                         </a>
@@ -285,87 +229,24 @@
                             title="Truyện full"><span class="glyphicon glyphicon-menu-right"></span></a>
                 </div>
                 <div class="row">
-                    <div class="col-xs-4 col-sm-3 col-md-2">
-                        <a href="https://truyenfull.vn/nguoi-vo-thu-bay-cua-tong-tai-ac-ma-522328/"
-                           title="Người Vợ Thứ Bảy Của Tổng Tài Ác Ma">
+                    @foreach (Story s in ViewBag.FullStories)
+                   {
+                       <div class="col-xs-4 col-sm-3 col-md-2">
+                        <a href="/Story/Detail/@s.Sid"
+                           title="@s.Name">
                             <div class="lazyimg"
-                                 data-desk-image="https://imgtruyentr.staticscdn.net/2021/06/Untitled-1-4-215x322.jpg?1"
-                                 data-image="https://imgtruyentr.staticscdn.net/2021/06/Untitled-1-4-215x322.jpg?1"
-                                 data-alt="Người Vợ Thứ Bảy Của Tổng Tài Ác Ma"></div>
+                                 data-desk-image="@s.Image"
+                                 data-image="@s.Image"
+                                 data-alt="@s.Name"></div>
                             <div class="caption">
-                                <h3>Người Vợ Thứ Bảy Của Tổng Tài Ác Ma</h3> <small class="btn-xs label-primary">
+                                <h3>@s.Name</h3> <small class="btn-xs label-primary">
                                     Full -
-                                    550 chương
+                                    @s.Chapters.Count Chương
                                 </small>
                             </div>
                         </a>
                     </div>
-                    <div class="col-xs-4 col-sm-3 col-md-2">
-                        <a href="https://truyenfull.vn/chong-doc-tai-cu-cuong-hon-toi/"
-                           title="Chồng Độc Tài Cứ Cưỡng Hôn Tôi">
-                            <div class="lazyimg"
-                                 data-desk-image="https://imgtruyentr.staticscdn.net/2021/07/Untitled-1-22-215x322.jpg?1"
-                                 data-image="https://imgtruyentr.staticscdn.net/2021/07/Untitled-1-22-215x322.jpg?1"
-                                 data-alt="Chồng Độc Tài Cứ Cưỡng Hôn Tôi"></div>
-                            <div class="caption">
-                                <h3>Chồng Độc Tài Cứ Cưỡng Hôn Tôi</h3> <small class="btn-xs label-primary">
-                                    Full - 902
-                                    chương
-                                </small>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-xs-4 col-sm-3 col-md-2">
-                        <a href="https://truyenfull.vn/vu-su-649010/"
-                           title="Vu sư">
-                            <div class="lazyimg"
-                                 data-desk-image="https://static.8cache.com/cover/eJwFwce2qjoAANAvYj3pOHiDCIRepAWcsKTmAKGJFL_-7j1g9j8Dj7o-z4y-jymDR9bNOqKaohn16BPKZl1Gd1D19Bvrx-IBHWzz9JGfYqXYTXT5CSReqa-3e7rpYxM1R-DFVcmx6yhnf74UXTVmBq2-tuqqThaRPtHiNBEU6osamvsZQs500CV73RnvkH6JkvF-hHjEB9nhNbfd4lhB-8stoXWBUhyF9Mi6yak0qddxaOy6y7o6pApQa47aryhWYM5Sxsk9tcu26XwqoH3XfEEJc2VfLYoj8bdmBghcJ2b8ovI2stv-mRi7tJtrCpNBCz46oUr-9kdlUu9LrKPjxaW6r68G5yHHpdUe6FcHqizft_h6WNQh95HJ5WW4MuwtsR5YbgQasC2Icjc4JbDnoed4TYcCn9nAJmCIv63iChMRHz_5aT1-_TK80kGlUG_wOlT9goaX_6BAoxhhWiHseQ9ttPf4vR_LxVPOsEyd1GmvTI5UrX1jRX4tUlHdxRAYjtPTQ_rTZv5c4aIVEV_nUSp6yXS54dVH7u-1M43nkPI9UN6fiEIuDqS2_H4FimWfN78jpsm4zJHyG5eNYQMcdy6q4qwVVw66uZ8m5DBmdmQg53slgpBZVlLEd7XmbVRV4wzim9Gv8xbx9uRfnMwlISwdWxALUiPpJt2I5btaryd996bm6bUFm-ejBJwei2Av3tJZjAtrhvps-UeOjBmLjTx9oj0UQKLZZ9t2kUHvwfQu0HpdREDWK8CbZ2Smeo8IOf4_GJqnMMsw_wDOO_Wy/vu-su-649010.jpg"
-                                 data-image="https://static.8cache.com/cover/eJwFwce2qjoAANAvYj3pOHiDCIRepAWcsKTmAKGJFL_-7j1g9j8Dj7o-z4y-jymDR9bNOqKaohn16BPKZl1Gd1D19Bvrx-IBHWzz9JGfYqXYTXT5CSReqa-3e7rpYxM1R-DFVcmx6yhnf74UXTVmBq2-tuqqThaRPtHiNBEU6osamvsZQs500CV73RnvkH6JkvF-hHjEB9nhNbfd4lhB-8stoXWBUhyF9Mi6yak0qddxaOy6y7o6pApQa47aryhWYM5Sxsk9tcu26XwqoH3XfEEJc2VfLYoj8bdmBghcJ2b8ovI2stv-mRi7tJtrCpNBCz46oUr-9kdlUu9LrKPjxaW6r68G5yHHpdUe6FcHqizft_h6WNQh95HJ5WW4MuwtsR5YbgQasC2Icjc4JbDnoed4TYcCn9nAJmCIv63iChMRHz_5aT1-_TK80kGlUG_wOlT9goaX_6BAoxhhWiHseQ9ttPf4vR_LxVPOsEyd1GmvTI5UrX1jRX4tUlHdxRAYjtPTQ_rTZv5c4aIVEV_nUSp6yXS54dVH7u-1M43nkPI9UN6fiEIuDqS2_H4FimWfN78jpsm4zJHyG5eNYQMcdy6q4qwVVw66uZ8m5DBmdmQg53slgpBZVlLEd7XmbVRV4wzim9Gv8xbx9uRfnMwlISwdWxALUiPpJt2I5btaryd996bm6bUFm-ejBJwei2Av3tJZjAtrhvps-UeOjBmLjTx9oj0UQKLZZ9t2kUHvwfQu0HpdREDWK8CbZ2Smeo8IOf4_GJqnMMsw_wDOO_Wy/vu-su-649010.jpg"
-                                 data-alt="Vu sư"></div>
-                            <div class="caption">
-                                <h3>Vu sư</h3> <small class="btn-xs label-primary">Full - 156 chương</small>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-xs-4 col-sm-3 col-md-2">
-                        <a href="https://truyenfull.vn/duoi-vay-than-691341/"
-                           title="Dưới váy thần">
-                            <div class="lazyimg"
-                                 data-desk-image="https://static.8cache.com/cover/eJwNzjUWo0AAANAT8RaXYgt8SAhuoZmHS7CQQU-_2__iDy3157LohXMA-PiiaN_S3LdlshzA9HT4rj7yDk38OvfCcyUyu-2JL9nUGq9fyo2BirdNPj4LeW1Vsr81PWiBub_hnk7vuuzHZgHoVadu_L13b0jZqsgMRvQxtJjkLG5p-pQSLLoNcAIXgvC2NgPaMwttRcaEUkZusiCmlI_Bxl_o8GxHEEyKgkE4allB6MF9EZH6CZxIIhvhd-VaERHoCHDPeXLJcN5PYZzRlY7c3WmQXRmFqTq5jJ-MV3PC6zGsyiCLklqNWLgUKU2pDxk76ahhbzloxh82BOkw4gt9WI89JtW8XobPo9IYIS8N3KmOn9rX_TvuQzu4TNJWXuJuTfa3kr4vTjkYun7061vYH4d60ZMG9KK2ZU-nwdf6pgRiYsbdCK3rUORVyVjSvnaaW97dEvSvALhfm9YtUosFU2q2FwScGhYRnw8UaC_8y_HbVNDN4TkweG8JFlIhpjeBFR22cdZNq0pu4JRNF6Ob0vdsKDK3ElOl8DWKXf5PI95rEmN5hyjaLF_QKhfnurvzQZbhVEVxig41dmYeCJyzvjbbkCNOjQwEZ0cAfBFN03yFcV8lSj4y3TbOvTESdcwvxbo4xJqRuLL6UE1FsulYfKSxha_xXP9JZ_rDayirI7bjV1SK1J2WVkXCj-gyWu1uPAQATQbkVFv6rzS53Q7eYSyQddhKr2d-PqWj7HVr04Uqa2P16WZIaJT9TlymnLMVin8PkmCwliLJfwmA-AY=/duoi-vay-than-691341.jpg"
-                                 data-image="https://static.8cache.com/cover/eJwNzjUWo0AAANAT8RaXYgt8SAhuoZmHS7CQQU-_2__iDy3157LohXMA-PiiaN_S3LdlshzA9HT4rj7yDk38OvfCcyUyu-2JL9nUGq9fyo2BirdNPj4LeW1Vsr81PWiBub_hnk7vuuzHZgHoVadu_L13b0jZqsgMRvQxtJjkLG5p-pQSLLoNcAIXgvC2NgPaMwttRcaEUkZusiCmlI_Bxl_o8GxHEEyKgkE4allB6MF9EZH6CZxIIhvhd-VaERHoCHDPeXLJcN5PYZzRlY7c3WmQXRmFqTq5jJ-MV3PC6zGsyiCLklqNWLgUKU2pDxk76ahhbzloxh82BOkw4gt9WI89JtW8XobPo9IYIS8N3KmOn9rX_TvuQzu4TNJWXuJuTfa3kr4vTjkYun7061vYH4d60ZMG9KK2ZU-nwdf6pgRiYsbdCK3rUORVyVjSvnaaW97dEvSvALhfm9YtUosFU2q2FwScGhYRnw8UaC_8y_HbVNDN4TkweG8JFlIhpjeBFR22cdZNq0pu4JRNF6Ob0vdsKDK3ElOl8DWKXf5PI95rEmN5hyjaLF_QKhfnurvzQZbhVEVxig41dmYeCJyzvjbbkCNOjQwEZ0cAfBFN03yFcV8lSj4y3TbOvTESdcwvxbo4xJqRuLL6UE1FsulYfKSxha_xXP9JZ_rDayirI7bjV1SK1J2WVkXCj-gyWu1uPAQATQbkVFv6rzS53Q7eYSyQddhKr2d-PqWj7HVr04Uqa2P16WZIaJT9TlymnLMVin8PkmCwliLJfwmA-AY=/duoi-vay-than-691341.jpg"
-                                 data-alt="Dưới váy thần"></div>
-                            <div class="caption">
-                                <h3>Dưới váy thần</h3> <small class="btn-xs label-primary">Full - 92 chương</small>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-xs-4 col-sm-3 col-md-2">
-                        <a href="https://truyenfull.vn/ha-canh-tren-trai-tim-anh/"
-                           title="Hạ cánh trên trái tim anh">
-                            <div class="lazyimg"
-                                 data-desk-image="https://static.8cache.com/cover/eJzLyTDWL_CusgjPDYksLfTMMa2qcg8NindOzs9wNopKC3ezMMrJ8ivO0vUPSslNyzF0dwko1i0sd0pPzNF1cgq2rPLPDfM2DXCOLymrMnSu8nDzcS-1LTcyNNXNMDYyAgDxKx72/ha-canh-tren-trai-tim-anh.jpg"
-                                 data-image="https://static.8cache.com/cover/eJzLyTDWL_CusgjPDYksLfTMMa2qcg8NindOzs9wNopKC3ezMMrJ8ivO0vUPSslNyzF0dwko1i0sd0pPzNF1cgq2rPLPDfM2DXCOLymrMnSu8nDzcS-1LTcyNNXNMDYyAgDxKx72/ha-canh-tren-trai-tim-anh.jpg"
-                                 data-alt="Hạ cánh trên trái tim anh"></div>
-                            <div class="caption">
-                                <h3>Hạ cánh trên trái tim anh</h3> <small class="btn-xs label-primary">
-                                    Full - 87
-                                    chương
-                                </small>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-xs-4 col-sm-3 col-md-2">
-                        <a href="https://truyenfull.vn/dau-nha-nong/"
-                           title="Dâu nhà nông">
-                            <div class="lazyimg"
-                                 data-desk-image="https://static.8cache.com/cover/eJzLyTDWTw92SjUNcCpxTPJKjtTNDMiuMo93dknJjiz2rQjxTiouj7CsSjMOT8txK3T19y3yLc9Kcc9IrcjzKs1Md00tLgzNNzJzCXbLyokvqsrIL022LTcyNNXNMDYyAgAM_yCA/dau-nha-nong.jpg"
-                                 data-image="https://static.8cache.com/cover/eJzLyTDWTw92SjUNcCpxTPJKjtTNDMiuMo93dknJjiz2rQjxTiouj7CsSjMOT8txK3T19y3yLc9Kcc9IrcjzKs1Md00tLgzNNzJzCXbLyokvqsrIL022LTcyNNXNMDYyAgAM_yCA/dau-nha-nong.jpg"
-                                 data-alt="Dâu nhà nông"></div>
-                            <div class="caption">
-                                <h3>Dâu nhà nông</h3> <small class="btn-xs label-primary">Full - 107 chương</small>
-                            </div>
-                        </a>
-                    </div>
+                   }
                 </div>
             </div>
         </div>
