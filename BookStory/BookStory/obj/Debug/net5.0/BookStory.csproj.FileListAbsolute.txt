@@ -30,7 +30,6 @@ D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\BookStory.pdb
 D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\BookStory.genruntimeconfig.cache
 D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\ref\BookStory.dll
 D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\BookStory.csproj.CopyComplete
-D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\Razor\Views\Home\List.cshtml.g.cs
 D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\Razor\Views\Home\Index.cshtml.g.cs
 D:\KY5\PRN211\.NET\BookStory\BookStory\bin\Debug\net5.0\Humanizer.dll
 D:\KY5\PRN211\.NET\BookStory\BookStory\bin\Debug\net5.0\Microsoft.Data.SqlClient.dll
@@ -72,3 +71,4 @@ D:\KY5\PRN211\.NET\BookStory\BookStory\bin\Debug\net5.0\X.PagedList.dll
 D:\KY5\PRN211\.NET\BookStory\BookStory\bin\Debug\net5.0\X.PagedList.Mvc.Core.dll
 D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\BookStory.MvcApplicationPartsAssemblyInfo.cs
 D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\Razor\Views\Story\Content.cshtml.g.cs
+D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\Razor\Views\Story\Search.cshtml.g.cs

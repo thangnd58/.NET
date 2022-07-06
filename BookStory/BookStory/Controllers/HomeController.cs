@@ -23,7 +23,7 @@ namespace BookStory.Controllers
             storiesCategories = context.StoriesCategories.Where(x => x.Cid == id).ToList();
             if (id == 0)
             {
-                stories = context.Stories.Take(16).ToList();
+                stories = context.Stories.OrderByDescending(s => s.Sid).Take(16).ToList();
             }
             else
             {
@@ -38,13 +38,23 @@ namespace BookStory.Controllers
                     }
                 }
             }
-            ViewBag.Stories = stories.Take(16);
+            ViewBag.Stories = stories;
             ViewBag.CurrentId = id;
-            List<Chapter> listNewChapters = new();
-            listNewChapters = context.Chapters.OrderByDescending(x => x.UpdatedAt).Take(24).ToList();
-            ViewBag.FullStories = context.Stories.Where(x => x.Status == 1).ToList();
+            Dictionary<Chapter, List<Category>> listNewChapters = new();
+            foreach(Chapter c in context.Chapters.OrderByDescending(x => x.UpdatedAt).Take(24).ToList())
+            {
+                listNewChapters.Add(c, GetCategoriesBySid(c.Sid));
+            }
+            ViewBag.FullStories = context.Stories.Where(x => x.Status == 1).OrderByDescending(s => s.Sid).Take(6).ToList();
             ViewBag.ListNewChapters = listNewChapters;
             return View();
+        }
+
+        public List<Category> GetCategoriesBySid(int sid)
+        {
+            List<Category> categories = new();
+            categories = context.Categories.Where(x => x.StoriesCategories.Where(s => s.Sid == sid).Any()).ToList();
+            return categories;
         }
     }
 }

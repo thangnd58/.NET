@@ -36,7 +36,7 @@ namespace BookStory.Controllers
             ViewBag.AllCategories = listAllCategories;
             ViewBag.Story = s;
             ViewBag.StoryAuthors = context.Stories.Where(s => s.StoriesAuthors.Where(x => x.Aid == author.Aid && x.Sid != id).Any()).Take(5).ToList();
-            ViewBag.StoryHighestView = context.Stories.OrderByDescending(x => x.View).Take(10).ToList();
+            ViewBag.StoryHighestView = context.Stories.OrderByDescending(x => x.View).Take(11).ToList();
             if (page == null) page = 1;
             int pageSize = 10;
             int pageNumber = (page ?? 1);
@@ -52,6 +52,20 @@ namespace BookStory.Controllers
             ViewBag.AllCategories = listAllCategories;
             ViewBag.AllChapters = context.Chapters.Where(x => x.Sid == id).ToList();
             return View(c);
+        }
+
+        public IActionResult Search(int id, int? page)
+        {
+            ViewBag.AllCategories = context.Categories.ToList();
+            ViewBag.StoryHighestView = context.Stories.OrderByDescending(x => x.View).Take(11).ToList();
+            _ = context.Chapters.ToList();
+            _ = context.StoriesAuthors.ToList();
+            ViewBag.Authors = context.Authors.ToList();
+            if (page == null) page = 1;
+            int pageSize = 2;
+            int pageNumber = (page ?? 1);
+            var storiesPage = context.Stories.Where(x => x.StoriesCategories.Where(s => s.Cid == id).Any()).ToList(); ;
+            return View(storiesPage.ToPagedList(pageNumber, pageSize));
         }
     }
 }
