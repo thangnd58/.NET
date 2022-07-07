@@ -1,6 +1,8 @@
 ﻿using BookStory.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -41,12 +43,21 @@ namespace BookStory.Controllers
             ViewBag.Stories = stories;
             ViewBag.CurrentId = id;
             Dictionary<Chapter, List<Category>> listNewChapters = new();
-            foreach(Chapter c in context.Chapters.OrderByDescending(x => x.UpdatedAt).Take(24).ToList())
+            foreach (Chapter c in context.Chapters.OrderByDescending(x => x.UpdatedAt).Take(24).ToList())
             {
                 listNewChapters.Add(c, GetCategoriesBySid(c.Sid));
             }
-            ViewBag.FullStories = context.Stories.Where(x => x.Status == 1).OrderByDescending(s => s.Sid).Take(6).ToList();
+            ViewBag.FullStories = context.Stories.Where(x => x.Status == 1).OrderByDescending(s => s.Sid).Take(12).ToList();
+            _ = context.Chapters.ToList();
             ViewBag.ListNewChapters = listNewChapters;
+            User u = null;
+            string json = HttpContext.Session.GetString("user");
+            if (json != null)
+            {
+                u = JsonConvert.DeserializeObject<User>(json);
+                List<Chapter> SaveChapters = context.Chapters.OrderByDescending(s => s.Sid).Where(x => x.Readings.Where(r => r.Ctid == x.Ctid && r.Uid == u.Uid).Any()).Take(16).ToList();
+                ViewBag.SaveChapters = SaveChapters;
+            }
             return View();
         }
 

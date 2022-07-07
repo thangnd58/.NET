@@ -7,7 +7,7 @@
 <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# book: http://ogp.me/ns/book# profile: http://ogp.me/ns/profile#">
     <meta charset="UTF-8">
     <title>Đọc truyện online, đọc truyện hay</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="~/style.css">
 </head>
 
 <body id="body_home">
@@ -36,7 +36,7 @@
                                         <div class="col-md-4">
                                             <ul class="dropdown-menu">
                                                 <li>
-                                                    <a href="#"
+                                                    <a href="/Story/Search/@c.Cid"
                                                    title="@c.Title">@c.Title</a>
                                                 </li>
                                             </ul>
@@ -90,7 +90,12 @@
                                     if (json != null) u = JsonConvert.DeserializeObject<User>(json);
                                     <li>
                                         <a href="#">
-                                            Trang cá nhân của @u.Name
+                                            Trang cá nhân
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/Story/ListSaved/@u.Uid">
+                                            Truyện đã lưu
                                         </a>
                                     </li>
                                     <li>
@@ -103,12 +108,11 @@
                             </ul>
                         </li>
                     </ul>
-                    <form class="navbar-form navbar-right" action="#" role="search" itemprop="potentialAction" itemscope
-                          itemtype="https://schema.org/SearchAction">
+                    <form class="navbar-form navbar-right" action="/Story/Search" method="post" role="search" itemprop="potentialAction" itemscope>
                         <div class="input-group search-holder">
-                            <meta itemprop="target" content="https://truyenfull.vn/tim-kiem/?tukhoa={tukhoa}" /><input aria-label="Từ khóa tìm kiếm" role="search key" class="form-control" id="search-input"
-                                                                                                                       type="search" name="tukhoa" placeholder="Tìm kiếm..." value="" itemprop="query-input"
-                                                                                                                       required>
+                            <input aria-label="Từ khóa tìm kiếm" role="search key" class="form-control" id="search-input"
+                                   type="search" name="id" placeholder="Tìm kiếm..." value="" itemprop="query-input"
+                                   required>
                             <div class="input-group-btn">
                                 <button class="btn btn-default" type="submit"
                                         aria-label="Tìm kiếm" role="search">
@@ -129,9 +133,12 @@
         </div>
         <div class="container" id="intro-index">
             <div class="title-list">
-                <h2><a href="#" title="Truyện theo thể loại">Truyện mới thêm</a></h2><a href="#" title="Truyện hot">
+                <a href="/Story/Search/Hot" title="Truyện hot">
                     <span class="glyphicon glyphicon-fire"></span>
                 </a>
+                <h2><a href="/Story/Search/Hot" title="Truyện hot">Truyện hot</a></h2>
+                <h2><a href="/Story/Search/New" title="Truyện mới">Truyện mới</a></h2>
+                <h2><a href="/Story/Search/Full" title="Truyện full">Truyện full</a></h2>
                 <form action="/Home/Index/" method="post">
                     <select name="id" onchange="this.form.submit()" id="hot-select"
                             class="form-control new-select" aria-label="Chọn thể loại">
@@ -166,14 +173,12 @@
             <div class="list list-truyen list-new col-xs-12 col-sm-12 col-md-8 col-truyen-main">
                 <div class="title-list">
                     <h2>
-                        <a href="#" title="Truyện mới">Truyện mới cập nhật</a>
-                    </h2><a href="#" title="Truyện mới">
-                        <span class="glyphicon glyphicon-menu-right"></span>
-                    </a>
+                        <a href="#" title="Truyện mới cập nhật">Truyện mới cập nhật chương mới</a>
+                    </h2>
                 </div>
                 @foreach (var c in ViewBag.ListNewChapters)
                 {
-                    <div class="row" itemscope>
+                    <div class="row" itemscope )">
                         <div class="col-xs-9 col-sm-6 col-md-5 col-title">
                             <span class="label-title label-new"></span>
                             <h3 itemprop="name">
@@ -187,7 +192,7 @@
                             @foreach (var ct in @c.Value)
                             {
                                 <a itemprop="genre"
-                           href="#" title="">@ct.Title</a>
+                           href="/Story/Search/@ct.Cid" title="">@ct.Title</a>
                             }
                         </div>
                         <div class="col-xs-3 col-sm-3 col-md-2 col-chap text-info">
@@ -196,27 +201,36 @@
                                 <span class="chapter-text"><span>Chương </span></span>@c.Key.Chapnumber
                             </a>
                         </div>
-                        <div class="hidden-xs hidden-sm col-md-2 col-time text-888" id="timer">@c.Key.UpdatedAt</div>
+                        <div class="hidden-xs hidden-sm col-md-2 col-time text-888 timer">@c.Key.UpdatedAt</div>
                     </div>
                 }
             </div>
             <div class="col-md-4 col-truyen-side">
-                <div class="list list-truyen list-history col-xs-12">
-                    <div class="title-list">
-                        <h2>Truyện đang đọc</h2>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-5 col-lg-7">
-                            <span class="glyphicon glyphicon-chevron-right"></span>
-                            <h3 itemprop="name">
-                                <a href="#">Archimedes Thân Yêu</a>
-                            </h3>
+                @if (Context.Session.GetString("user") != null && ViewBag.SaveChapters.Count > 0)
+                {
+                    User u = null;
+                    string json = Context.Session.GetString("user");
+                    if (json != null) u = JsonConvert.DeserializeObject<User>(json);
+                    <div class="list list-truyen list-history col-xs-12">
+                        <div class="title-list">
+                            <h2><a href="/Story/ListSaved/@u.Uid">Chương đã lưu</a></h2>
                         </div>
-                        <div class="col-md-7 col-lg-5 text-info">
-                            <a href="#">Đọc tiếp Q1 - C1-1</a>
-                        </div>
+                        @foreach (Chapter c in ViewBag.SaveChapters)
+                        {
+                            <div class="row">
+                                <div class="col-md-5 col-lg-7">
+                                    <span class="glyphicon glyphicon-chevron-right"></span>
+                                    <h3 itemprop="name">
+                                        <a title="@c.Name" href="/Story/Detail/@c.Sid">@c.Name</a>
+                                    </h3>
+                                </div>
+                                <div class="col-md-7 col-lg-5 text-info">
+                                    <a title="@c.Name Chương @c.Chapnumber" href="/Story/Content/@c.Sid/@c.Chapnumber">Đọc tiếp chương @c.Chapnumber</a>
+                                </div>
+                            </div>
+                        }
                     </div>
-                </div>
+                }
                 <div class="visible-md-block visible-lg-block text-center">
                     <div class="hide" id="history-holder-side"></div>
                     <div class="list list-truyen list-cat col-xs-12">
@@ -227,7 +241,7 @@
                             @foreach (Category c in ViewBag.Categories)
                             {
                                 <div class="col-xs-6">
-                                    <a href="#"
+                                    <a href="/Story/Search/@c.Cid"
                                    title="@c.Title">@c.Title</a>
                                 </div>
                             }
@@ -240,7 +254,7 @@
             <div class="list list-thumbnail col-xs-12">
                 <div class="title-list">
                     <h2>
-                        <a href="#" title="Truyện full">
+                        <a href="/Story/Search/Full" title="Truyện full">
                             Truyện đã hoàn
                             thành
                         </a>
@@ -295,11 +309,52 @@
             </ul>
         </div>
     </div>
-    <script src="~/main.js"></script>
-    <noscript>
-        <link rel="stylesheet" type="text/css" href="https://static.8cache.com/min/g/maincss-08122021_1.css" />
-    </noscript>
+    <script src="~/main2.js"></script>
     <script>$('head').append('<link rel="stylesheet" type="text/css" href="https://static.8cache.com/min/g/maincss-08122021_1.css"/>');</script>
+    <script>
+           var a = document.getElementsByClassName("timer");
+           for(let i = 0; i < a.length; i++){
+               timeDifference(a[i].textContent, i);
+           }
+           function timeDifference(previous, i) {
+            const date = new Date();
+            var current = date.getTime();
+            var oTime = previous;
+            var oldTime = new Date(oTime);
+            var msPerMinute = 60 * 1000;
+            var msPerHour = msPerMinute * 60;
+            var msPerDay = msPerHour * 24;
+            var msPerMonth = msPerDay * 30;
+            var msPerYear = msPerDay * 365;
+            var elapsed = current - oldTime;
+            var output = '';
+            if (elapsed < msPerMinute) {
+                 output = Math.round(elapsed/1000) + ' giây trước';
+            }
+
+            else if (elapsed < msPerHour) {
+                 output = Math.round(elapsed/msPerMinute) + ' phút trước';
+            }
+
+            else if (elapsed < msPerDay ) {
+                 output = Math.round(elapsed/msPerHour ) + ' giờ trước';
+            }
+
+            else if (elapsed < msPerMonth) {
+                output = Math.round(elapsed/msPerDay) + ' ngày trước';
+            }
+
+            else if (elapsed < msPerYear) {
+                output = Math.round(elapsed/msPerMonth) + ' tháng trước';
+            }
+
+            else {
+                output = Math.round(elapsed/msPerYear ) + ' năm trước';
+            }
+
+            document.getElementsByClassName("timer")[i].innerHTML = output;
+        }
+    </script>
 </body>
 
 </html>

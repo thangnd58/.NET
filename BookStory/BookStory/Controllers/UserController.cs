@@ -32,7 +32,7 @@ namespace BookStory.Controllers
             }
             else
             {
-                ViewBag.Message = "Incorrect email address or password.";
+                ViewBag.Message = "Nhập sai email hoặc mật khẩu";
                 return View();
             }
         }
@@ -62,15 +62,15 @@ namespace BookStory.Controllers
             }
             if (!pass.Equals(re_pass))
             {
-                ViewBag.Message = "Re-entered password is not the same, please re-enter.";
+                ViewBag.Message = "Mật khẩu nhập lại không giống với mật khẩu cũ";
             }
             else if (isRegister == false)
             {
-                ViewBag.Message = "Registration failed. Email already exists in the system.";
+                ViewBag.Message = "Đăng ký thất bại, email đã tồn tại trong hệ thống";
             }
             else
             {
-                ViewBag.Message = "Sign up successfully. You can login to the system.";
+                ViewBag.Message = "Đăng ký thành công, bạn có thể đăng nhập";
                 context.Add(user);
                 context.SaveChanges();
             }

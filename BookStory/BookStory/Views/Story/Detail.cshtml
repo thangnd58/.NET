@@ -40,7 +40,7 @@
                                         <div class="col-md-4">
                                             <ul class="dropdown-menu">
                                                 <li>
-                                                    <a href="#"
+                                                    <a href="/Story/Search/@c.Cid"
                                                    title="@c.Title">@c.Title</a>
                                                 </li>
                                             </ul>
@@ -98,6 +98,11 @@
                                         </a>
                                     </li>
                                     <li>
+                                        <a href="/Story/ListSaved/@u.Uid">
+                                            Truyện đã lưu
+                                        </a>
+                                    </li>
+                                    <li>
                                         <a href="/User/Logout">
                                             Đăng xuất
                                         </a>
@@ -107,12 +112,11 @@
                             </ul>
                         </li>
                     </ul>
-                    <form class="navbar-form navbar-right" action="#" role="search" itemprop="potentialAction" itemscope
-                          itemtype="https://schema.org/SearchAction">
+                    <form class="navbar-form navbar-right" action="/Story/Search" method="post" role="search" itemprop="potentialAction" itemscope>
                         <div class="input-group search-holder">
-                            <meta itemprop="target" content="https://truyenfull.vn/tim-kiem/?tukhoa={tukhoa}" /><input aria-label="Từ khóa tìm kiếm" role="search key" class="form-control" id="search-input"
-                                                                                                                       type="search" name="tukhoa" placeholder="Tìm kiếm..." value="" itemprop="query-input"
-                                                                                                                       required>
+                            <input aria-label="Từ khóa tìm kiếm" role="search key" class="form-control" id="search-input"
+                                   type="search" name="id" placeholder="Tìm kiếm..." value="" itemprop="query-input"
+                                   required>
                             <div class="input-group-btn">
                                 <button class="btn btn-default" type="submit"
                                         aria-label="Tìm kiếm" role="search">
@@ -148,14 +152,14 @@
                         <div class="info">
                             <div>
                                 <h3>Tác giả:</h3><a itemprop="author"
-                                                    href="#"
+                                                    href="/Story/Search/@ViewBag.Author.Name"
                                                     title="@ViewBag.Author.Name">@ViewBag.Author.Name</a>
                             </div>
                             <div>
                                 <h3>Thể loại:</h3>
                                 @foreach (Category c in ViewBag.Categories)
                                 {
-                                    <a itemprop="genre" href="#"
+                                    <a itemprop="genre" href="/Story/Search/@c.Cid"
                                    title="@c.Title">@c.Title</a>
                                 }
                             </div>
@@ -172,6 +176,9 @@
                                 {
                                     <span class="text-primary">Đang ra</span>
                                 }
+                            </div>
+                            <div>
+                                <h3>Lượt xem:</h3><span class="source">@ViewBag.Story.View lượt</span>
                             </div>
                         </div>
                     </div>
@@ -230,11 +237,11 @@
                     <div class="title-list">
                         <h4>Truyện đang hot</h4>
                     </div>
-                    @for (int i = 1; i <= ViewBag.StoryHighestView.Count - 1; i++)
+                    @for (int i = 0; i < ViewBag.StoryHighestView.Count; i++)
                     {
                         <div class="row top-item">
                             <div class="col-xs-12">
-                                <div class="top-num top-@i">@i</div>
+                                <div class="top-num top-@(i+1)">@(i+1)</div>
                                 <div class="s-title">
                                     <h3>
                                         <a href="/Story/Detail/@ViewBag.StoryHighestView[i].Sid"
@@ -276,10 +283,7 @@
             </ul>
         </div>
     </div>
-    <script src="~/main.js"></script>
-    <noscript>
-        <link rel="stylesheet" type="text/css" href="https://static.8cache.com/min/g/maincss-08122021_1.css" />
-    </noscript>
+    <script src="~/main2.js"></script>
     <script>$('head').append('<link rel="stylesheet" type="text/css" href="https://static.8cache.com/min/g/maincss-08122021_1.css"/>');</script>
 </body>
 

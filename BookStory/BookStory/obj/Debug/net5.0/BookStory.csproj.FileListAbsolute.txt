@@ -72,3 +72,4 @@ D:\KY5\PRN211\.NET\BookStory\BookStory\bin\Debug\net5.0\X.PagedList.Mvc.Core.dll
 D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\BookStory.MvcApplicationPartsAssemblyInfo.cs
 D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\Razor\Views\Story\Content.cshtml.g.cs
 D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\Razor\Views\Story\Search.cshtml.g.cs
+D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\Razor\Views\Story\ListSaved.cshtml.g.cs

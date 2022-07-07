@@ -1,7 +1,7 @@
-@using BookStory.Models
+﻿@using BookStory.Models
 @using Microsoft.AspNetCore.Http
 @using Newtonsoft.Json
-@model X.PagedList.IPagedList<BookStory.Models.Story>
+@model X.PagedList.IPagedList<BookStory.Models.Chapter>
 @using X.PagedList;
 @using X.PagedList.Mvc.Core
 
@@ -12,6 +12,8 @@
     <meta charset="UTF-8">
     <title>Truyện chữ mới</title>
     <link type="text/css" rel="stylesheet" href="~/style.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body id="body_list">
@@ -140,129 +142,34 @@
                 <div class="text-center"></div>
                 <div class="list list-truyen col-xs-12">
                     <div class="title-list">
-                        <h2>Kết Quả Tìm Kiếm</h2>
+                        <h2>Các chương đã lưu</h2>
                     </div>
-                    @foreach (Story s in Model)
+                    @if (Model.Count > 0)
                     {
-                        <div class="row" itemscope>
-                            <div class="col-xs-3">
-                                
-                                <div style="background: url(@s.Image); background-repeat: no-repeat; background-position: center; background-size: 160px 79px" >
-
-                                </div>
-                                
-                            </div>
-                            <div class="col-xs-7">
-                                <div>
-                                    <span class="glyphicon glyphicon-book"></span>
-                                    <h3 class="truyen-title" itemprop="name">
-                                        <a href="/Story/Detail/@s.Sid"
-                                       title="@s.Name" itemprop="url">
-                                            @s.Name
-                                        </a>
-                                    </h3>
-                                    @if (s.Keyword.Contains("hot"))
-                                    {
-                                        <span class="label-title label-hot"></span>
-                                    }
-                                    @if (s.Keyword.Contains("full"))
-                                    {
-                                        <span class="label-title label-full"></span>
-                                    }
-                                    @if (s.Keyword.Contains("new"))
-                                    {
-                                        <span class="label-title label-new"></span>
-                                    }
-                                    <span class="author" itemprop="author">
-                                        <span class="glyphicon glyphicon-pencil"></span> 
-                                        @foreach (Author a in ViewBag.Authors)
-                                        {
-                                            if (a.Aid == s.StoriesAuthors.FirstOrDefault(x => x.Sid == s.Sid).Aid)
-                                            {
-                                                <a href="/Story/Search/@a.Name">@a.Name</a>
-                                            }
-                                        }
-                                    </span>
-                                    <span class="author" itemprop="author"> @s.View lượt xem </span>
-                                </div>
-                            </div>
-                            <div class="col-xs-2 text-info">
-                                <div>
-                                    <a href="/Story/Content/@s.Sid/@s.Chapters.Count"
-                                   title="@s.Name Chương @s.Chapters.Count">
-                                        <span class="chapter-text"><span>Chương </span></span>@s.Chapters.Count
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                </div>
-                @Html.PagedListPager(Model, page => Url.Action("Search", new { id = ViewBag.CurrentId,page }))
-            </div>
-            <div class="col-xs-12 col-sm-12 col-md-3 col-truyen-side">
-                <div class="visible-md-block visible-lg-block text-center">
-                    <div class="list list-truyen list-cat col-xs-12">
-                        <div class="title-list">
-                            <h4>Thể loại truyện</h4>
-                        </div>
-                        <div class="row">
-                            @foreach (Category c in ViewBag.AllCategories)
-                            {
-                                <div class="col-xs-6">
-                                    <a href="/Story/Search/@c.Cid"
-                                   title="@c.Title">@c.Title</a>
-                                </div>
-                            }
-                        </div>
-                    </div>
-                    <div class="list list-truyen list-side col-xs-12">
-                        <div class="title-list">
-                            <h4>Truyện đang hot</h4>
-                        </div>
-                        @for (int i = 0; i < ViewBag.StoryHighestView.Count; i++)
+                        @foreach (Chapter c in Model)
                         {
-                            <div class="row top-item">
+                            <div class="row" itemscope>
                                 <div class="col-xs-12">
-                                    <div class="top-num top-@(i+1)">@(i+1)</div>
-                                    <div class="s-title">
-                                        <h3>
-                                            <a href="/Story/Detail/@ViewBag.StoryHighestView[i].Sid"
-                                           title="@ViewBag.StoryHighestView[i].Name">@ViewBag.StoryHighestView[i].Name</a>
-                                        </h3>
-                                    </div>
                                     <div>
-                                        @ViewBag.StoryHighestView[i].View lượt xem
+                                        <a title="Bỏ lưu" href="/Story/UnSave/@c.Sid/@c.Chapnumber/@ViewBag.CurrentId/@ViewBag.CurrentPage"><i class="fa fa-close"></i></a>
+                                        <h3 class="truyen-title" itemprop="name">
+                                            <a href="/Story/Content/@c.Sid/@c.Chapnumber"
+                                       title="@c.Name" itemprop="url">
+                                                @c.Name - Chương @c.Chapnumber
+                                            </a>
+                                        </h3>
+
                                     </div>
                                 </div>
                             </div>
                         }
-                    </div>
+                        @Html.PagedListPager(Model, page => Url.Action("ListSaved", new { id = ViewBag.CurrentId, page }))
+                    } else
+                    {
+                        <div class="truyen-title">Trống</div>
+                    }
                 </div>
-            </div>
-            <div id="footer" class="footer">
-                <div class="container">
-                    <div class="hidden-xs col-sm-5">
-                        <strong>Truyện Full</strong> - <a title="Đọc truyện online"
-                                                          href="#">Đọc truyện</a> online, <a title="Đọc truyện chữ"
-                                                                                             href="#">đọc truyện</a> chữ, <a title="Truyện hay"
-                                                                                                                             href="#">truyện hay</a>. Website luôn cập nhật những bộ <a title="Truyện mới"
-                                                                                                                                                                                        href="#">truyện mới</a> thuộc các thể loại đặc sắc như <a title="Truyện tiên hiệp" href="#">truyện tiên hiệp</a>, <a title="Truyện kiếm hiệp" href="#">truyện kiếm hiệp</a>, hay
-                        <a title="Truyện ngôn tình" href="#">truyện ngôn tình</a> một
-                        cách nhanh nhất. Hỗ trợ mọi thiết bị như di động và máy tính bảng.
-                    </div>
-                    <ul class="col-xs-12 col-sm-7 list-unstyled">
-                        <li class="text-right pull-right">
-                            <a class="backtop"
-                               title="Trở lên đầu trang" href="#wrap" rel="nofollow" aria-label="Trở về đầu trang">
-                                <span class="glyphicon glyphicon-upload"></span>
-                            </a>
-                        </li>
-                        <li class="hidden-xs tag-list">
-                            <a href="https://truyenfull.vn/danh-sach/tien-hiep-hay/"
-                               title="truyện tiên hiệp hay">truyện tiên hiệp hay</a> <a href="https://truyenfull.vn/the-loai/he-thong/" title="truyện hệ thống">truyện hệ thống</a>
-                        </li>
-                    </ul>
-                </div>
+                
             </div>
             <script src="~/main2.js"></script>
             <script>$('head').append('<link rel="stylesheet" type="text/css" href="https://static.8cache.com/min/g/maincss-08122021_1.css"/>');</script>
