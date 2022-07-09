@@ -73,3 +73,9 @@ D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\BookStory.MvcApplication
 D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\Razor\Views\Story\Content.cshtml.g.cs
 D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\Razor\Views\Story\Search.cshtml.g.cs
 D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\Razor\Views\Story\ListSaved.cshtml.g.cs
+D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\Razor\Views\User\ChangePassword.cshtml.g.cs
+D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\Razor\Views\Admin\Dashboard.cshtml.g.cs
+D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\Razor\Views\Admin\ListUser.cshtml.g.cs
+D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\Razor\Views\Admin\ListStory.cshtml.g.cs
+D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\Razor\Views\Admin\ListChapter.cshtml.g.cs
+D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\Razor\Views\Admin\Add.cshtml.g.cs

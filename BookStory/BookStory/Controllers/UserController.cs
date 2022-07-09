@@ -10,11 +10,6 @@ namespace BookStory.Controllers
     {
         readonly StoryDBContext context = new();
 
-        public IActionResult Index()
-        {
-            return View();
-        }
-
         [HttpGet]
         public IActionResult Login()
         {
@@ -27,16 +22,25 @@ namespace BookStory.Controllers
             var isLogin = context.Users.SingleOrDefault(u => u.Email.Equals(email) && u.Password.Equals(password));
             if (isLogin != null)
             {
-                HttpContext.Session.SetString("user", JsonConvert.SerializeObject(isLogin));
-                return RedirectToAction("Index", "Home");
+                if (isLogin.Role == 2)
+                {
+                    HttpContext.Session.SetString("user", JsonConvert.SerializeObject(isLogin));
+                    return RedirectToAction("Index", "Home");
+                }
+                else if (isLogin.Role == 3)
+                {
+                    ViewBag.Message = "Nhập sai email hoặc mật khẩu";
+                    return View();
+                }
             }
             else
             {
                 ViewBag.Message = "Nhập sai email hoặc mật khẩu";
                 return View();
             }
+            return View();
         }
-
+        [HttpGet]
         public IActionResult Register()
         {
             return View();
@@ -71,7 +75,7 @@ namespace BookStory.Controllers
             else
             {
                 ViewBag.Message = "Đăng ký thành công, bạn có thể đăng nhập";
-                context.Add(user);
+                context.Add<User>(user);
                 context.SaveChanges();
             }
             return View();
@@ -81,6 +85,44 @@ namespace BookStory.Controllers
         {
             HttpContext.Session.Remove("user");
             return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult ChangePassword(string opassword, string npassword, string cpassword)
+        {
+            User u = null;
+            string json = HttpContext.Session.GetString("user");
+            if (json != null) u = JsonConvert.DeserializeObject<User>(json);
+            string message = "";
+            var entity = context.Users.FirstOrDefault(s => s.Uid == u.Uid);
+            if (!entity.Password.Equals(opassword))
+            {
+                message = "Mật khẩu cũ không đúng. Vui lòng nhập lại";
+            }
+            else if (entity.Password == npassword)
+            {
+                message = "Mật khẩu mới giống với mật khẩu cũ. Vui lòng nhập lại";
+            }
+            else if (!npassword.Equals(cpassword))
+            {
+                message = "Mật khẩu nhập lại không khớp với mật khẩu cũ";
+            }
+            else
+            {
+                
+                entity.Password = npassword;
+                context.Entry(entity).CurrentValues.SetValues(entity);
+                context.SaveChanges();
+                message = "Đổi mật khẩu thành công";
+            }
+            ViewBag.Message = message;
+            return View();
         }
     }
 }

@@ -143,7 +143,7 @@ namespace BookStory.Controllers
                 context.Add<Reading>(r);
                 context.SaveChanges();
             }
-            return RedirectToAction("Content", "Story", new { id = id, page = page });
+            return RedirectToAction("Content", "Story", new { id, page });
         }
 
         public IActionResult UnSave(int id, int page, int? id2, int? id3)
@@ -154,7 +154,7 @@ namespace BookStory.Controllers
             context.SaveChanges();
             if (id2 == null)
             {
-                return RedirectToAction("Content", "Story", new { id = id, page = page });
+                return RedirectToAction("Content", "Story", new { id, page });
             } else
             {
                 return RedirectToAction("ListSaved", "Story", new { id = id2, page = id3});

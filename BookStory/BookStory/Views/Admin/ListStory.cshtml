@@ -1,0 +1,508 @@
+﻿@using BookStory.Models
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
+    <!-- DataTables -->
+   <link rel="stylesheet" href="~/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/dist/css/adminlte.min.css">
+    <!-- Select2 -->
+    <link rel="stylesheet" href="~/plugins/select2/css/select2.min.css">
+    <link rel="stylesheet" href="~/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed sidebar-collapse">
+    <div class="wrapper">
+
+        <!-- Navbar -->
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+            <!-- Left navbar links -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="#" class="nav-link">Home</a>
+                </li>
+            </ul>
+        </nav>
+        <!-- /.navbar -->
+        <!-- Main Sidebar Container -->
+        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+            <!-- Brand Logo -->
+            <a href="#" class="brand-link">
+                <img src="~/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+                     style="opacity: .8">
+                <span class="brand-text font-weight-light">Admin</span>
+            </a>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Sidebar Menu -->
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                        <!-- Add icons to the links using the .nav-icon class
+                           with font-awesome or any other icon font library -->
+                        <li class="nav-item menu-open">
+                            <a href="/Admin/ListStory/" class="nav-link active">
+                                <i class="nav-icon fas fa-table"></i>
+                                <p>
+                                    Truyện
+                                </p>
+                            </a>
+                            <a href="/Admin/ListUser/" class="nav-link">
+                                <i class="nav-icon fas fa-table"></i>
+                                <p>
+                                    Người dùng
+                                </p>
+                            </a>
+                            <a href="/Admin/ListChapter/" class="nav-link">
+                                <i class="nav-icon fas fa-table"></i>
+                                <p>
+                                    Chương
+                                </p>
+                            </a>
+                            <a href="/Admin/Add/" class="nav-link">
+                                <i class="nav-icon fas fa-table"></i>
+                                <p>
+                                    Thêm
+                                </p>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <!-- /.sidebar-menu -->
+            </div>
+            <!-- /.sidebar -->
+        </aside>
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- /.content-header -->
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-4 col-4">
+                            <!-- small box -->
+                            <div class="small-box bg-info">
+                                <div class="inner">
+                                    <h3>@ViewBag.TotalStory</h3>
+
+                                    <p>Bộ truyện</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-bag"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- ./col -->
+                        <div class="col-lg-4 col-4">
+                            <!-- small box -->
+                            <div class="small-box bg-success">
+                                <div class="inner">
+                                    <h3>@ViewBag.TotalView</h3>
+
+                                    <p>Lượt đọc</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-stats-bars"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- ./col -->
+                        <div class="col-lg-4 col-4">
+                            <!-- small box -->
+                            <div class="small-box bg-warning">
+                                <div class="inner">
+                                    <h3>@ViewBag.TotalUser</h3>
+
+                                    <p>Tài khoản</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-person-add"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Main row -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">
+                                        Danh sách các truyện
+                                        <button id="addstory-btn" type="button" data-toggle="modal" data-target="#modal-story" class="btn btn-success">Thêm truyện mới</button>
+                                        <button id="addauthor-btn" type="button" data-toggle="modal" data-target="#modal-author" class="btn btn-success">Thêm tác giả mới</button>
+                                        <button id="addcategory-btn" type="button" data-toggle="modal" data-target="#modal-category" class="btn btn-success">Thêm danh mục mới</button>
+                                    </h3>
+                                </div>
+                                <!-- /.card-header -->
+                                <div class="card-body">
+
+                                    <table id="example1" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Tên truyện</th>
+                                                <th>Lượt đọc</th>
+                                                <th>Số tập</th>
+                                                <th>Trạng thái</th>
+                                                <th>Ngày đăng</th>
+                                                <th>Ngày cập nhật</th>
+                                                <th>Hành động</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (Story s in ViewBag.Stories)
+                                            {
+                                                <tr>
+                                                    <td>@s.Sid</td>
+                                                    <td>@s.Name</td>
+                                                    <td>@s.View</td>
+                                                    <td>@s.Chapters.Count</td>
+                                                    @if (@s.Status == 1)
+                                                    {
+                                                        <td>Hoàn thành</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>Chưa hoàn thành</td>
+                                                    }
+                                                    <td>@s.CreatedAt</td>
+                                                    <td>@s.UpdatedAt</td>
+                                                    <td>
+                                                        <button class="btn btn-xs" type="button" data-toggle="modal" data-target="#modal-edit">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+                                                             width="30" height="30"
+                                                             viewBox="0 0 30 30"
+                                                             style=" fill:#000000;">
+                                                                <path d="M 13 3 A 1.0001 1.0001 0 0 0 11.986328 4 L 6 4 A 1.0001 1.0001 0 1 0 6 6 L 24 6 A 1.0001 1.0001 0 1 0 24 4 L 18.013672 4 A 1.0001 1.0001 0 0 0 17 3 L 13 3 z M 6 8 L 6 24 C 6 25.105 6.895 26 8 26 L 22 26 C 23.105 26 24 25.105 24 24 L 24 8 L 6 8 z"></path>
+                                                            </svg>
+                                                        </button>
+                                                        <button class="btn btn-xs storyinfo" type="button" data-toggle="modal" data-target="#modal-edit">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+                                                             width="30" height="30"
+                                                             viewBox="0 0 30 30"
+                                                             style=" fill:#000000;">
+                                                                <path d="M 22.828125 3 C 22.316375 3 21.804562 3.1954375 21.414062 3.5859375 L 19 6 L 24 11 L 26.414062 8.5859375 C 27.195062 7.8049375 27.195062 6.5388125 26.414062 5.7578125 L 24.242188 3.5859375 C 23.851688 3.1954375 23.339875 3 22.828125 3 z M 17 8 L 5.2597656 19.740234 C 5.2597656 19.740234 6.1775313 19.658 6.5195312 20 C 6.8615312 20.342 6.58 22.58 7 23 C 7.42 23.42 9.6438906 23.124359 9.9628906 23.443359 C 10.281891 23.762359 10.259766 24.740234 10.259766 24.740234 L 22 13 L 17 8 z M 4 23 L 3.0566406 25.671875 A 1 1 0 0 0 3 26 A 1 1 0 0 0 4 27 A 1 1 0 0 0 4.328125 26.943359 A 1 1 0 0 0 4.3378906 26.939453 L 4.3632812 26.931641 A 1 1 0 0 0 4.3691406 26.927734 L 7 26 L 5.5 24.5 L 4 23 z"></path>
+                                                            </svg>
+                                                        </button>
+                                                        <input type="hidden" id="sid-val">
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+                        </div>
+                    </div>
+                    <!-- Control Sidebar -->
+                    <aside class="control-sidebar control-sidebar-dark">
+                        <!-- Control sidebar content goes here -->
+                    </aside>
+                    <!-- /.control-sidebar -->
+                </div>
+            </section>
+        </div>
+        @*Modal Story*@
+        <div class="modal fade" id="modal-story">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Thêm truyện</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/Admin/AddStory/" method="post">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="inputName">Tên truyện</label>
+                                    <input type="text" name="name" id="inputName" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputStatus">Danh mục</label>
+                                    <select name="categories" class="form-control select2" multiple="multiple" required>
+                                        @foreach (Category c in ViewBag.Categories)
+                                        {
+                                            <option value="@c.Cid">@c.Title</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputStatus">Tác giả</label>
+                                    <select name="author" class="select2 custom-select form-control" required>
+                                        <option selected>Chọn tác giả</option>
+                                        @foreach (Author a in ViewBag.Authors)
+                                        {
+                                            <option value="@a.Aid">@a.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputStatus">Trạng thái</label>
+                                    <select id="inputStatus" name="status" class="form-control custom-select" required>
+                                        <option value="1">Hoàn thành</option>
+                                        <option value="0">Chưa hoàn thành</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputName">Nguồn</label>
+                                    <input type="text" name="source" id="inputName" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputName">Link ảnh</label>
+                                    <input type="text" name="image" id="inputName" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputName">Từ khóa</label>
+                                    <input type="text" name="keyword" id="inputName" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputDescription">Mô tả ngắn</label>
+                                    <textarea id="inputDescription" name="description" class="form-control" rows="5"></textarea>
+                                </div>
+                                <input type="submit" value="Tạo" class="btn btn-success">
+                            </div>
+                            <!-- /.card-body -->
+                            <!-- /.card -->
+                        </form>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+
+        @*Modal Author*@
+        <!-- /.modal -->
+        <div class="modal fade" id="modal-author">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Thêm tác giả</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/Admin/AddAuthor/" method="post">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="inputEstimatedBudget">Tên tác giả</label>
+                                    <input type="text" name="author" id="inputEstimatedBudget" class="form-control" required>
+                                </div>
+                                <input type="submit" value="Tạo" class="btn btn-success">
+                            </div>
+                            <!-- /.card-body -->
+                        </form>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+        @*Modal Category*@
+        <!-- /.modal -->
+        <div class="modal fade" id="modal-category">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Thêm danh mục</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/Admin/AddCategory/" method="post">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="inputEstimatedBudget">Tên danh mục</label>
+                                    <input type="text" name="category" id="inputEstimatedBudget" class="form-control" required>
+                                </div>
+                                <input type="submit" value="Tạo" class="btn btn-success">
+                            </div>
+                            <!-- /.card-body -->
+
+                        </form>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+        @*Modal Edit Story*@
+        <div class="modal fade" id="modal-edit">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Chỉnh sửa truyện</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="" method="post">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="inputName">Tên truyện</label>
+                                    <input id="name-edit" type="text" name="name" id="inputName" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputStatus">Danh mục</label>
+                                    <select name="categories" class="form-control select2" multiple="multiple" required>
+                                        @foreach (Category c in ViewBag.Categories)
+                                        {
+                                            <option value="@c.Cid">@c.Title</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputStatus">Tác giả</label>
+                                    <select id="author-edit" name="author" class="select2 custom-select form-control" required>
+                                        <option selected>Chọn tác giả</option>
+                                        @foreach (Author a in ViewBag.Authors)
+                                        {
+                                            <option value="@a.Aid">@a.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputStatus">Trạng thái</label>
+                                    <select id="status-edit" name="status" class="form-control custom-select" required>
+                                        <option value="1">Hoàn thành</option>
+                                        <option value="0">Chưa hoàn thành</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputName">Nguồn</label>
+                                    <input type="text" name="source" id="source-edit" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputName">Link ảnh</label>
+                                    <input type="text" name="image" id="image-edit" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputName">Từ khóa</label>
+                                    <input type="text" name="keyword" id="keyword-edit" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputDescription">Mô tả ngắn</label>
+                                    <textarea name="description" id="description-edit" class="form-control" rows="5"></textarea>
+                                </div>
+                                <input type="submit" value="Lưu" class="btn btn-success">
+                            </div>
+                            <!-- /.card-body -->
+                            <!-- /.card -->
+                        </form>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+
+    </div>
+    <!-- ./wrapper -->
+    <!-- jQuery -->
+    <script src="~/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+   <!-- DataTables  & Plugins-->
+    <script src="~/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/plugins/jszip/jszip.min.js"></script>
+    <script src="~/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="~/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="~/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="~/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="~/dist/js/adminlte.min.js"></script>
+    <!-- Select2 -->
+    <script src="~/plugins/select2/js/select2.full.min.js"></script>
+    <!-- Page specific script -->
+    <script type="text/javascript">
+          $(function () {
+          $("#example1").DataTable({
+            "responsive": true, "lengthChange": false, "autoWidth": false,
+            "buttons": ["colvis"],
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+          }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+
+        $('.select2').select2();
+
+        $(document).ready(function(){
+            $('.storyinfo').click(function(){
+                var storyid = document.getElementById('sid-val').value;
+                alert(storyid);
+                $.ajax({
+                    url: '/Admin/GetStory/',
+                    type: 'GET',
+                    data: {storyid : storyid},
+                    success: function(response) {
+                        $('#name-edit').val(response.name)
+                        $('#status-edit').val(response.status)
+                        $('#source-edit').val(response.source)
+                        $('#image-edit').val(response.image)
+                        $('#keyword-edit').val(response.keyword)
+                        $('#description-edit').val(response.description)
+                        $('#author-edit').val(response.authorid).change()
+                    }
+                });
+            });
+        });
+
+        var table = document.getElementById('example1');
+        for(var i=0; i< table.rows.length; i++){
+            table.rows[i].onmouseover = function(){
+                document.getElementById('sid-val').value = this.cells[0].textContent;
+                console.log(document.getElementById('sid-val').value)
+            }
+        }
+    </script>
+</body>
+
+</html>

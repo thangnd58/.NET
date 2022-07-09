@@ -13,7 +13,11 @@
     <title>@ViewBag.Story.Name</title>
     <link rel="stylesheet" href="~/style.css">
 </head>
-
+@{
+    User u = null;
+    string json = Context.Session.GetString("user");
+    if (json != null) u = JsonConvert.DeserializeObject<User>(json);
+}
 <body id="body_truyen">
     <div id="wrap">
         <div class="navbar navbar-default navbar-static-top" role="navigation" id="nav">
@@ -28,6 +32,11 @@
                 </div>
                 <div class="navbar-collapse collapse" itemscope itemtype="">
                     <ul class="control nav navbar-nav ">
+                    @if(u != null){
+                            <li>
+                            <a href="/Story/ListSaved/@u.Uid">Xin chào @u.Name</a>
+                        </li>
+                        }
                         <li class="dropdown">
                             <a href="javascript:void(0)" class="dropdown-toggle"
                                data-toggle="dropdown">
@@ -74,7 +83,7 @@
                             <a href="javascript:void(0)" class="dropdown-toggle"
                                data-toggle="dropdown"><span class="glyphicon glyphicon-list"></span> Lựa chọn <span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
-                                @if (Context.Session.GetString("user") == null)
+                                @if (u == null)
                                 {
                                     <li>
                                         <a href="/User/Login">
@@ -83,23 +92,20 @@
                                     </li>
                                     <li>
                                         <a href="/User/Register">
-                                            Đăng kí
+                                            Đăng ký
                                         </a>
                                     </li>
                                 }
                                 else
                                 {
-                                    User u = null;
-                                    string json = Context.Session.GetString("user");
-                                    if (json != null) u = JsonConvert.DeserializeObject<User>(json);
-                                    <li>
-                                        <a href="#">
-                                            Trang cá nhân của @u.Name
-                                        </a>
-                                    </li>
                                     <li>
                                         <a href="/Story/ListSaved/@u.Uid">
                                             Truyện đã lưu
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/User/ChangePassword/">
+                                            Đổi mật khẩu
                                         </a>
                                     </li>
                                     <li>
