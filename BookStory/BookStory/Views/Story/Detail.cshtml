@@ -199,13 +199,12 @@
                     <div class="row">
                         @foreach (Chapter c in @Model)
                         {
-                            <div class="col-xs-2 col-sm-2 col-md-2">
+                            <div class="col-xs-12 col-sm-12 col-md-12">
                                 <ul class="list-chapter">
-
                                     <li>
                                         <span class="glyphicon glyphicon-certificate"></span> <a href="/Story/Content/@c.Sid/@c.Chapnumber"
                                                                                              title="@c.Subname @c.Name">
-                                            <span class="chapter-text"><span>Chương @c.Chapnumber</span></span>
+                                            <span class="chapter-text"><span>@c.Subname</span></span>
                                         </a>
                                     </li>
 

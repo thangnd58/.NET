@@ -186,7 +186,8 @@ namespace BookStory.Controllers
                 Chapnumber = chapternumber,
                 Content = chaptercontent,
                 Sid = sid,
-                CreatedAt = System.DateTime.Now
+                CreatedAt = System.DateTime.Now,
+                UpdatedAt = System.DateTime.Now
             };
             context.Add<Chapter>(c);
             context.SaveChanges();

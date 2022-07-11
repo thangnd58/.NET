@@ -108,7 +108,7 @@ namespace BookStory.Controllers
             {
                 foreach (StoriesAuthor sa in context.StoriesAuthors.ToList())
                 {
-                    if (a.Aid == sa.Aid && a.Name.ToLower().Equals(authorname.ToLower()))
+                    if (a.Aid == sa.Aid && a.Name.ToLower().Contains(authorname.ToLower()))
                     {
                         stories.AddRange(context.Stories.Where(x => x.Sid == sa.Sid).ToList());
                     }
