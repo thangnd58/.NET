@@ -35,8 +35,8 @@ namespace BookStory.Controllers
                 }
             }
             List<Chapter> chapters = context.Chapters.Where(x => x.Sid == id).ToList();
-            ViewBag.Categories = categoriesOfStory;
-            ViewBag.AllCategories = listAllCategories;
+            ViewBag.CategoriesOfStory = categoriesOfStory;
+            ViewBag.Categories = listAllCategories;
             ViewBag.Story = s;
             ViewBag.StoryAuthors = context.Stories.Where(s => s.StoriesAuthors.Where(x => x.Aid == author.Aid && x.Sid != id).Any()).Take(5).ToList();
             ViewBag.StoryHighestView = context.Stories.OrderByDescending(x => x.View).Take(10).ToList();
@@ -54,7 +54,7 @@ namespace BookStory.Controllers
             List<Category> listAllCategories = context.Categories.ToList();
             c = context.Chapters.FirstOrDefault(x => x.Sid == id && x.Chapnumber == id1.ToString());
             Story s = context.Stories.FirstOrDefault(x => x.Sid == id);
-            ViewBag.AllCategories = listAllCategories;
+            ViewBag.Categories = listAllCategories;
             ViewBag.AllChapters = context.Chapters.Where(x => x.Sid == id).ToList();
             User u = null;
             string json = HttpContext.Session.GetString("user");
@@ -80,7 +80,7 @@ namespace BookStory.Controllers
         [HttpGet]
         public IActionResult Search(string id, int? id1)
         {
-            ViewBag.AllCategories = context.Categories.ToList();
+            ViewBag.Categories = context.Categories.ToList();
             ViewBag.StoryHighestView = context.Stories.OrderByDescending(x => x.View).Take(10).ToList();
             _ = context.Chapters.ToList();
             _ = context.StoriesAuthors.ToList();
@@ -163,7 +163,7 @@ namespace BookStory.Controllers
 
         public IActionResult ListSaved(int id, int? id1)
         {
-            ViewBag.AllCategories = context.Categories.ToList();
+            ViewBag.Categories = context.Categories.ToList();
             var SaveChapters = context.Chapters.OrderByDescending(s => s.Sid).Where(x => x.Readings.Where(r => r.Ctid == x.Ctid && r.Uid == id).Any()).ToList();
             if (id1 == null) id1 = 1;
             int pageSize = 10;

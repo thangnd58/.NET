@@ -1,362 +1,162 @@
 @using BookStory.Models
 @using Microsoft.AspNetCore.Http
 @using Newtonsoft.Json
-<!DOCTYPE html>
-<html lang="vi">
 
-<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# book: http://ogp.me/ns/book# profile: http://ogp.me/ns/profile#">
-    <meta charset="UTF-8">
-    <title>Đọc truyện online, đọc truyện hay</title>
-    <link rel="stylesheet" href="~/style.css">
-</head>
 @{
-    User u = null;
-    string json = Context.Session.GetString("user");
-    if (json != null) u = JsonConvert.DeserializeObject<User>(json);
+    ViewBag.Title = "Home";
+    Layout = "_StoryLayout";
 }
-<body id="body_home">
-    <div id="wrap">
-        <div class="navbar navbar-default navbar-static-top" role="navigation" id="nav">
-            <script type="text/javascript">function getCookie(d) { d += "="; for (var b = decodeURIComponent(document.cookie).split(";"), c = [], a = 0; a < b.length; a++)0 == b[a].trim().indexOf(d) && (c = b[a].trim().split("=")); return 0 < c.length ? c[1] : "" } var js_bgcolor = getCookie("bgcolor-cookie"); "#232323" == js_bgcolor && (document.getElementsByTagName("body")[0].className += " dark-theme");</script>
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse"
-                            data-target=".navbar-collapse">
-                        <span class="sr-only">Hiện menu</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
-                    </button>
-                    <h1><a class="header-logo" href="/Home/Index" title="doc truyen">doc truyen</a></h1>
-                </div>
-                <div class="navbar-collapse collapse" itemscope itemtype="">
-                    <ul class="control nav navbar-nav ">
-                    @if(u != null){
-                            <li><a href="/Story/ListSaved/@u.Uid">Xin chào @u.Name</a></li>
-                        }
-                        <li class="dropdown">
-                            <a href="javascript:void(0)" class="dropdown-toggle"
-                               data-toggle="dropdown">
-                                <span class="glyphicon glyphicon-list"></span> Thể loại <span class="caret"></span>
-                            </a>
-                            <div class="dropdown-menu multi-column">
-                                <div class="row">
-                                    @foreach (Category c in ViewBag.Categories)
-                                    {
-                                        <div class="col-md-4">
-                                            <ul class="dropdown-menu">
-                                                <li>
-                                                    <a href="/Story/Search/@c.Cid"
-                                                   title="@c.Title">@c.Title</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    }
-                                </div>
-                            </div>
-                        </li>
-                        <li class="dropdown">
-                            <a href="javascript:void(0)" class="dropdown-toggle"
-                               data-toggle="dropdown">
-                                <span class="glyphicon glyphicon-cog"></span> Tùy chỉnh trang <span class="caret"></span>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right settings">
-                                <form class="form-horizontal">
-                                    <div class="form-group form-group-sm">
-                                        <label class="col-sm-2 col-md-5 control-label"
-                                               for="truyen-background">Màu nền trang</label>
-                                        <div class="col-sm-5 col-md-7">
-                                            <select class="form-control"
-                                                    id="truyen-background">
-                                                <option value="#F4F4F4" selected>Xám nhạt</option>
-                                                <option value="#232323">Màu tối</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </li>
-                        <li class="dropdown">
-                            <a href="javascript:void(0)" class="dropdown-toggle"
-                               data-toggle="dropdown"><span class="glyphicon glyphicon-list"></span> Lựa chọn <span class="caret"></span></a>
-                            <ul class="dropdown-menu" role="menu">
-                                @if (u == null)
-                                {
-                                    <li>
-                                        <a href="/User/Login">
-                                            Đăng nhập
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/User/Register">
-                                            Đăng ký
-                                        </a>
-                                    </li>
-                                }
-                                else
-                                {
-                                    <li>
-                                        <a href="/Story/ListSaved/@u.Uid">
-                                            Truyện đã lưu
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/User/ChangePassword/">
-                                            Đổi mật khẩu
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/User/Logout">
-                                            Đăng xuất
-                                        </a>
-                                    </li>
-
-                                }
-                            </ul>
-                        </li>
-                        
-                    </ul>
-                    <form class="navbar-form navbar-right" action="/Story/Search" method="post" role="search" itemprop="potentialAction" itemscope>
-                        <div class="input-group search-holder">
-                            <input aria-label="Từ khóa tìm kiếm" role="search key" class="form-control" id="search-input"
-                                   type="search" name="id" placeholder="Tìm kiếm..." value="" itemprop="query-input"
-                                   required>
-                            <div class="input-group-btn">
-                                <button class="btn btn-default" type="submit"
-                                        aria-label="Tìm kiếm" role="search">
-                                    <span class="glyphicon glyphicon-search"></span>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="list-group list-search-res hide"></div>
-                    </form>
-                </div>
-            </div>
-            <div class="navbar-breadcrumb">
-                <div class="container breadcrumb-container">
-                    Đọc truyện online, đọc truyện chữ, truyện full, truyện hay.
-                    Tổng hợp đầy đủ và cập nhật liên tục.
-                </div>
-            </div>
-        </div>
-        <div class="container" id="intro-index">
-            <div class="title-list">
-                <a href="/Story/Search/Hot" title="Truyện hot">
-                    <span class="glyphicon glyphicon-fire"></span>
-                </a>
-                <h2><a href="/Story/Search/Hot" title="Truyện hot">Truyện hot</a></h2>
-                <h2><a href="/Story/Search/New" title="Truyện mới">Truyện mới</a></h2>
-                <h2><a href="/Story/Search/Full" title="Truyện full">Truyện full</a></h2>
-                <form action="/Home/Index/" method="post">
-                    <select name="id" onchange="this.form.submit()" id="hot-select"
-                            class="form-control new-select" aria-label="Chọn thể loại">
-                        <option value="0">Tất cả</option>
-                        @foreach (Category c in ViewBag.Categories)
-                        {
-                            <option value="@c.Cid" @(ViewBag.CurrentId == c.Cid ?"selected":"")>@c.Title</option>
-                        }
-                    </select>
-                </form>
-            </div>
-            <div class="index-intro">
-                @foreach (Story s in ViewBag.Stories)
+<div class="container" id="intro-index">
+    <div class="title-list">
+        <a href="/Story/Search/Hot" title="Truyện hot">
+            <span class="glyphicon glyphicon-fire"></span>
+        </a>
+        <h2><a href="/Story/Search/Hot" title="Truyện hot">Truyện hot</a></h2>
+        <h2><a href="/Story/Search/New" title="Truyện mới">Truyện mới</a></h2>
+        <h2><a href="/Story/Search/Full" title="Truyện full">Truyện full</a></h2>
+        <form action="/Home/Index/" method="post">
+            <select name="id" onchange="this.form.submit()" id="hot-select"
+                    class="form-control new-select" aria-label="Chọn thể loại">
+                <option value="0">Tất cả</option>
+                @foreach (Category c in ViewBag.Categories)
                 {
-                    <div class="item top-1" itemscope itemtype="">
-                        <a href="/Story/Detail/@s.Sid" itemprop="url">
-                            <span class="@(s.Status == 1?"full-label":"")"></span><img src="@s.Image"
-                                                                                   alt="@s.Name" class="img-responsive item-img" itemprop="image">
-                            <div class="title">
-                                <h3 itemprop="name">@s.Name</h3>
-                            </div>
-                        </a>
-                    </div>
+                    <option value="@c.Cid" @(ViewBag.CurrentId == c.Cid ?"selected":"")>@c.Title</option>
                 }
+            </select>
+        </form>
+    </div>
+    <div class="index-intro">
+        @foreach (Story s in ViewBag.Stories)
+        {
+            <div class="item top-1" itemscope itemtype="">
+                <a href="/Story/Detail/@s.Sid" itemprop="url">
+                    <span class="@(s.Status == 1?"full-label":"")"></span><img src="@s.Image"
+                                                                           alt="@s.Name" class="img-responsive item-img" itemprop="image">
+                    <div class="title">
+                        <h3 itemprop="name">@s.Name</h3>
+                    </div>
+                </a>
             </div>
+        }
+    </div>
+</div>
+<div class="container" id="list-index">
+    <div class="row text-center">
+        <div id="banner-bio-link"></div>
+    </div>
+    <div class="hide" id="history-holder"></div>
+    <div class="list list-truyen list-new col-xs-12 col-sm-12 col-md-8 col-truyen-main">
+        <div class="title-list">
+            <h2>
+                <a href="#" title="Truyện mới cập nhật">Truyện mới cập nhật chương mới</a>
+            </h2>
         </div>
-        <div class="container" id="list-index">
-            <div class="row text-center">
-                <div id="banner-bio-link"></div>
-            </div>
-            <div class="hide" id="history-holder"></div>
-            <div class="list list-truyen list-new col-xs-12 col-sm-12 col-md-8 col-truyen-main">
-                <div class="title-list">
-                    <h2>
-                        <a href="#" title="Truyện mới cập nhật">Truyện mới cập nhật chương mới</a>
-                    </h2>
+        @foreach (var c in ViewBag.ListNewChapters)
+        {
+            <div class="row" itemscope )">
+                <div class="col-xs-9 col-sm-6 col-md-5 col-title">
+                    <span class="label-title label-new"></span>
+                    <h3 itemprop="name">
+                        <a href="/Story/Detail/@c.Key.Sid"
+                       title="@c.Key.Name" itemprop="url">
+                            @c.Key.Name
+                        </a>
+                    </h3>
                 </div>
-                @foreach (var c in ViewBag.ListNewChapters)
+                <div class="hidden-xs col-sm-3 col-md-3 col-cat text-888">
+                    @foreach (var ct in @c.Value)
+                    {
+                        <a itemprop="genre"
+                   href="/Story/Search/@ct.Cid" title="">@ct.Title</a>
+                    }
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-2 col-chap text-info">
+                    <a href="/Story/Content/@c.Key.Sid/@c.Key.Chapnumber"
+                   title="@c.Key.Name - Chương @c.Key.Chapnumber">
+                        <span class="chapter-text"><span>Chương </span></span>@c.Key.Chapnumber
+                    </a>
+                </div>
+                <div class="hidden-xs hidden-sm col-md-2 col-time text-888 timer">@c.Key.UpdatedAt</div>
+            </div>
+        }
+    </div>
+    <div class="col-md-4 col-truyen-side">
+        @{
+            User u = null;
+            string json = Context.Session.GetString("user");
+            if (json != null) u = JsonConvert.DeserializeObject<User>(json);
+        }
+        @if (u != null && ViewBag.SaveChapters.Count > 0)
+        {
+            <div class="list list-truyen list-history col-xs-12">
+                <div class="title-list">
+                    <h2><a href="/Story/ListSaved/@u.Uid">Chương đã lưu</a></h2>
+                </div>
+                @foreach (Chapter c in ViewBag.SaveChapters)
                 {
-                    <div class="row" itemscope )">
-                        <div class="col-xs-9 col-sm-6 col-md-5 col-title">
-                            <span class="label-title label-new"></span>
+                    <div class="row">
+                        <div class="col-md-5 col-lg-7">
+                            <span class="glyphicon glyphicon-chevron-right"></span>
                             <h3 itemprop="name">
-                                <a href="/Story/Detail/@c.Key.Sid"
-                               title="@c.Key.Name" itemprop="url">
-                                    @c.Key.Name
-                                </a>
+                                <a title="@c.Name" href="/Story/Detail/@c.Sid">@c.Name</a>
                             </h3>
                         </div>
-                        <div class="hidden-xs col-sm-3 col-md-3 col-cat text-888">
-                            @foreach (var ct in @c.Value)
-                            {
-                                <a itemprop="genre"
-                           href="/Story/Search/@ct.Cid" title="">@ct.Title</a>
-                            }
+                        <div class="col-md-7 col-lg-5 text-info">
+                            <a title="@c.Name Chương @c.Chapnumber" href="/Story/Content/@c.Sid/@c.Chapnumber">Đọc tiếp chương @c.Chapnumber</a>
                         </div>
-                        <div class="col-xs-3 col-sm-3 col-md-2 col-chap text-info">
-                            <a href="/Story/Content/@c.Key.Sid/@c.Key.Chapnumber"
-                           title="@c.Key.Name - Chương @c.Key.Chapnumber">
-                                <span class="chapter-text"><span>Chương </span></span>@c.Key.Chapnumber
-                            </a>
-                        </div>
-                        <div class="hidden-xs hidden-sm col-md-2 col-time text-888 timer">@c.Key.UpdatedAt</div>
                     </div>
                 }
             </div>
-            <div class="col-md-4 col-truyen-side">
-                @if (u != null && ViewBag.SaveChapters.Count > 0)
-                {
-                    <div class="list list-truyen list-history col-xs-12">
-                        <div class="title-list">
-                            <h2><a href="/Story/ListSaved/@u.Uid">Chương đã lưu</a></h2>
-                        </div>
-                        @foreach (Chapter c in ViewBag.SaveChapters)
-                        {
-                            <div class="row">
-                                <div class="col-md-5 col-lg-7">
-                                    <span class="glyphicon glyphicon-chevron-right"></span>
-                                    <h3 itemprop="name">
-                                        <a title="@c.Name" href="/Story/Detail/@c.Sid">@c.Name</a>
-                                    </h3>
-                                </div>
-                                <div class="col-md-7 col-lg-5 text-info">
-                                    <a title="@c.Name Chương @c.Chapnumber" href="/Story/Content/@c.Sid/@c.Chapnumber">Đọc tiếp chương @c.Chapnumber</a>
-                                </div>
-                            </div>
-                        }
-                    </div>
-                }
-                <div class="visible-md-block visible-lg-block text-center">
-                    <div class="hide" id="history-holder-side"></div>
-                    <div class="list list-truyen list-cat col-xs-12">
-                        <div class="title-list">
-                            <h4>Thể loại truyện</h4>
-                        </div>
-                        <div class="row">
-                            @foreach (Category c in ViewBag.Categories)
-                            {
-                                <div class="col-xs-6">
-                                    <a href="/Story/Search/@c.Cid"
-                                   title="@c.Title">@c.Title</a>
-                                </div>
-                            }
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="container" id="truyen-slide">
-            <div class="list list-thumbnail col-xs-12">
+        }
+        <div class="visible-md-block visible-lg-block text-center">
+            <div class="hide" id="history-holder-side"></div>
+            <div class="list list-truyen list-cat col-xs-12">
                 <div class="title-list">
-                    <h2>
-                        <a href="/Story/Search/Full" title="Truyện full">
-                            Truyện đã hoàn
-                            thành
-                        </a>
-                    </h2><a href="#"
-                            title="Truyện full"><span class="glyphicon glyphicon-menu-right"></span></a>
+                    <h4>Thể loại truyện</h4>
                 </div>
                 <div class="row">
-                    @foreach (Story s in ViewBag.FullStories)
+                    @foreach (Category c in ViewBag.Categories)
                     {
-                        <div class="col-xs-4 col-sm-3 col-md-2">
-                            <a href="/Story/Detail/@s.Sid"
-                           title="@s.Name">
-                                <div class="lazyimg"
-                                 data-desk-image="@s.Image"
-                                 data-image="@s.Image"
-                                 data-alt="@s.Name"></div>
-                                <div class="caption">
-                                    <h3>@s.Name</h3> <small class="btn-xs label-primary">
-                                        Full -
-                                        @s.Chapters.Count Chương
-                                    </small>
-                                </div>
-                            </a>
+                        <div class="col-xs-6">
+                            <a href="/Story/Search/@c.Cid"
+                           title="@c.Title">@c.Title</a>
                         </div>
                     }
                 </div>
             </div>
         </div>
     </div>
-    <div id="footer" class="footer">
-        <div class="container">
-            <div class="hidden-xs col-sm-5">
-                <strong>Truyện Full</strong> - <a title="Đọc truyện online"
-                                                  href="#">Đọc truyện</a> online, <a title="Đọc truyện chữ"
-                                                                                     href="#">đọc truyện</a> chữ, <a title="Truyện hay"
-                                                                                                                     href="#">truyện hay</a>. Website luôn cập nhật những bộ <a title="Truyện mới"
-                                                                                                                                                                                href="#">truyện mới</a> thuộc các thể loại đặc sắc như <a title="Truyện tiên hiệp" href="#">truyện tiên hiệp</a>, <a title="Truyện kiếm hiệp" href="#">truyện kiếm hiệp</a>, hay
-                <a title="Truyện ngôn tình" href="#">truyện ngôn tình</a> một
-                cách nhanh nhất. Hỗ trợ mọi thiết bị như di động và máy tính bảng.
-            </div>
-            <ul class="col-xs-12 col-sm-7 list-unstyled">
-                <li class="text-right pull-right">
-                    <a class="backtop"
-                       title="Trở lên đầu trang" href="#wrap" rel="nofollow" aria-label="Trở về đầu trang">
-                        <span class="glyphicon glyphicon-upload"></span>
+</div>
+<div class="container" id="truyen-slide">
+    <div class="list list-thumbnail col-xs-12">
+        <div class="title-list">
+            <h2>
+                <a href="/Story/Search/Full" title="Truyện full">
+                    Truyện đã hoàn
+                    thành
+                </a>
+            </h2><a href="#"
+                    title="Truyện full"><span class="glyphicon glyphicon-menu-right"></span></a>
+        </div>
+        <div class="row">
+            @foreach (Story s in ViewBag.FullStories)
+            {
+                <div class="col-xs-4 col-sm-3 col-md-2">
+                    <a href="/Story/Detail/@s.Sid"
+                   title="@s.Name">
+                        <div class="lazyimg"
+                         data-desk-image="@s.Image"
+                         data-image="@s.Image"
+                         data-alt="@s.Name"></div>
+                        <div class="caption">
+                            <h3>@s.Name</h3> <small class="btn-xs label-primary">
+                                Full -
+                                @s.Chapters.Count Chương
+                            </small>
+                        </div>
                     </a>
-                </li>
-                <li class="hidden-xs tag-list">
-                    <a href="https://truyenfull.vn/danh-sach/tien-hiep-hay/"
-                       title="truyện tiên hiệp hay">truyện tiên hiệp hay</a> <a href="https://truyenfull.vn/the-loai/he-thong/" title="truyện hệ thống">truyện hệ thống</a>
-                </li>
-            </ul>
+                </div>
+            }
         </div>
     </div>
-    <script src="~/main2.js"></script>
-    <script>$('head').append('<link rel="stylesheet" type="text/css" href="https://static.8cache.com/min/g/maincss-08122021_1.css"/>');</script>
-    <script>
-           var a = document.getElementsByClassName("timer");
-           for(let i = 0; i < a.length; i++){
-               timeDifference(a[i].textContent, i);
-           }
-           function timeDifference(previous, i) {
-            const date = new Date();
-            var current = date.getTime();
-            var oTime = previous;
-            var oldTime = new Date(oTime);
-            var msPerMinute = 60 * 1000;
-            var msPerHour = msPerMinute * 60;
-            var msPerDay = msPerHour * 24;
-            var msPerMonth = msPerDay * 30;
-            var msPerYear = msPerDay * 365;
-            var elapsed = current - oldTime;
-            var output = '';
-            if (elapsed < msPerMinute) {
-                 output = Math.round(elapsed/1000) + ' giây trước';
-            }
-
-            else if (elapsed < msPerHour) {
-                 output = Math.round(elapsed/msPerMinute) + ' phút trước';
-            }
-
-            else if (elapsed < msPerDay ) {
-                 output = Math.round(elapsed/msPerHour ) + ' giờ trước';
-            }
-
-            else if (elapsed < msPerMonth) {
-                output = Math.round(elapsed/msPerDay) + ' ngày trước';
-            }
-
-            else if (elapsed < msPerYear) {
-                output = Math.round(elapsed/msPerMonth) + ' tháng trước';
-            }
-
-            else {
-                output = Math.round(elapsed/msPerYear ) + ' năm trước';
-            }
-
-            document.getElementsByClassName("timer")[i].innerHTML = output;
-        }
-    </script>
-</body>
-
-</html>
+</div>

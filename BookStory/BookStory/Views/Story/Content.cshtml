@@ -3,345 +3,103 @@
 @using Newtonsoft.Json
 @model Chapter
 
-<!DOCTYPE html>
-<html lang="vi">
-
-<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# book: http://ogp.me/ns/book# profile: http://ogp.me/ns/profile#">
-    <meta charset="UTF-8">
-    <title>@Model.Name</title>
-    <link rel="stylesheet" href="style.css">
-</head>
 @{
-    User u = null;
-    string json = Context.Session.GetString("user");
-    if (json != null) u = JsonConvert.DeserializeObject<User>(json);
+    ViewBag.Title = "Content";
+    Layout = "_StoryLayout";
 }
-<body id="body_chapter">
-    <div id="wrap">
-        <div class="navbar navbar-default navbar-static-top" role="navigation" id="nav">
-            <script type="text/javascript">function getCookie(d) { d += "="; for (var b = decodeURIComponent(document.cookie).split(";"), c = [], a = 0; a < b.length; a++)0 == b[a].trim().indexOf(d) && (c = b[a].trim().split("=")); return 0 < c.length ? c[1] : "" } var js_bgcolor = getCookie("bgcolor-cookie"); "#232323" == js_bgcolor && (document.getElementsByTagName("body")[0].className += " dark-theme");</script>
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse"
-                            data-target=".navbar-collapse">
-                        <span class="sr-only">Hiện menu</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
-                    </button>
-                    <h1><a class="header-logo" href="/Home/Index" title="doc truyen">doc truyen</a></h1>
-                </div>
-                <div class="navbar-collapse collapse" itemscope itemtype="">
-                    <ul class="control nav navbar-nav ">
-                        @if (u != null)
-                        {
-                            <li>
-                                <a href="/Story/ListSaved/@u.Uid">Xin chào @u.Name</a>
-                            </li>
-                        }
-                        <li class="dropdown">
-                            <a href="javascript:void(0)" class="dropdown-toggle"
-                               data-toggle="dropdown">
-                                <span class="glyphicon glyphicon-list"></span> Thể loại <span class="caret"></span>
-                            </a>
-                            <div class="dropdown-menu multi-column">
-                                <div class="row">
-                                    @foreach (Category c in ViewBag.AllCategories)
-                                    {
-                                        <div class="col-md-4">
-                                            <ul class="dropdown-menu">
-                                                <li>
-                                                    <a href="/Story/Search/@c.Cid"
-                                                   title="@c.Title">@c.Title</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    }
-                                </div>
-                            </div>
-                        </li>
-                        <li class="dropdown">
-                            <a href="javascript:void(0)" class="dropdown-toggle"
-                               data-toggle="dropdown">
-                                <span class="glyphicon glyphicon-cog"></span> Tùy chỉnh trang <span class="caret"></span>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right settings">
-                                <form class="form-horizontal">
-                                    <div class="form-group form-group-sm">
-                                        <label class="col-sm-2 col-md-5 control-label"
-                                               for="truyen-background">Màu nền</label>
-                                        <div class="col-sm-5 col-md-7">
-                                            <select class="form-control"
-                                                    id="truyen-background">
-                                                <option value="#F4F4F4">Xám nhạt</option>
-                                                <option value="#E9EBEE">Xanh nhạt</option>
-                                                <option value="#F4F4E4">Vàng nhạt</option>
-                                                <option value="#EAE4D3">Màu sepia</option>
-                                                <option value="#D5D8DC">Xanh đậm</option>
-                                                <option value="#FAFAC8">Vàng đậm</option>
-                                                <option value="#EFEFAB">Vàng ố</option>
-                                                <option value="#FFF">Màu trắng</option>
-                                                <option value="hatsan">Hạt sạn</option>
-                                                <option value="sachcu">Sách cũ</option>
-                                                <option value="#232323">Màu tối</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group form-group-sm">
-                                        <label class="col-sm-2 col-md-5 control-label"
-                                               for="font-chu">Font chữ</label>
-                                        <div class="col-sm-5 col-md-7">
-                                            <select class="form-control" id="font-chu">
-                                                <option value="'Palatino Linotype', serif">Palatino Linotype</option>
-                                                <option value="Bookerly, serif">Bookerly</option>
-                                                <option value="Minion, serif">Minion</option>
-                                                <option value="'Segoe UI', sans-serif">Segoe UI</option>
-                                                <option value="Roboto, sans-serif">Roboto</option>
-                                                <option value="'Roboto Condensed', sans-serif">Roboto Condensed</option>
-                                                <option value="'Patrick Hand', sans-serif">Patrick Hand</option>
-                                                <option value="'Noticia Text', sans-serif">Noticia Text</option>
-                                                <option value="'Times New Roman', serif">Times New Roman</option>
-                                                <option value="Verdana, sans-serif">Verdana</option>
-                                                <option value="Tahoma, sans-serif">Tahoma</option>
-                                                <option value="Arial, sans-serif">Arial</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group form-group-sm">
-                                        <label class="col-sm-2 col-md-5 control-label"
-                                               for="size-chu">Size chữ</label>
-                                        <div class="col-sm-5 col-md-7">
-                                            <select class="form-control" id="size-chu">
-                                                <option value="16px">16</option>
-                                                <option value="18px">18</option>
-                                                <option value="20px">20</option>
-                                                <option value="22px">22</option>
-                                                <option value="24px">24</option>
-                                                <option value="26px">26</option>
-                                                <option value="28px">28</option>
-                                                <option value="30px">30</option>
-                                                <option value="32px">32</option>
-                                                <option value="34px">34</option>
-                                                <option value="36px">36</option>
-                                                <option value="38px">38</option>
-                                                <option value="40px">40</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group form-group-sm">
-                                        <label class="col-sm-2 col-md-5 control-label"
-                                               for="line-height">Chiều cao dòng</label>
-                                        <div class="col-sm-5 col-md-7">
-                                            <select class="form-control" id="line-height">
-                                                <option value="100%">100%</option>
-                                                <option value="120%">120%</option>
-                                                <option value="140%">140%</option>
-                                                <option value="160%">160%</option>
-                                                <option value="180%">180%</option>
-                                                <option value="200%">200%</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group form-group-sm">
-                                        <label class="col-sm-2 col-md-5 control-label">Full khung</label>
-                                        <div class="col-sm-5 col-md-7">
-                                            <label class="radio-inline"
-                                                   for="fluid-yes">
-                                                <input type="radio" name="fluid-switch" id="fluid-yes"
-                                                       value="yes"> Có
-                                            </label><label class="radio-inline"
-                                                           for="fluid-no">
-                                                <input type="radio" name="fluid-switch" id="fluid-no"
-                                                       value="no" checked> Không
-                                            </label>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </li>
-                        <li class="dropdown">
-                            <a href="javascript:void(0)" class="dropdown-toggle"
-                               data-toggle="dropdown"><span class="glyphicon glyphicon-list"></span> Lựa chọn <span class="caret"></span></a>
-                            <ul class="dropdown-menu" role="menu">
-                                @if (u == null)
-                                {
-                                    <li>
-                                        <a href="/User/Login">
-                                            Đăng nhập
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/User/Register">
-                                            Đăng ký
-                                        </a>
-                                    </li>
-                                }
-                                else
-                                {
-                                    <li>
-                                        <a href="/Story/ListSaved/@u.Uid">
-                                            Truyện đã lưu
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/User/ChangePassword/">
-                                            Đổi mật khẩu
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/User/Logout">
-                                            Đăng xuất
-                                        </a>
-                                    </li>
+<div id="chapter-big-container" class="container chapter">
+    <div class="row">
+        <div class="col-xs-12">
+            <button type="button"
+                    class="btn btn-responsive btn-success toggle-nav-open ">
+                <span class="glyphicon glyphicon-menu-up glyphicon-menu-updownswitch"></span>
+            </button>
+            <a class="truyen-title"
+               href="/Story/Detail/@Model.Sid" title="@Model.Name">@Model.Name</a>
 
-                                }
-                            </ul>
-                        </li>
-                    </ul>
-                    <form class="navbar-form navbar-right" action="/Story/Search" method="post" role="search" itemprop="potentialAction" itemscope>
-                        <div class="input-group search-holder">
-                            <input aria-label="Từ khóa tìm kiếm" role="search key" class="form-control" id="search-input"
-                                   type="search" name="id" placeholder="Tìm kiếm..." value="" itemprop="query-input"
-                                   required>
-                            <div class="input-group-btn">
-                                <button class="btn btn-default" type="submit"
-                                        aria-label="Tìm kiếm" role="search">
-                                    <span class="glyphicon glyphicon-search"></span>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="list-group list-search-res hide"></div>
-                    </form>
-                </div>
-            </div>
-            <div class="navbar-breadcrumb">
-                <div class="container breadcrumb-container">
-                    Đọc truyện online, đọc truyện chữ, truyện full, truyện hay.
-                    Tổng hợp đầy đủ và cập nhật liên tục.
-                </div>
-            </div>
-        </div>
-        <div id="chapter-big-container" class="container chapter">
-            <div class="row">
-                <div class="col-xs-12">
-                    <button type="button"
-                            class="btn btn-responsive btn-success toggle-nav-open ">
-                        <span class="glyphicon glyphicon-menu-up glyphicon-menu-updownswitch"></span>
-                    </button>
-                    <a class="truyen-title"
-                       href="/Story/Detail/@Model.Sid" title="@Model.Name">@Model.Name</a>
+            <h2>
+                <a class="chapter-title" href="/Story/Content/@Model.Sid/@Model.Chapnumber"
+                   title="@Model.Subname">
+                    <span class="chapter-text"><span>@Model.Subname</span></span>
+                </a>
+            </h2>
+            <hr class="chapter-start">
+            @if (Context.Session.GetString("user") != null)
+            {
+                if (ViewBag.IsSave == false)
+                {
+                    <a href="/Story/Save/@Model.Sid/@Model.Chapnumber"><button class="btn btn-success">Lưu chương</button></a>
+                }
+                else
+                {
+                    <a href="/Story/UnSave/@Model.Sid/@Model.Chapnumber"><button class="btn btn-success">Bỏ lưu chương</button></a>
+                }
+            }
+            <div style="margin-top: 30px" class="chapter-nav" id="chapter-nav-top">
+                <input type="hidden" id="ten-truyen"
+                       value="me-vo-khong-loi-ve-914117"><input type="hidden" id="truyen-comment"
+                                                                value="me-vo-khong-loi-ve"><input type="hidden" id="truyen-id" value="22044"><input type="hidden" id="chapter-id" value="2834631"><input type="hidden" id="chapter-bnum"
+                                                                                                                                                                                                         value=""><input type="hidden" id="chapter-num" value="1"><input type="hidden"
+                                                                                                                                                                                                                                                                         id="chapter-sac" value="1"><input type="hidden" id="" value="1">
+                <div class="btn-group">
 
-                    <h2>
-                        <a class="chapter-title" href="/Story/Content/@Model.Sid/@Model.Chapnumber"
-                           title="@Model.Subname">
-                            <span class="chapter-text"><span>@Model.Subname</span></span>
-                        </a>
-                    </h2>
-                    <hr class="chapter-start">
-                    @if (Context.Session.GetString("user") != null)
-                    {
-                        if (ViewBag.IsSave == false)
-                        {
-                            <a href="/Story/Save/@Model.Sid/@Model.Chapnumber"><button class="btn btn-success">Lưu chương</button></a>
-                        }
-                        else
-                        {
-                            <a href="/Story/UnSave/@Model.Sid/@Model.Chapnumber"><button class="btn btn-success">Bỏ lưu chương</button></a>
-                        }
-                    }
-                    <div style="margin-top: 30px" class="chapter-nav" id="chapter-nav-top">
-                        <input type="hidden" id="ten-truyen"
-                               value="me-vo-khong-loi-ve-914117"><input type="hidden" id="truyen-comment"
-                                                                        value="me-vo-khong-loi-ve"><input type="hidden" id="truyen-id" value="22044"><input type="hidden" id="chapter-id" value="2834631"><input type="hidden" id="chapter-bnum"
-                                                                                                                                                                                                                 value=""><input type="hidden" id="chapter-num" value="1"><input type="hidden"
-                                                                                                                                                                                                                                                                                 id="chapter-sac" value="1"><input type="hidden" id="" value="1">
-                        <div class="btn-group">
-
-                            <a class="btn btn-success btn-chapter-nav @(Model.Chapnumber.Equals("1")?"disabled":"")"
-                               href="/Story/Content/@Model.Sid/@(int.Parse(Model.Chapnumber) - 1)" id="prev_chap" data-cid="">
-                                <span class="glyphicon glyphicon-chevron-left"></span> <span class="hidden-xs">
-                                    Chương
-                                </span>trước
-                            </a>
-                            <select class="btn btn-success btn-chapter-nav" onchange="window.location.href=this.value">
-                                @foreach (Chapter c in ViewBag.AllChapters)
-                                {
-                                    <option value="/Story/Content/@c.Sid/@c.Chapnumber" @(c.Chapnumber == @Model.Chapnumber?"selected":"")>Chương @c.Chapnumber</option>
-                                }
-                            </select>
-                            <a class="btn btn-success btn-chapter-nav @(Model.Chapnumber.Equals(ViewBag.AllChapters.Count.ToString())?"disabled":"")"
-                               href="/Story/Content/@Model.Sid/@(int.Parse(Model.Chapnumber) + 1)"
-                               id="next_chap" data-cid="2834632">
-                                <span class="hidden-xs">Chương </span>tiếp <span class="glyphicon glyphicon-chevron-right"></span>
-                            </a>
-                        </div>
-                    </div><br />
-                    <hr class="chapter-end">
-                    <div id="chapter-c" class="chapter-c">
-                        @Html.Raw(Model.Content)
-                    </div>
-                    <hr class="chapter-end">
-                    @if (Context.Session.GetString("user") != null)
-                    {
-                        if (ViewBag.IsSave == false)
-                        {
-                            <a href="/Story/Save/@Model.Sid/@Model.Chapnumber"><button class="btn btn-success">Lưu chương</button></a>
-                        }
-                        else
-                        {
-                            <a href="/Story/UnSave/@Model.Sid/@Model.Chapnumber"><button class="btn btn-success">Bỏ lưu chương</button></a>
-                        }
-                    }
-                    <div style="margin-top: 30px" class="chapter-nav" id="chapter-nav-bot">
-                        <div class="btn-group">
-                            <a class="btn btn-success btn-chapter-nav @(Model.Chapnumber.Equals("1")?"disabled":"")"
-                               href="/Story/Content/@Model.Sid/@(int.Parse(Model.Chapnumber) - 1)" id="prev_chap" data-cid="">
-                                <span class="glyphicon glyphicon-chevron-left"></span> <span class="hidden-xs">
-                                    Chương
-                                </span>trước
-                            </a>
-                            <select class="btn btn-success btn-chapter-nav" onchange="window.location.href=this.value">
-                                @foreach (Chapter c in ViewBag.AllChapters)
-                                {
-                                    <option value="/Story/Content/@c.Sid/@c.Chapnumber" @(c.Chapnumber == @Model.Chapnumber?"selected":"")>Chương @c.Chapnumber</option>
-                                }
-                            </select>
-                            <a class="btn btn-success btn-chapter-nav @(Model.Chapnumber.Equals(ViewBag.AllChapters.Count.ToString())?"disabled":"")"
-                               href="/Story/Content/@Model.Sid/@(int.Parse(Model.Chapnumber) + 1)"
-                               id="next_chap" data-cid="2834632">
-                                <span class="hidden-xs">Chương </span>tiếp <span class="glyphicon glyphicon-chevron-right"></span>
-                            </a>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="footer" class="footer">
-        <div class="container">
-            <div class="hidden-xs col-sm-5">
-                <strong>Truyện Full</strong> - <a title="Đọc truyện online"
-                                                  href="#">Đọc truyện</a> online, <a title="Đọc truyện chữ"
-                                                                                     href="#">đọc truyện</a> chữ, <a title="Truyện hay"
-                                                                                                                     href="#">truyện hay</a>. Website luôn cập nhật những bộ <a title="Truyện mới"
-                                                                                                                                                                                href="#">truyện mới</a> thuộc các thể loại đặc sắc như <a title="Truyện tiên hiệp" href="#">truyện tiên hiệp</a>, <a title="Truyện kiếm hiệp" href="#">truyện kiếm hiệp</a>, hay
-                <a title="Truyện ngôn tình" href="#">truyện ngôn tình</a> một
-                cách nhanh nhất. Hỗ trợ mọi thiết bị như di động và máy tính bảng.
-            </div>
-            <ul class="col-xs-12 col-sm-7 list-unstyled">
-                <li class="text-right pull-right">
-                    <a class="backtop"
-                       title="Trở lên đầu trang" href="#wrap" rel="nofollow" aria-label="Trở về đầu trang">
-                        <span class="glyphicon glyphicon-upload"></span>
+                    <a class="btn btn-success btn-chapter-nav @(Model.Chapnumber.Equals("1")?"disabled":"")"
+                       href="/Story/Content/@Model.Sid/@(int.Parse(Model.Chapnumber) - 1)" id="prev_chap" data-cid="">
+                        <span class="glyphicon glyphicon-chevron-left"></span> <span class="hidden-xs">
+                            Chương
+                        </span>trước
                     </a>
-                </li>
-                <li class="hidden-xs tag-list">
-                    <a href="#"
-                       title="truyện tiên hiệp hay">truyện tiên hiệp hay</a> <a href="#" title="truyện hệ thống">truyện hệ thống</a>
-                </li>
-            </ul>
+                    <select class="btn btn-success btn-chapter-nav" onchange="window.location.href=this.value">
+                        @foreach (Chapter c in ViewBag.AllChapters)
+                        {
+                            <option value="/Story/Content/@c.Sid/@c.Chapnumber" @(c.Chapnumber == @Model.Chapnumber?"selected":"")>Chương @c.Chapnumber</option>
+                        }
+                    </select>
+                    <a class="btn btn-success btn-chapter-nav @(Model.Chapnumber.Equals(ViewBag.AllChapters.Count.ToString())?"disabled":"")"
+                       href="/Story/Content/@Model.Sid/@(int.Parse(Model.Chapnumber) + 1)"
+                       id="next_chap" data-cid="2834632">
+                        <span class="hidden-xs">Chương </span>tiếp <span class="glyphicon glyphicon-chevron-right"></span>
+                    </a>
+                </div>
+            </div><br />
+            <hr class="chapter-end">
+            <div id="chapter-c" class="chapter-c">
+                @Html.Raw(Model.Content)
+            </div>
+            <hr class="chapter-end">
+            @if (Context.Session.GetString("user") != null)
+            {
+                if (ViewBag.IsSave == false)
+                {
+                    <a href="/Story/Save/@Model.Sid/@Model.Chapnumber"><button class="btn btn-success">Lưu chương</button></a>
+                }
+                else
+                {
+                    <a href="/Story/UnSave/@Model.Sid/@Model.Chapnumber"><button class="btn btn-success">Bỏ lưu chương</button></a>
+                }
+            }
+            <div style="margin-top: 30px" class="chapter-nav" id="chapter-nav-bot">
+                <div class="btn-group">
+                    <a class="btn btn-success btn-chapter-nav @(Model.Chapnumber.Equals("1")?"disabled":"")"
+                       href="/Story/Content/@Model.Sid/@(int.Parse(Model.Chapnumber) - 1)" id="prev_chap" data-cid="">
+                        <span class="glyphicon glyphicon-chevron-left"></span> <span class="hidden-xs">
+                            Chương
+                        </span>trước
+                    </a>
+                    <select class="btn btn-success btn-chapter-nav" onchange="window.location.href=this.value">
+                        @foreach (Chapter c in ViewBag.AllChapters)
+                        {
+                            <option value="/Story/Content/@c.Sid/@c.Chapnumber" @(c.Chapnumber == @Model.Chapnumber?"selected":"")>Chương @c.Chapnumber</option>
+                        }
+                    </select>
+                    <a class="btn btn-success btn-chapter-nav @(Model.Chapnumber.Equals(ViewBag.AllChapters.Count.ToString())?"disabled":"")"
+                       href="/Story/Content/@Model.Sid/@(int.Parse(Model.Chapnumber) + 1)"
+                       id="next_chap" data-cid="2834632">
+                        <span class="hidden-xs">Chương </span>tiếp <span class="glyphicon glyphicon-chevron-right"></span>
+                    </a>
+                </div>
+
+            </div>
         </div>
     </div>
-    <script src="~/main2.js"></script>
-    <script>$('head').append('<link rel="stylesheet" type="text/css" href="https://static.8cache.com/min/g/maincss-08122021_1.css"/>');</script>
-</body>
-
-</html>
+</div>

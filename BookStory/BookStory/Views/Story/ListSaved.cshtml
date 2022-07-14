@@ -5,182 +5,42 @@
 @using X.PagedList;
 @using X.PagedList.Mvc.Core
 
-<!DOCTYPE html>
-<html lang="vi">
-
-<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# book: http://ogp.me/ns/book# profile: http://ogp.me/ns/profile#">
-    <meta charset="UTF-8">
-    <title>Truyện chữ mới</title>
-    <link type="text/css" rel="stylesheet" href="~/style.css">
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-</head>
 @{
-    User u = null;
-    string json = Context.Session.GetString("user");
-    if (json != null) u = JsonConvert.DeserializeObject<User>(json);
+    ViewBag.Title = "List Saved";
+    Layout = "_StoryLayout";
 }
-<body id="body_list">
-    <div id="wrap">
-        <div class="navbar navbar-default navbar-static-top" role="navigation" id="nav">
-            <script type="text/javascript">function getCookie(d) { d += "="; for (var b = decodeURIComponent(document.cookie).split(";"), c = [], a = 0; a < b.length; a++)0 == b[a].trim().indexOf(d) && (c = b[a].trim().split("=")); return 0 < c.length ? c[1] : "" } var js_bgcolor = getCookie("bgcolor-cookie"); "#232323" == js_bgcolor && (document.getElementsByTagName("body")[0].className += " dark-theme");</script>
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse"
-                            data-target=".navbar-collapse">
-                        <span class="sr-only">Hiện menu</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
-                    </button>
-                    <h1><a class="header-logo" href="/Home/Index" title="doc truyen">doc truyen</a></h1>
-                </div>
-                <div class="navbar-collapse collapse" itemscope itemtype="">
-                    <ul class="control nav navbar-nav ">
-                        @if (u != null)
-                        {
-                            <li>
-                                <a href="/Story/ListSaved/@u.Uid">Xin chào @u.Name</a>
-                            </li>
-                        }
-                        <li class="dropdown">
-                            <a href="javascript:void(0)" class="dropdown-toggle"
-                               data-toggle="dropdown">
-                                <span class="glyphicon glyphicon-list"></span> Thể loại <span class="caret"></span>
-                            </a>
-                            <div class="dropdown-menu multi-column">
-                                <div class="row">
-                                    @foreach (Category c in ViewBag.AllCategories)
-                                    {
-                                        <div class="col-md-4">
-                                            <ul class="dropdown-menu">
-                                                <li>
-                                                    <a href="/Story/Search/@c.Cid"
-                                                   title="@c.Title">@c.Title</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    }
-                                </div>
-                            </div>
-                        </li>
-                        <li class="dropdown">
-                            <a href="javascript:void(0)" class="dropdown-toggle"
-                               data-toggle="dropdown">
-                                <span class="glyphicon glyphicon-cog"></span> Tùy chỉnh trang <span class="caret"></span>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right settings">
-                                <form class="form-horizontal">
-                                    <div class="form-group form-group-sm">
-                                        <label class="col-sm-2 col-md-5 control-label"
-                                               for="truyen-background">Màu nền trang</label>
-                                        <div class="col-sm-5 col-md-7">
-                                            <select class="form-control"
-                                                    id="truyen-background">
-                                                <option value="#F4F4F4" selected>Xám nhạt</option>
-                                                <option value="#232323">Màu tối</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </li>
-                        <li class="dropdown">
-                            <a href="javascript:void(0)" class="dropdown-toggle"
-                               data-toggle="dropdown"><span class="glyphicon glyphicon-list"></span> Lựa chọn <span class="caret"></span></a>
-                            <ul class="dropdown-menu" role="menu">
-                                @if (u == null)
-                                {
-                                    <li>
-                                        <a href="/User/Login">
-                                            Đăng nhập
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/User/Register">
-                                            Đăng ký
-                                        </a>
-                                    </li>
-                                }
-                                else
-                                {
-                                    <li>
-                                        <a href="/Story/ListSaved/@u.Uid">
-                                            Truyện đã lưu
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/User/ChangePassword/">
-                                            Đổi mật khẩu
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/User/Logout">
-                                            Đăng xuất
-                                        </a>
-                                    </li>
+<div class="container" id="list-page">
+    <div class="col-xs-12 col-sm-12 col-md-9 col-truyen-main">
+        <div class="text-center"></div>
+        <div class="list list-truyen col-xs-12">
+            <div class="title-list">
+                <h2>Các chương đã lưu</h2>
+            </div>
+            @if (Model.Count > 0)
+            {
+                @foreach (Chapter c in Model)
+                {
+                    <div class="row" itemscope>
+                        <div class="col-xs-12">
+                            <div>
+                                <a title="Bỏ lưu" href="/Story/UnSave/@c.Sid/@c.Chapnumber/@ViewBag.CurrentId/@ViewBag.CurrentPage"><button class="btn btn-danger">Xóa</button></a>
+                                <h3 class="truyen-title" itemprop="name">
+                                    <a href="/Story/Content/@c.Sid/@c.Chapnumber"
+                               title="@c.Name" itemprop="url">
+                                        @c.Name - Chương @c.Chapnumber
+                                    </a>
+                                </h3>
 
-                                }
-                            </ul>
-                        </li>
-                    </ul>
-                    <form class="navbar-form navbar-right" action="/Story/Search" method="post" role="search" itemprop="potentialAction" itemscope>
-                        <div class="input-group search-holder">
-                            <input aria-label="Từ khóa tìm kiếm" role="search key" class="form-control" id="search-input"
-                                   type="search" name="id" placeholder="Tìm kiếm..." value="" itemprop="query-input"
-                                   required>
-                            <div class="input-group-btn">
-                                <button class="btn btn-default" type="submit"
-                                        aria-label="Tìm kiếm" role="search">
-                                    <span class="glyphicon glyphicon-search"></span>
-                                </button>
                             </div>
                         </div>
-                        <div class="list-group list-search-res hide"></div>
-                    </form>
-                </div>
-            </div>
-            <div class="navbar-breadcrumb">
-                <div class="container breadcrumb-container">
-                    Đọc truyện online, đọc truyện chữ, truyện full, truyện hay.
-                    Tổng hợp đầy đủ và cập nhật liên tục.
-                </div>
-            </div>
-        </div>
-        <div class="container" id="list-page">
-            <div class="col-xs-12 col-sm-12 col-md-9 col-truyen-main">
-                <div class="text-center"></div>
-                <div class="list list-truyen col-xs-12">
-                    <div class="title-list">
-                        <h2>Các chương đã lưu</h2>
                     </div>
-                    @if (Model.Count > 0)
-                    {
-                        @foreach (Chapter c in Model)
-                        {
-                            <div class="row" itemscope>
-                                <div class="col-xs-12">
-                                    <div>
-                                        <a title="Bỏ lưu" href="/Story/UnSave/@c.Sid/@c.Chapnumber/@ViewBag.CurrentId/@ViewBag.CurrentPage"><i class="fa fa-close"></i></a>
-                                        <h3 class="truyen-title" itemprop="name">
-                                            <a href="/Story/Content/@c.Sid/@c.Chapnumber"
-                                       title="@c.Name" itemprop="url">
-                                                @c.Name - Chương @c.Chapnumber
-                                            </a>
-                                        </h3>
-
-                                    </div>
-                                </div>
-                            </div>
-                        }
-                        @Html.PagedListPager(Model, id1 => Url.Action("ListSaved", new { id = ViewBag.CurrentId, id1 }))
-                    }
-                    else
-                    {
-                        <div class="truyen-title">Trống</div>
-                    }
-                </div>
-
-            </div>
-            <script src="~/main2.js"></script>
-            <script>$('head').append('<link rel="stylesheet" type="text/css" href="https://static.8cache.com/min/g/maincss-08122021_1.css"/>');</script>
-</body>
-
-</html>
+                }
+                @Html.PagedListPager(Model, id1 => Url.Action("ListSaved", new { id = ViewBag.CurrentId, id1 }))
+            }
+            else
+            {
+                <div class="truyen-title">Trống</div>
+            }
+        </div>
+    </div>
+</div>

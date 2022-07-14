@@ -1,0 +1,271 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewBag.Title</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
+    <!-- DataTables -->
+    <link rel="stylesheet" href="~/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/dist/css/adminlte.min.css">
+    <!-- Select2 -->
+    <link rel="stylesheet" href="~/plugins/select2/css/select2.min.css">
+    <link rel="stylesheet" href="~/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+    <!-- summernote -->
+    <link rel="stylesheet" href="~/plugins/summernote/summernote-bs4.min.css">
+</head>
+<style>
+    .select2-container .select2-selection--single {
+        box-sizing: border-box;
+        cursor: pointer;
+        display: block;
+        height: 38px;
+        user-select: none;
+        -webkit-user-select: none;
+    }
+</style>
+<body class="hold-transition sidebar-mini layout-fixed sidebar-collapse">
+    <div class="wrapper">
+
+        <!-- Navbar -->
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+            <!-- Left navbar links -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="/Home/Index/" class="nav-link">Home</a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Sidebar Container -->
+        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+            <!-- Brand Logo -->
+            <a href="/Admin/ListStory/" class="brand-link">
+                <img src="~/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+                     style="opacity: .8">
+                <span class="brand-text font-weight-light">Admin</span>
+            </a>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Sidebar Menu -->
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                        <!-- Add icons to the links using the .nav-icon class
+                           with font-awesome or any other icon font library -->
+                        <li class="nav-item menu-open">
+                            <a href="/Admin/ListStory/" class="nav-link @(Context.Request.Path.ToString().Contains("ListStory")?"active":"")">
+                                <i class="nav-icon fas fa-table"></i>
+                                <p>
+                                    Truyện
+                                </p>
+                            </a>
+                            <a href="/Admin/ListChapter/" class="nav-link @(Context.Request.Path.ToString().Contains("ListChapter")?"active":"")">
+                                <i class="nav-icon fas fa-table"></i>
+                                <p>
+                                    Chương
+                                </p>
+                            </a>
+                            <a href="/Admin/ListUser/" class="nav-link @(Context.Request.Path.ToString().Contains("ListUser")?"active":"")">
+                                <i class="nav-icon fas fa-table"></i>
+                                <p>
+                                    Người dùng
+                                </p>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <!-- /.sidebar-menu -->
+            </div>
+            <!-- /.sidebar -->
+        </aside>
+        @RenderBody();
+        </div>
+    <!-- ./wrapper -->
+    <!-- jQuery -->
+    <script src="~/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- DataTables  & Plugins-->
+    <script src="~/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/plugins/jszip/jszip.min.js"></script>
+    <script src="~/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="~/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="~/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="~/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="~/dist/js/adminlte.min.js"></script>
+    <!-- Select2 -->
+    <script src="~/plugins/select2/js/select2.full.min.js"></script>
+    <!-- Summernote -->
+    <script src="~/plugins/summernote/summernote-bs4.min.js"></script>
+    <!-- Page specific script -->
+    <script>
+
+        $(document).ready(function(){
+
+            //Data Table
+            $("#example1").DataTable({
+                "buttons": ["colvis"],
+                "paging": false,
+                "lengthChange": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": true,
+                "responsive": true,
+                "order": [[0, "desc"]],
+              });
+
+            //Add story
+            $('#add-story').click(function(){
+                $.ajax({
+                    url: '/Admin/AddStory/',
+                    type: 'POST',
+                    data: $('#form-add-story').serialize(),
+                    success: function() {
+                        alert("Add Story Successful")
+                        location.reload()
+                    }
+                });
+            });
+
+            //Add author
+            $('#add-author').click(function(){
+                $.ajax({
+                    url: '/Admin/AddAuthor/',
+                    type: 'POST',
+                    data: $('#form-add-author').serialize(),
+                    success: function() {
+                        alert("Add Author Successful")
+                        location.reload()
+                    }
+                });
+            });
+
+            //Add category
+            $('#add-category').click(function(){
+                $.ajax({
+                    url: '/Admin/AddCategory/',
+                    type: 'POST',
+                    data: $('#form-add-category').serialize(),
+                    success: function() {
+                        alert("Add Category Successful")
+                        location.reload()
+                    }
+                });
+            });
+
+            //Edit story
+            $('#edit-story').click(function(){
+                $.ajax({
+                    url: '/Admin/EditStory/',
+                    type: 'POST',
+                    data: $('#form-edit-story').serialize(),
+                    success: function() {
+                        alert("Edit Story Successful")
+                        location.reload()
+                    }
+                });
+            });
+
+            //Add chapter
+            $('#add-chapter').click(function(){
+                $.ajax({
+                    url: '/Admin/AddChapter/',
+                    type: 'POST',
+                    data: $('#form-add-chapter').serialize(),
+                    success: function() {
+                        alert("Add Chapter Successful")
+                        location.reload()
+                    }
+                });
+            });
+
+            //Load chapter into modal for add
+            $('.chapterinfo').click(function(){
+                var sid = $(this).data('id');
+                $('#sid-chapter').val(sid);
+                $.ajax({
+                    url: '/Admin/GetChapter/',
+                    type: 'GET',
+                    data: {sid : sid},
+                    success: function(response) {
+                        $('#namechapter').val(response.name)
+                        $('#chapternumber').val(response.chapnumber)
+                    }
+                });
+                $('#modal-addchapter').modal('show');
+            });
+
+            //Load story into modal for update
+            $('.storyinfo').click(function(){
+                var storyid = $(this).data('id');
+                $.ajax({
+                    url: '/Admin/GetStory/',
+                    type: 'GET',
+                    data: {storyid : storyid},
+                    success: function(response) {
+                        $('#sid-edit').val(response.sid)
+                        $('#name-edit').val(response.name)
+                        $('#status-edit').val(response.status)
+                        $('#source-edit').val(response.source)
+                        $('#image-edit').val(response.image)
+                        $('#keyword-edit').val(response.keyword)
+                        $('#description-edit').val(response.description)
+                        $('#author-edit').val(response.authorid).change()
+                        $('#category-edit').val(response.listcid).change()
+                    }
+                });
+                $('#modal-edit').modal('show');
+            });
+
+            //Load storyid into ask modal
+            $('.deletestory').click(function(){
+                var storyid = $(this).data('id');
+                $('#input-detele').val(storyid);
+            });
+
+            //Confirm delete story
+            $('#confirm-delete').click(function(){
+                $.ajax({
+                    url: '/Admin/DeleteStory/',
+                    type: 'POST',
+                    data: $('#form-delete-story').serialize(),
+                    success: function() {
+                        alert("Delete Story Successful")
+                        location.reload()
+                    }
+                });
+            });
+
+        });
+
+        //Select2
+        $('.select2').select2();
+        // Summernote
+        $('.summernote').summernote();
+
+    </script>
+</body>
+
+</html>
