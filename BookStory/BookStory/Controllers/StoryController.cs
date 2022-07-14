@@ -13,7 +13,7 @@ namespace BookStory.Controllers
     {
         readonly StoryDBContext context = new();
 
-        public IActionResult Detail(int id, int? page)
+        public IActionResult Detail(int id, int? id1)
         {
             Story s = null;
             s = context.Stories.FirstOrDefault(x => x.Sid == id);
@@ -40,22 +40,20 @@ namespace BookStory.Controllers
             ViewBag.Story = s;
             ViewBag.StoryAuthors = context.Stories.Where(s => s.StoriesAuthors.Where(x => x.Aid == author.Aid && x.Sid != id).Any()).Take(5).ToList();
             ViewBag.StoryHighestView = context.Stories.OrderByDescending(x => x.View).Take(10).ToList();
-            if (page == null) page = 1;
+            if (id1 == null) id1 = 1;
             int pageSize = 10;
-            int pageNumber = (page ?? 1);
+            int pageNumber = (id1 ?? 1);
             var chaptersPage = chapters.ToList();
             return View(chaptersPage.ToPagedList(pageNumber, pageSize));
         }
 
-        public IActionResult Content(int id, int page)
+        public IActionResult Content(int id, int id1)
         {
 
-            Chapter c = null;
+            Chapter c = new();
             List<Category> listAllCategories = context.Categories.ToList();
-            c = context.Chapters.FirstOrDefault(x => x.Sid == id && x.Chapnumber == page.ToString());
+            c = context.Chapters.FirstOrDefault(x => x.Sid == id && x.Chapnumber == id1.ToString());
             Story s = context.Stories.FirstOrDefault(x => x.Sid == id);
-            s.View++;
-            context.SaveChanges();
             ViewBag.AllCategories = listAllCategories;
             ViewBag.AllChapters = context.Chapters.Where(x => x.Sid == id).ToList();
             User u = null;
@@ -73,21 +71,23 @@ namespace BookStory.Controllers
                 }
                 ViewBag.IsSave = IsSave;
             }
+            context.SaveChanges();
+            s.View += 1;
             return View(c);
         }
 
         [HttpPost]
         [HttpGet]
-        public IActionResult Search(string id, int? page)
+        public IActionResult Search(string id, int? id1)
         {
             ViewBag.AllCategories = context.Categories.ToList();
             ViewBag.StoryHighestView = context.Stories.OrderByDescending(x => x.View).Take(10).ToList();
             _ = context.Chapters.ToList();
             _ = context.StoriesAuthors.ToList();
             ViewBag.Authors = context.Authors.ToList();
-            if (page == null) page = 1;
+            if (id1 == null) id1 = 1;
             int pageSize = 10;
-            int pageNumber = (page ?? 1);
+            int pageNumber = (id1 ?? 1);
             var storiesPage = context.Stories.Where(x => x.StoriesCategories.Where(s => s.Cid.ToString() == id).Any()).ToList();
             if (storiesPage.Count == 0)
             {
@@ -117,7 +117,7 @@ namespace BookStory.Controllers
             return stories;
         }
 
-        public IActionResult Save(int id, int page)
+        public IActionResult Save(int id, int id1)
         {
             User u = null;
             string json = HttpContext.Session.GetString("user");
@@ -132,7 +132,7 @@ namespace BookStory.Controllers
             {
                 rid = 1;
             }
-            int ctid = context.Chapters.FirstOrDefault(x => x.Chapnumber.Equals(page.ToString()) && x.Sid == id).Ctid;
+            int ctid = context.Chapters.FirstOrDefault(x => x.Chapnumber.Equals(id1.ToString()) && x.Sid == id).Ctid;
             int count = context.Readings.Where(x => x.Ctid == ctid && x.Uid == u.Uid).ToList().Count;
             if (count == 0)
             {
@@ -143,33 +143,33 @@ namespace BookStory.Controllers
                 context.Add<Reading>(r);
                 context.SaveChanges();
             }
-            return RedirectToAction("Content", "Story", new { id, page });
+            return RedirectToAction("Content", "Story", new { id, id1 });
         }
 
-        public IActionResult UnSave(int id, int page, int? id2, int? id3)
+        public IActionResult UnSave(int id, int id1, int? id2, int? id3)
         {
-            int ctid = context.Chapters.FirstOrDefault(x => x.Chapnumber.Equals(page.ToString()) && x.Sid == id).Ctid;
+            int ctid = context.Chapters.FirstOrDefault(x => x.Chapnumber.Equals(id1.ToString()) && x.Sid == id).Ctid;
             Reading r = context.Readings.FirstOrDefault(x => x.Ctid == ctid);
             context.Readings.Remove(r);
             context.SaveChanges();
             if (id2 == null)
             {
-                return RedirectToAction("Content", "Story", new { id, page });
+                return RedirectToAction("Content", "Story", new { id, id1 });
             } else
             {
-                return RedirectToAction("ListSaved", "Story", new { id = id2, page = id3});
+                return RedirectToAction("ListSaved", "Story", new { id = id2, id1 = id3});
             }
         }
 
-        public IActionResult ListSaved(int id, int? page)
+        public IActionResult ListSaved(int id, int? id1)
         {
             ViewBag.AllCategories = context.Categories.ToList();
             var SaveChapters = context.Chapters.OrderByDescending(s => s.Sid).Where(x => x.Readings.Where(r => r.Ctid == x.Ctid && r.Uid == id).Any()).ToList();
-            if (page == null) page = 1;
+            if (id1 == null) id1 = 1;
             int pageSize = 10;
-            int pageNumber = (page ?? 1);
+            int pageNumber = (id1 ?? 1);
             ViewBag.CurrentId = id;
-            ViewBag.CurrentPage = page;
+            ViewBag.CurrentPage = id1;
             return View(SaveChapters.ToPagedList(pageNumber, pageSize));
         }
 

@@ -92,6 +92,13 @@ namespace BookStory.Controllers
         }
 
         [HttpPost]
+        public IActionResult DeleteStory()
+        {
+
+            return RedirectToAction("ListStory", "Admin");
+        }
+
+        [HttpPost]
         public IActionResult AddAuthor(string author)
         {
             Author a = new()
@@ -120,8 +127,8 @@ namespace BookStory.Controllers
                 CreatedAt = System.DateTime.Now,
                 UpdatedAt = System.DateTime.Now
             };
-            context.Add<Story>(story);
-            context.SaveChanges();
+            _ = context.Add(story);
+            _ = context.SaveChanges();
             for (int i = 0; i < categories.Length; i++)
             {
                 StoriesCategory sc = new()
@@ -130,8 +137,8 @@ namespace BookStory.Controllers
                     Cid = categories[i],
                     Sid = context.Stories.FirstOrDefault(x => x.Name.Equals(story.Name)).Sid
                 };
-                context.Add<StoriesCategory>(sc);
-                context.SaveChanges();
+                _ = context.Add(sc);
+                _ = context.SaveChanges();
             }
             StoriesAuthor sa = new()
             {
@@ -139,8 +146,8 @@ namespace BookStory.Controllers
                 Sid = context.Stories.FirstOrDefault(x => x.Name.Equals(story.Name)).Sid,
                 Aid = author
             };
-            context.Add<StoriesAuthor>(sa);
-            context.SaveChanges();
+            _ = context.Add(sa);
+            _ = context.SaveChanges();
             return RedirectToAction("ListStory", "Admin");
         }
 

@@ -22,8 +22,19 @@
     <!-- Select2 -->
     <link rel="stylesheet" href="~/plugins/select2/css/select2.min.css">
     <link rel="stylesheet" href="~/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+    <!-- summernote -->
+    <link rel="stylesheet" href="~/plugins/summernote/summernote-bs4.min.css">
 </head>
-
+<style>
+    .select2-container .select2-selection--single {
+        box-sizing: border-box;
+        cursor: pointer;
+        display: block;
+        height: 38px;
+        user-select: none;
+        -webkit-user-select: none;
+    }
+</style>
 <body class="hold-transition sidebar-mini layout-fixed sidebar-collapse">
     <div class="wrapper">
 
@@ -39,7 +50,7 @@
                 </li>
             </ul>
         </nav>
-        <!-- /.navbar -->
+
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
@@ -145,8 +156,7 @@
                                     </h3>
                                 </div>
                                 <!-- /.card-header -->
-                                <div class="card-body">
-
+                                <div class="card-body" id="refresh-table">
                                     <table id="example1" class="table table-bordered table-striped">
                                         <thead>
                                             <tr>
@@ -204,9 +214,10 @@
                 </div>
             </section>
         </div>
+
         @*Modal Story*@
         <div class="modal fade" id="modal-story">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title">Thêm truyện</h4>
@@ -215,63 +226,64 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="/Admin/AddStory/" method="post">
+                        <form action="/Admin/AddStory/" method="post" id="form-add-story">
                             <div class="card-body">
                                 <div class="form-group">
                                     <label for="inputName">Tên truyện</label>
                                     <input type="text" name="name" id="inputName" class="form-control" required>
                                 </div>
-                                <div class="form-group">
-                                    <label for="inputStatus">Danh mục</label>
-                                    <select name="categories" class="form-control select2" multiple="multiple" required>
-                                        @foreach (Category c in ViewBag.Categories)
-                                        {
-                                            <option value="@c.Cid">@c.Title</option>
-                                        }
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="inputStatus">Tác giả</label>
-                                    <select name="author" class="select2 form-control" required>
-                                        <option selected>Chọn tác giả</option>
-                                        @foreach (Author a in ViewBag.Authors)
-                                        {
-                                            <option value="@a.Aid">@a.Name</option>
-                                        }
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="inputStatus">Trạng thái</label>
-                                    <select id="inputStatus" name="status" class="form-control custom-select" required>
-                                        <option value="1">Hoàn thành</option>
-                                        <option value="0">Chưa hoàn thành</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="inputName">Nguồn</label>
-                                    <input type="text" name="source" id="inputName" class="form-control" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="inputName">Link ảnh</label>
-                                    <input type="text" name="image" id="inputName" class="form-control" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="inputName">Từ khóa</label>
-                                    <input type="text" name="keyword" id="inputName" class="form-control" required>
+                                <div class="row">
+                                    <div class="form-group col-md-4">
+                                        <label for="inputStatus">Danh mục</label>
+                                        <select name="categories" class="form-control select2" multiple="multiple" required>
+                                            @foreach (Category c in ViewBag.Categories)
+                                            {
+                                                <option value="@c.Cid">@c.Title</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="inputStatus">Tác giả</label>
+                                        <select name="author" class="select2 form-control" required>
+                                            <option selected>Chọn tác giả</option>
+                                            @foreach (Author a in ViewBag.Authors)
+                                            {
+                                                <option value="@a.Aid">@a.Name</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="inputStatus">Trạng thái</label>
+                                        <select id="inputStatus" name="status" class="form-control custom-select" required>
+                                            <option value="1">Hoàn thành</option>
+                                            <option value="0">Chưa hoàn thành</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="inputName">Nguồn</label>
+                                        <input type="text" name="source" id="inputName" class="form-control" required>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="inputName">Link ảnh</label>
+                                        <input type="text" name="image" id="inputName" class="form-control" required>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="inputName">Từ khóa</label>
+                                        <input type="text" name="keyword" id="inputName" class="form-control" required>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputDescription">Mô tả ngắn</label>
-                                    <textarea id="inputDescription" name="description" class="form-control" rows="5"></textarea>
+                                    <textarea id="inputDescription" name="description" class="form-control summernote" rows="8"></textarea>
                                 </div>
                                 <input type="submit" value="Tạo" class="btn btn-success">
+                                @*<button type="button" class="btn btn-success" id="add-story">Tạo</button>*@
                             </div>
                             <!-- /.card-body -->
                             <!-- /.card -->
                         </form>
                     </div>
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                    </div>
+
                 </div>
                 <!-- /.modal-content -->
             </div>
@@ -279,7 +291,6 @@
         </div>
 
         @*Modal Author*@
-        <!-- /.modal -->
         <div class="modal fade" id="modal-author">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -290,28 +301,26 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="/Admin/AddAuthor/" method="post">
+                        <form action="#" method="post" id="form-add-author">
                             <div class="card-body">
                                 <div class="form-group">
                                     <label for="inputEstimatedBudget">Tên tác giả</label>
                                     <input type="text" name="author" id="inputEstimatedBudget" class="form-control" required>
                                 </div>
-                                <input type="submit" value="Tạo" class="btn btn-success">
+                                @*<input type="submit" value="Tạo" class="btn btn-success">*@
+                                <button type="button" class="btn btn-success" id="add-author">Tạo</button>
                             </div>
                             <!-- /.card-body -->
                         </form>
                     </div>
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                    </div>
+
                 </div>
                 <!-- /.modal-content -->
             </div>
             <!-- /.modal-dialog -->
         </div>
-        <!-- /.modal -->
+
         @*Modal Category*@
-        <!-- /.modal -->
         <div class="modal fade" id="modal-category">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -322,30 +331,29 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="/Admin/AddCategory/" method="post">
+                        <form action="/Admin/AddCategory/" method="post" id="form-add-category">
                             <div class="card-body">
                                 <div class="form-group">
                                     <label for="inputEstimatedBudget">Tên danh mục</label>
                                     <input type="text" name="category" id="inputEstimatedBudget" class="form-control" required>
                                 </div>
-                                <input type="submit" value="Tạo" class="btn btn-success">
+                                @*<input type="submit" value="Tạo" class="btn btn-success">*@
+                                <button type="button" class="btn btn-success" id="add-category">Tạo</button>
                             </div>
                             <!-- /.card-body -->
 
                         </form>
                     </div>
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                    </div>
+
                 </div>
                 <!-- /.modal-content -->
             </div>
             <!-- /.modal-dialog -->
         </div>
-        <!-- /.modal -->
+
         @*Modal Edit Story*@
         <div class="modal fade" id="modal-edit">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title">Chỉnh sửa truyện</h4>
@@ -354,56 +362,59 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="/Admin/EditStory" method="post">
+                        <form action="#" method="post" id="form-edit-story">
                             <div class="card-body">
                                 <div class="form-group">
                                     <label for="inputName">Tên truyện</label>
                                     <input type="hidden" id="sid-edit" name="sid" value="">
                                     <input id="name-edit" type="text" name="name" class="form-control" required>
                                 </div>
-                                <div class="form-group">
-                                    <label for="inputStatus">Danh mục</label>
-                                    <select name="categories" id="category-edit" class="form-control select2" multiple="multiple" required>
-                                        @foreach (Category c in ViewBag.Categories)
-                                        {
-                                            <option value="@c.Cid">@c.Title</option>
-                                        }
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="inputStatus">Tác giả</label>
-                                    <select id="author-edit" name="author" class="select2 custom-select form-control" required>
-                                        <option selected>Chọn tác giả</option>
-                                        @foreach (Author a in ViewBag.Authors)
-                                        {
-                                            <option value="@a.Aid">@a.Name</option>
-                                        }
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="inputStatus">Trạng thái</label>
-                                    <select id="status-edit" name="status" class="form-control custom-select" required>
-                                        <option value="1">Hoàn thành</option>
-                                        <option value="0">Chưa hoàn thành</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="inputName">Nguồn</label>
-                                    <input type="text" name="source" id="source-edit" class="form-control" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="inputName">Link ảnh</label>
-                                    <input type="text" name="image" id="image-edit" class="form-control" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="inputName">Từ khóa</label>
-                                    <input type="text" name="keyword" id="keyword-edit" class="form-control" required>
+                                <div class="row">
+                                    <div class="form-group col-md-4">
+                                        <label for="inputStatus">Danh mục</label>
+                                        <select name="categories" id="category-edit" class="form-control select2" multiple="multiple" required>
+                                            @foreach (Category c in ViewBag.Categories)
+                                            {
+                                                <option value="@c.Cid">@c.Title</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="inputStatus">Tác giả</label>
+                                        <select id="author-edit" name="author" class="select2 custom-select form-control" required>
+                                            <option selected>Chọn tác giả</option>
+                                            @foreach (Author a in ViewBag.Authors)
+                                            {
+                                                <option value="@a.Aid">@a.Name</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="inputStatus">Trạng thái</label>
+                                        <select id="status-edit" name="status" class="form-control custom-select" required>
+                                            <option value="1">Hoàn thành</option>
+                                            <option value="0">Chưa hoàn thành</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="inputName">Nguồn</label>
+                                        <input type="text" name="source" id="source-edit" class="form-control" required>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="inputName">Link ảnh</label>
+                                        <input type="text" name="image" id="image-edit" class="form-control" required>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="inputName">Từ khóa</label>
+                                        <input type="text" name="keyword" id="keyword-edit" class="form-control" required>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputDescription">Mô tả ngắn</label>
-                                    <textarea name="description" id="description-edit" class="form-control" rows="5"></textarea>
+                                    <textarea name="description" id="description-edit" class="form-control summernote" rows="8"></textarea>
                                 </div>
-                                <input type="submit" value="Lưu" class="btn btn-success">
+                                @*<input type="submit" value="Lưu" class="btn btn-success">*@
+                                <button type="button" class="btn btn-success" id="edit-story">Lưu</button>
                             </div>
                             <!-- /.card-body -->
                             <!-- /.card -->
@@ -414,9 +425,10 @@
             </div>
             <!-- /.modal-dialog -->
         </div>
+
         @*Modal Add Chapter*@
         <div class="modal fade" id="modal-addchapter">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title">Thêm chương mới</h4>
@@ -442,7 +454,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="inputDescription">Nội dung</label>
-                                    <textarea name="chaptercontent" id="chaptercontent" class="form-control" rows="10"></textarea>
+                                    <textarea name="chaptercontent" id="chaptercontent" class="form-control summernote" rows="10" required></textarea>
                                 </div>
                                 <input type="submit" value="Lưu" class="btn btn-success">
                             </div>
@@ -478,6 +490,8 @@
     <script src="~/dist/js/adminlte.min.js"></script>
     <!-- Select2 -->
     <script src="~/plugins/select2/js/select2.full.min.js"></script>
+    <!-- Summernote -->
+    <script src="~/plugins/summernote/summernote-bs4.min.js"></script>
     <!-- Page specific script -->
     <script>
           $(function () {
@@ -490,12 +504,78 @@
             "info": true,
             "autoWidth": true,
             "responsive": true,
+            "order": [[0, "desc"]],
           });
           //.buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
           });
 
-        $('.select2').select2();
 
+        //Add story
+        $(document).ready(function(){
+            $('#add-story').click(function(){
+                $.ajax({
+                    url: '/Admin/AddStory/',
+                    type: 'POST',
+                    data: $('#form-add-story').serialize(),
+                    success: function() {
+                        alert("Add Story Successful")
+                        location.reload()
+                    }
+                });
+            });
+        });
+
+        //Add Author
+          $(document).ready(function(){
+            $('#add-author').click(function(){
+                $.ajax({
+                    url: '/Admin/AddAuthor/',
+                    type: 'POST',
+                    data: $('#form-add-author').serialize(),
+                    success: function() {
+                        alert("Add Author Successful")
+                        location.reload()
+                    }
+                });
+            });
+        });
+
+        //Add Category
+          $(document).ready(function(){
+            $('#add-category').click(function(){
+                $.ajax({
+                    url: '/Admin/AddCategory/',
+                    type: 'POST',
+                    data: $('#form-add-category').serialize(),
+                    success: function() {
+                        alert("Add Category Successful")
+                        location.reload()
+                    }
+                });
+            });
+        });
+
+        //Edit Story
+          $(document).ready(function(){
+            $('#edit-story').click(function(){
+                $.ajax({
+                    url: '/Admin/EditStory/',
+                    type: 'POST',
+                    data: $('#form-edit-story').serialize(),
+                    success: function() {
+                        alert("Edit Story Successful")
+                        location.reload()
+                    }
+                });
+            });
+        });
+
+        //Select2
+        $('.select2').select2();
+        // Summernote
+        $('.summernote').summernote();
+
+        //load data story for edit
         $(document).ready(function(){
             $('.storyinfo').click(function(){
                 var storyid = $(this).data('id');
@@ -510,7 +590,7 @@
                         $('#source-edit').val(response.source)
                         $('#image-edit').val(response.image)
                         $('#keyword-edit').val(response.keyword)
-                        $('#description-edit').val(response.description)
+                        $('#description-edit').text(response.description)
                         $('#author-edit').val(response.authorid).change()
                         $('#category-edit').val(response.listcid).change()
                     }
@@ -519,6 +599,7 @@
             });
         });
 
+        //load data chapter for update
         $(document).ready(function(){
             $('.chapterinfo').click(function(){
                 var sid = $(this).data('id');

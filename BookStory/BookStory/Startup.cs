@@ -45,7 +45,7 @@ namespace BookStory
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}/{page?}/{id2?}/{id3?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}/{id1?}/{id2?}/{id3?}");
             });
         }
     }

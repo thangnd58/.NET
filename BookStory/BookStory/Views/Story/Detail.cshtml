@@ -192,7 +192,7 @@
                         <div class="desc-text desc-text-full" itemprop="description"><p>@Html.Raw(ViewBag.Story.Description)</p></div>
                     </div>
                 </div>
-                <div class="col-xs-12" id="list-chapter">
+                <div class="col-xs-12">
                     <div class="title-list">
                         <h2>Danh sách chương</h2>
                     </div>
@@ -212,7 +212,7 @@
                             </div>
                         }
                     </div>
-                    @Html.PagedListPager(Model, page => Url.Action("Detail", new { page }))
+                    @Html.PagedListPager(Model, id1 => Url.Action("Detail", new { id1 }))
                 </div>
             </div>
             <div class="visible-md-block visible-lg-block col-md-3 text-center col-truyen-side">
@@ -291,5 +291,4 @@
     <script src="~/main2.js"></script>
     <script>$('head').append('<link rel="stylesheet" type="text/css" href="https://static.8cache.com/min/g/maincss-08122021_1.css"/>');</script>
 </body>
-
 </html>

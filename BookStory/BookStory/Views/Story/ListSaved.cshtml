@@ -170,7 +170,7 @@
                                 </div>
                             </div>
                         }
-                        @Html.PagedListPager(Model, page => Url.Action("ListSaved", new { id = ViewBag.CurrentId, page }))
+                        @Html.PagedListPager(Model, id1 => Url.Action("ListSaved", new { id = ViewBag.CurrentId, id1 }))
                     }
                     else
                     {

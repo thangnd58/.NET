@@ -17,7 +17,7 @@ namespace BookStory.Controllers
 
         public IActionResult Index(int id)
         {
-            List<Category> categories = null;
+            List<Category> categories = new();
             categories = context.Categories.ToList();
             ViewBag.Categories = categories;
             List<Story> stories = new();
