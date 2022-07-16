@@ -1,4 +1,7 @@
 ﻿@using BookStory.Models
+@model X.PagedList.IPagedList<BookStory.Models.Chapter>
+@using X.PagedList.Mvc.Bootstrap4.Core
+@using X.PagedList.Mvc.Core
 @{
     ViewBag.Title = "List Chapter";
     Layout = "_AdminLayout";
@@ -73,7 +76,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (Chapter c in ViewBag.Chapters)
+                                    @foreach (Chapter c in Model)
                                     {
                                         <tr>
                                             <td>@c.Ctid</td>
@@ -82,10 +85,10 @@
                                             <td>@c.CreatedAt</td>
                                             <td>@c.UpdatedAt</td>
                                             <td>
-                                                <button title="Sửa" data-id="@c.Ctid" class="btn storyinfo">
+                                                <button title="Sửa" data-id="@c.Ctid" class="btn chapterinfo1">
                                                     <i class="far fa-edit"></i>
                                                 </button>
-                                                <button type="button" data-target="#modal-delete" data-toggle="modal" title="Xóa truyện" class="btn deletestory" data-id="@c.Ctid">
+                                                <button type="button" data-target="#modal-delete-chapter" data-toggle="modal" title="Xóa truyện" class="btn deletechapter" data-id="@c.Ctid">
                                                     <i class="fa fa-trash"></i>
                                                 </button>
                                             </td>
@@ -93,6 +96,7 @@
                                     }
                                 </tbody>
                             </table>
+                            @Html.PagedListPager(Model, id => Url.Action("ListChapter", new { id }), Bootstrap4PagedListRenderOptions.ClassicPlusFirstAndLast)
                         </div>
                         <!-- /.card-body -->
                     </div>
@@ -106,4 +110,67 @@
             <!-- /.control-sidebar -->
         </div>
     </section>
+</div>
+@*Modal edit chapter*@
+<div class="modal fade" id="modal-edit-chapter">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Sửa chương</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="#" method="post" id="form-edit-chapter">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="form-group col-md-4">
+                                <label for="inputName">Tên truyện</label>
+                                <input type="hidden" id="chapterid" name="ctid" value="">
+                                <input id="namechapter1" type="text" name="chaptername" class="form-control" readonly>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="inputName">Tập</label>
+                                <input id="chapternumber1" type="text" name="chapternumber" class="form-control" readonly>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="inputName">Tên chương</label>
+                                <input id="subnamechapter1" type="text" name="chaptersubname" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputDescription">Nội dung</label>
+                            <textarea name="chaptercontent" id="chaptercontent1" class="form-control summernote" rows="" required></textarea>
+                        </div>
+                        @*<input type="submit" value="Lưu" class="btn btn-success">*@
+                        <button class="btn btn-success" id="edit-chapter">Tạo</button>
+                    </div>
+                    <!-- /.card-body -->
+                    <!-- /.card -->
+                </form>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+@*Modal Ask Delete*@
+<div class="modal fade" id="modal-delete-chapter">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p style="text-align: center; margin: 0px 10px 0px 10px;">Bạn có muốn xóa chương này không?</p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <form id="form-delete-chapter">
+                    <input type="hidden" value="" name="chapterid" id="input-detele-chapter" />
+                    <button type="button" id="confirm-delete-chapter" class="btn btn-danger">Xóa</button>
+                </form>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
 </div>

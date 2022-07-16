@@ -32,7 +32,6 @@ namespace BookStory.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                //optionsBuilder.UseSqlServer("Server=localhost;Database=StoryDB;user=sa;password=123456");
                 var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
                 optionsBuilder.UseSqlServer(config.GetConnectionString("MyConStr"));
             }

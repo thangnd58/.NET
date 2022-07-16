@@ -30,7 +30,7 @@
         {
             <div class="item top-1" itemscope itemtype="">
                 <a href="/Story/Detail/@s.Sid" itemprop="url">
-                    <span class="@(s.Status == 1?"full-label":"")"></span><img src="@s.Image"
+                    <span class="@(s.Status == 1?"full-label":"")"></span><img src="~/StoriesImage/@s.Image"
                                                                            alt="@s.Name" class="img-responsive item-img" itemprop="image">
                     <div class="title">
                         <h3 itemprop="name">@s.Name</h3>
@@ -76,7 +76,7 @@
                         <span class="chapter-text"><span>Chương </span></span>@c.Key.Chapnumber
                     </a>
                 </div>
-                <div class="hidden-xs hidden-sm col-md-2 col-time text-888 timer">@c.Key.UpdatedAt</div>
+                <div class="hidden-xs hidden-sm col-md-2 col-time text-888 timer">@c.Key.CreatedAt</div>
             </div>
         }
     </div>
@@ -144,11 +144,8 @@
                 <div class="col-xs-4 col-sm-3 col-md-2">
                     <a href="/Story/Detail/@s.Sid"
                    title="@s.Name">
-                        <div class="lazyimg"
-                         data-desk-image="@s.Image"
-                         data-image="@s.Image"
-                         data-alt="@s.Name"></div>
                         <div class="caption">
+                        <img src="~/StoriesImage/@s.Image" />
                             <h3>@s.Name</h3> <small class="btn-xs label-primary">
                                 Full -
                                 @s.Chapters.Count Chương

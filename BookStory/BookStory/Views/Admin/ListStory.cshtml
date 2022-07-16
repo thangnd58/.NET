@@ -1,4 +1,7 @@
 ﻿@using BookStory.Models
+@model X.PagedList.IPagedList<BookStory.Models.Story>
+@using X.PagedList.Mvc.Bootstrap4.Core
+@using X.PagedList.Mvc.Core
 @{
     ViewBag.Title = "List Story";
     Layout = "_AdminLayout";
@@ -81,7 +84,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (Story s in ViewBag.Stories)
+                                    @foreach (Story s in Model)
                                     {
                                         <tr>
                                             <td>@s.Sid</td>
@@ -113,6 +116,7 @@
                                     }
                                 </tbody>
                             </table>
+                            @Html.PagedListPager(Model, id => Url.Action("ListStory", new { id }), Bootstrap4PagedListRenderOptions.ClassicPlusFirstAndLast)
                         </div>
                         <!-- /.card-body -->
                     </div>
@@ -139,13 +143,13 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="#" method="post" id="form-add-story">
+                <form action="/Admin/AddStory/" method="post" id="form-add-story" enctype="multipart/form-data">
                     <div class="card-body">
-                        <div class="form-group">
-                            <label for="inputName">Tên truyện</label>
-                            <input type="text" name="name" id="inputName" class="form-control" required>
-                        </div>
                         <div class="row">
+                            <div class="form-group col-md-12">
+                                <label for="inputName">Tên truyện</label>
+                                <input type="text" name="name" id="inputName" class="form-control" required>
+                            </div>
                             <div class="form-group col-md-4">
                                 <label for="inputStatus">Danh mục</label>
                                 <select name="categories" class="form-control select2" multiple="multiple" required>
@@ -173,12 +177,12 @@
                                 </select>
                             </div>
                             <div class="form-group col-md-4">
-                                <label for="inputName">Nguồn</label>
-                                <input type="text" name="source" id="inputName" class="form-control" required>
+                                <label for="inputName">Link ảnh</label>
+                                <input type="file" name="image" id="inputName" class="form-control-file" required>
                             </div>
                             <div class="form-group col-md-4">
-                                <label for="inputName">Link ảnh</label>
-                                <input type="text" name="image" id="inputName" class="form-control" required>
+                                <label for="inputName">Nguồn</label>
+                                <input type="text" name="source" id="inputName" class="form-control" required>
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="inputName">Từ khóa</label>
@@ -189,8 +193,8 @@
                             <label for="inputDescription">Mô tả ngắn</label>
                             <textarea id="inputDescription" name="description" class="form-control summernote" rows="8"></textarea>
                         </div>
-                        @*<input type="submit" value="Tạo" class="btn btn-success">*@
-                        <button type="button" class="btn btn-success" id="add-story">Tạo</button>
+                        <input type="submit" value="Tạo" class="btn btn-success">
+                        @*<button type="button" class="btn btn-success" id="add-story">Tạo</button>*@
                     </div>
                     <!-- /.card-body -->
                     <!-- /.card -->
@@ -275,7 +279,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="#" method="post" id="form-edit-story">
+                <form action="/Admin/EditStory/" method="post" id="form-edit-story" enctype="multipart/form-data">
                     <div class="card-body">
                         <div class="form-group">
                             <label for="inputName">Tên truyện</label>
@@ -315,7 +319,7 @@
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="inputName">Link ảnh</label>
-                                <input type="text" name="image" id="image-edit" class="form-control" required>
+                                <input type="file" name="image" id="image-edit" class="form-control-file" required>
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="inputName">Từ khóa</label>
@@ -326,8 +330,8 @@
                             <label for="inputDescription">Mô tả ngắn</label>
                             <textarea name="description" id="description-edit" class="form-control summernote" rows="8"></textarea>
                         </div>
-                        @*<input type="submit" value="Lưu" class="btn btn-success">*@
-                        <button type="button" class="btn btn-success" id="edit-story">Lưu</button>
+                        <input type="submit" value="Lưu" class="btn btn-success">
+                        @*<button type="button" class="btn btn-success" id="edit-story">Lưu</button>*@
                     </div>
                     <!-- /.card-body -->
                     <!-- /.card -->

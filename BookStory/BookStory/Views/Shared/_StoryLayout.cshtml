@@ -23,7 +23,7 @@
                     <h1><a class="header-logo" href="/Home/Index" title="doc truyen">doc truyen</a></h1>
                 </div>
                 <div class="navbar-collapse collapse" itemscope itemtype="">
-                    <ul class="control nav navbar-nav ">
+                    <ul class="control nav navbar-nav">
                         @{
                             User u = null;
                             string json = Context.Session.GetString("user");
@@ -197,6 +197,11 @@
                                             Đăng ký
                                         </a>
                                     </li>
+                                    <li>
+                                        <a href="#">
+                                            Quên mật khẩu
+                                        </a>
+                                    </li>
                                 }
                                 else
                                 {
@@ -227,7 +232,7 @@
                                    required>
                             <div class="input-group-btn">
                                 <button class="btn btn-default" type="submit"
-                                        aria-label="Tìm kiếm" role="search">
+                                        aria-label="Tìm kiếm" role="search" style="height: 32px">
                                     <span class="glyphicon glyphicon-search"></span>
                                 </button>
                             </div>

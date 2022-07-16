@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "O2S9fbbgRKKNDGqbwPslNDMVe49zKQfn+vU5akdLp2deRUG+zgFVYdIj0XSomPMj6eiY3RaCrKkjDs9B3QSn7Q==",
+  "dgSpecHash": "Oe9Lq6vJXTMqD3SXgP+qboQxVOOA0+Ik0GmgftW5AqqSPBJNn4xPqzzgl3spdrsQtlX0xLn1cBZjZNaswAtEfw==",
   "success": true,
   "projectFilePath": "D:\\KY5\\PRN211\\.NET\\BookStory\\BookStory\\BookStory.csproj",
   "expectedPackageFiles": [
@@ -102,6 +102,7 @@
     "C:\\Users\\thang05082001\\.nuget\\packages\\system.xml.xmldocument\\4.3.0\\system.xml.xmldocument.4.3.0.nupkg.sha512",
     "C:\\Users\\thang05082001\\.nuget\\packages\\system.xml.xmlserializer\\4.3.0\\system.xml.xmlserializer.4.3.0.nupkg.sha512",
     "C:\\Users\\thang05082001\\.nuget\\packages\\x.pagedlist\\8.4.3\\x.pagedlist.8.4.3.nupkg.sha512",
+    "C:\\Users\\thang05082001\\.nuget\\packages\\x.pagedlist.mvc.bootstrap4\\8.1.0\\x.pagedlist.mvc.bootstrap4.8.1.0.nupkg.sha512",
     "C:\\Users\\thang05082001\\.nuget\\packages\\x.pagedlist.mvc.core\\8.4.3\\x.pagedlist.mvc.core.8.4.3.nupkg.sha512"
   ],
   "logs": []

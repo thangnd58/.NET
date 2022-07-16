@@ -1529,6 +1529,18 @@
           "lib/netstandard2.1/X.PagedList.dll": {}
         }
       },
+      "X.PagedList.Mvc.Bootstrap4/8.1.0": {
+        "type": "package",
+        "dependencies": {
+          "X.PagedList.Mvc.Core": "8.1.0"
+        },
+        "compile": {
+          "lib/netcoreapp3.1/X.PagedList.Mvc.Bootstrap4.Core.dll": {}
+        },
+        "runtime": {
+          "lib/netcoreapp3.1/X.PagedList.Mvc.Bootstrap4.Core.dll": {}
+        }
+      },
       "X.PagedList.Mvc.Core/8.4.3": {
         "type": "package",
         "dependencies": {
@@ -5824,6 +5836,18 @@
         "x.pagedlist.nuspec"
       ]
     },
+    "X.PagedList.Mvc.Bootstrap4/8.1.0": {
+      "sha512": "sP9V26oOtwwJrHhuOZ7T95/3oSoLGpUIqKg0gdpjepNvCrVCEQqO5CHirM6etl5qIUEK+7q2+rYhsI6UDfo57A==",
+      "type": "package",
+      "path": "x.pagedlist.mvc.bootstrap4/8.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netcoreapp3.1/X.PagedList.Mvc.Bootstrap4.Core.dll",
+        "x.pagedlist.mvc.bootstrap4.8.1.0.nupkg.sha512",
+        "x.pagedlist.mvc.bootstrap4.nuspec"
+      ]
+    },
     "X.PagedList.Mvc.Core/8.4.3": {
       "sha512": "f1M+6o0AGSUGBuIRiXl9PGfoFbymw8uKjcuA1pJb2XkfginndZg1UR9zgppXW0GMLWCMzCoD5uVGD3SSywSimQ==",
       "type": "package",
@@ -5842,6 +5866,7 @@
     "net5.0": [
       "Microsoft.EntityFrameworkCore.Design >= 5.0.17",
       "Microsoft.EntityFrameworkCore.SqlServer >= 5.0.17",
+      "X.PagedList.Mvc.Bootstrap4 >= 8.1.0",
       "X.PagedList.Mvc.Core >= 8.4.3"
     ]
   },
@@ -5893,6 +5918,10 @@
           "Microsoft.EntityFrameworkCore.SqlServer": {
             "target": "Package",
             "version": "[5.0.17, )"
+          },
+          "X.PagedList.Mvc.Bootstrap4": {
+            "target": "Package",
+            "version": "[8.1.0, )"
           },
           "X.PagedList.Mvc.Core": {
             "target": "Package",

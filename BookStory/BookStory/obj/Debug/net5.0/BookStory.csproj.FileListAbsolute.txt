@@ -16,8 +16,6 @@ D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\BookStory.csproj.CoreCom
 D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\BookStory.MvcApplicationPartsAssemblyInfo.cache
 D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\BookStory.RazorAssemblyInfo.cache
 D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\BookStory.RazorAssemblyInfo.cs
-D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\scopedcss\bundle\BookStory.styles.css
-D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\staticwebassets\BookStory.StaticWebAssets.Manifest.cache
 D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\BookStory.TagHelpers.input.cache
 D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\BookStory.TagHelpers.output.cache
 D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\BookStory.RazorCoreGenerate.cache
@@ -80,3 +78,7 @@ D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\Razor\Views\Admin\ListCh
 D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\Razor\Views\Shared\_AdminLayout.cshtml.g.cs
 D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\Razor\Views\Shared\_StoryLayout.cshtml.g.cs
 D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\Razor\Views\Shared\_UserLayout.cshtml.g.cs
+D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\Razor\Views\User\Verify.cshtml.g.cs
+D:\KY5\PRN211\.NET\BookStory\BookStory\bin\Debug\net5.0\X.PagedList.Mvc.Bootstrap4.Core.dll
+D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\scopedcss\bundle\BookStory.styles.css
+D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\staticwebassets\BookStory.StaticWebAssets.Manifest.cache

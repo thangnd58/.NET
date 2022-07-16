@@ -1,7 +1,9 @@
-﻿using BookStory.Models;
+﻿using BookStory.Common;
+using BookStory.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System;
 using System.Linq;
 
 namespace BookStory.Controllers
@@ -27,11 +29,17 @@ namespace BookStory.Controllers
                     HttpContext.Session.SetString("user", JsonConvert.SerializeObject(isLogin));
                     return RedirectToAction("Index", "Home");
                 }
-                else if (isLogin.Role == 3)
+                else if (isLogin.Role == 1)
+                {
+                    HttpContext.Session.SetString("user", JsonConvert.SerializeObject(isLogin));
+                    return RedirectToAction("ListStory", "Admin");
+                }
+                else
                 {
                     ViewBag.Message = "Nhập sai email hoặc mật khẩu";
                     return View();
                 }
+
             }
             else
             {
@@ -57,7 +65,7 @@ namespace BookStory.Controllers
                 Role = 2
             };
             bool isRegister = true;
-            foreach (User u in context.Users)
+            foreach (User u in context.Users.ToList())
             {
                 if (u.Email.Equals(email))
                 {
@@ -74,10 +82,42 @@ namespace BookStory.Controllers
             }
             else
             {
-                ViewBag.Message = "Đăng ký thành công, bạn có thể đăng nhập";
-                context.Add<User>(user);
-                context.SaveChanges();
+                Random generator = new Random();
+                int r = generator.Next(100000, 1000000);
+                new MailHelper().SendMail("testdata05082001@gmail.com", "Xác minh từ hệ thống BookStory", $"Mã xác minh của bạn là {r}");
+                HttpContext.Session.SetInt32("code", r);
+                HttpContext.Session.SetString("register-user", JsonConvert.SerializeObject(user));
+                return RedirectToAction("Verify", "User");
             }
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Verify(string code)
+        {
+            int? sessioncode = HttpContext.Session.GetInt32("code");
+            if (sessioncode != null)
+            {
+                if (code.Equals(sessioncode.ToString()))
+                {
+                    string json = HttpContext.Session.GetString("register-user");
+                    var user = JsonConvert.DeserializeObject<User>(json);
+                    context.Add<User>(user);
+                    context.SaveChanges();
+                    HttpContext.Session.Remove("register-user");
+                    HttpContext.Session.Remove("code");
+                }
+                else
+                {
+                    ViewBag.Message = "Nhập sai mã xác minh vui lòng nhập lại";
+                }
+            }
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult Verify()
+        {
             return View();
         }
 
@@ -115,7 +155,7 @@ namespace BookStory.Controllers
             }
             else
             {
-                
+
                 entity.Password = npassword;
                 context.Entry(entity).CurrentValues.SetValues(entity);
                 context.SaveChanges();

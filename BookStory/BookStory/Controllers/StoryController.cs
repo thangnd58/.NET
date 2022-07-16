@@ -71,9 +71,10 @@ namespace BookStory.Controllers
                 }
                 ViewBag.IsSave = IsSave;
             }
-            context.SaveChanges();
             s.View += 1;
-            return View(c);
+            context.SaveChanges();
+            ViewBag.Chapter = c;
+            return View();
         }
 
         [HttpPost]

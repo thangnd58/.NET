@@ -10,7 +10,12 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.17" />
+    <PackageReference Include="X.PagedList.Mvc.Bootstrap4" Version="8.1.0" />
     <PackageReference Include="X.PagedList.Mvc.Core" Version="8.4.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\StoriesImage\" />
   </ItemGroup>
 
 </Project>

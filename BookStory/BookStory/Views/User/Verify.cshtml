@@ -1,0 +1,35 @@
+﻿@using Microsoft.AspNetCore.Http
+@{
+    ViewBag.Title = "Verify";
+    Layout = "_UserLayout";
+    string json = Context.Session.GetString("register-user");
+    int? code = Context.Session.GetInt32("code");
+}
+<div class="signin-content">
+    <div class="signin-image">
+        <figure><img src="~/images/signin-image.jpg" alt="sing up image"></figure>
+        <a href="/User/Register" class="signup-image-link">Trở lại trang đăng ký</a>
+        <a href="/User/Login/" class="signup-image-link">Trở về trang đăng nhập</a>
+    </div>
+    @if (json == null || code == null)
+    {
+        <div class="signin-form">
+           <h3 class="form-title text-center">Đăng ký thành công</h3>
+        </div>
+    }
+    else
+    {
+        <div class="signin-form">
+            Mã xác minh đã gửi về email kiểm tra
+            <form method="POST" action="/User/Verify">
+                <div class="form-group">
+                    <input type="text" name="code" id="your_name" placeholder="Nhập mã code" required />
+                </div>
+                <div style="color: red;">@ViewBag.Message</div>
+                <div class="form-group form-button">
+                    <input type="submit" id="signin" class="form-submit" value="Gửi" />
+                </div>
+            </form>
+        </div>
+    }
+</div>

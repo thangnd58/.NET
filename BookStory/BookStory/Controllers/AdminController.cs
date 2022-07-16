@@ -2,7 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using X.PagedList;
+using Microsoft.AspNetCore.Http;
+using System.Web;
 
 namespace BookStory.Controllers
 {
@@ -10,7 +14,7 @@ namespace BookStory.Controllers
     {
         readonly StoryDBContext context = new();
 
-        public IActionResult ListStory()
+        public IActionResult ListStory(int? id)
         {
             List<Story> stories = context.Stories.ToList();
             ViewBag.Stories = stories;
@@ -25,14 +29,18 @@ namespace BookStory.Controllers
             ViewBag.Authors = context.Authors.ToList();
             ViewBag.Categories = context.Categories.ToList();
             _ = context.Chapters.ToList();
-            return View();
+            if (id == null) id = 1;
+            int pageSize = 20;
+            int pageNumber = (id ?? 1);
+            stories.Reverse();
+            var storiesPage = stories;
+            return View(storiesPage.ToPagedList(pageNumber, pageSize));
         }
 
-        public IActionResult ListUser()
+        public IActionResult ListUser(int? id)
         {
             List<Story> stories = context.Stories.ToList();
             List<User> users = context.Users.ToList();
-            ViewBag.Users = users;
             int totalView = 0;
             foreach (Story story in stories)
             {
@@ -42,14 +50,17 @@ namespace BookStory.Controllers
             ViewBag.TotalStory = stories.Count;
             ViewBag.TotalUser = context.Users.ToList().Count;
             _ = context.Chapters.ToList();
-            return View();
+            if (id == null) id = 1;
+            int pageSize = 20;
+            int pageNumber = (id ?? 1);
+            users.Reverse();
+            return View(users.ToPagedList(pageNumber, pageSize));
         }
 
-        public IActionResult ListChapter()
+        public IActionResult ListChapter(int? id)
         {
             List<Story> stories = context.Stories.ToList();
-            List<Chapter> chapters = context.Chapters.ToList();
-            ViewBag.Chapters = chapters;
+            List<Chapter> chapters = context.Chapters.OrderBy(x => x.Name).ToList();
             int totalView = 0;
             foreach (Story story in stories)
             {
@@ -59,7 +70,10 @@ namespace BookStory.Controllers
             ViewBag.TotalStory = stories.Count;
             ViewBag.TotalUser = context.Users.ToList().Count;
             _ = context.Chapters.ToList();
-            return View();
+            if (id == null) id = 1;
+            int pageSize = 20;
+            int pageNumber = (id ?? 1);
+            return View(chapters.ToPagedList(pageNumber, pageSize));
         }
 
         [HttpPost]
@@ -97,6 +111,17 @@ namespace BookStory.Controllers
         }
 
         [HttpPost]
+        public IActionResult DeleteChapter(int chapterid)
+        {
+            List<Reading> readings = context.Readings.Where(x => x.Ctid == chapterid).ToList();
+            Chapter chapter = context.Chapters.FirstOrDefault(x => x.Ctid == chapterid);
+            context.RemoveRange(readings);
+            context.Remove(chapter);
+            context.SaveChanges();
+            return RedirectToAction("ListChapter", "Admin");
+        }
+
+        [HttpPost]
         public IActionResult AddAuthor(string author)
         {
             try
@@ -116,10 +141,14 @@ namespace BookStory.Controllers
             return RedirectToAction("ListStory", "Admin");
         }
 
-
         [HttpPost]
-        public IActionResult AddStory(string name, int[] categories, int author, int status, string source, string image, string keyword, string description)
+        public IActionResult AddStory(string name, int[] categories, int author, int status, string source, IFormFile image, string keyword, string description)
         {
+            string fullPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "StoriesImage", image.FileName);
+            using(var file = new FileStream(fullPath, FileMode.Create))
+            {
+                image.CopyTo(file);
+            }
             try
             {
                 Story story = new()
@@ -128,7 +157,7 @@ namespace BookStory.Controllers
                     Status = status,
                     Source = source,
                     View = 0,
-                    Image = image,
+                    Image = image.FileName,
                     Keyword = keyword,
                     Description = description,
                     CreatedAt = System.DateTime.Now,
@@ -164,14 +193,19 @@ namespace BookStory.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditStory(int sid, string name, int[] categories, int author, int status, string source, string image, string keyword, string description)
+        public IActionResult EditStory(int sid, string name, int[] categories, int author, int status, string source, IFormFile image, string keyword, string description)
         {
+            string fullPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "StoriesImage", image.FileName);
+            using (var file = new FileStream(fullPath, FileMode.Create))
+            {
+                image.CopyTo(file);
+            }
             try
             {
                 var entity = context.Stories.FirstOrDefault(x => x.Sid == sid);
                 entity.Name = name;
                 entity.Source = source;
-                entity.Image = image;
+                entity.Image = image.FileName;
                 entity.Status = status;
                 entity.Keyword = keyword;
                 entity.Description = description;
@@ -201,6 +235,26 @@ namespace BookStory.Controllers
             return RedirectToAction("ListStory", "Admin");
         }
 
+        [HttpPost]
+        public IActionResult EditChapter(int ctid, string chaptername, string chapternumber, string chaptersubname, string chaptercontent)
+        {
+            try
+            {
+                var entity = context.Chapters.FirstOrDefault(x => x.Ctid == ctid);
+                entity.Name = chaptername;
+                entity.Subname = chaptersubname;
+                entity.Chapnumber = chapternumber;
+                entity.Content = chaptercontent;
+                entity.UpdatedAt = DateTime.Now;
+                context.Entry(entity).CurrentValues.SetValues(entity);
+                context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return RedirectToAction("ListChapter", "Admin");
+        }
 
         [HttpPost]
         public IActionResult AddChapter(int sid, string chaptername, string chapternumber, string chaptersubname, string chaptercontent)
@@ -276,7 +330,29 @@ namespace BookStory.Controllers
                 return Json(new
                 {
                     chapnumber = cnumber,
-                    name = s.Name
+                    name = s.Name,
+                    subname = s.Subname,
+                    content = s.Content,
+                });
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return null;
+        }
+
+        public JsonResult GetChapterByCtid(int ctid)
+        {
+            try
+            {
+                Chapter s = context.Chapters.FirstOrDefault(x => x.Ctid == ctid);
+                return Json(new
+                {
+                    chapnumber = s.Chapnumber,
+                    name = s.Name,
+                    subname = s.Subname,
+                    content = s.Content,
                 });
             }
             catch (Exception ex)
