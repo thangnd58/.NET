@@ -16,6 +16,36 @@ namespace BookStory.Controllers
         public IActionResult Detail(int id, int? id1)
         {
             Story s = null;
+            int totalRating = 0;
+            List<Rating> listScore = context.Ratings.Where(x => x.Sid == id).ToList();
+            int numberRating = listScore.Count;
+            foreach (var item in listScore)
+            {
+                totalRating += Convert.ToInt32(item.Rating1);
+            }
+            double score = (double)totalRating / (numberRating * 10);
+            if(totalRating == 0)
+            {
+                score = 0;
+            }
+            ViewBag.Score = score * 10;
+            ViewBag.TotalRating = numberRating;
+            List<Rating> listComments = context.Ratings.Where(x => x.Sid == id && x.CommentContent != null).ToList();
+            ViewBag.ListComments = listComments;
+            User u = null;
+            Rating r = null;
+            string json = HttpContext.Session.GetString("user");
+            if (json != null) {
+                u = JsonConvert.DeserializeObject<User>(json);
+                r = context.Ratings.OrderByDescending(x => x.CommentId).FirstOrDefault(x => x.Sid == id && x.Uid == u.Uid);
+            }
+            if(r == null)
+            {
+                ViewBag.Rating = 1;
+            } else
+            {
+                ViewBag.Rating = r.Rating1;
+            }
             s = context.Stories.FirstOrDefault(x => x.Sid == id);
             Author author = null;
             author = context.Authors.FirstOrDefault(x => x.Aid == context.StoriesAuthors.FirstOrDefault(s => s.Sid == id).Aid);
@@ -40,6 +70,8 @@ namespace BookStory.Controllers
             ViewBag.Story = s;
             ViewBag.StoryAuthors = context.Stories.Where(s => s.StoriesAuthors.Where(x => x.Aid == author.Aid && x.Sid != id).Any()).Take(5).ToList();
             ViewBag.StoryHighestView = context.Stories.OrderByDescending(x => x.View).Take(10).ToList();
+            List<Chapter> newChapters = context.Chapters.OrderByDescending(x => x.Chapnumber).Where(x => x.Sid == id).Take(5).ToList();
+            ViewBag.NewChapters = newChapters;
             if (id1 == null) id1 = 1;
             int pageSize = 10;
             int pageNumber = (id1 ?? 1);
@@ -49,7 +81,6 @@ namespace BookStory.Controllers
 
         public IActionResult Content(int id, int id1)
         {
-
             Chapter c = new();
             List<Category> listAllCategories = context.Categories.ToList();
             c = context.Chapters.FirstOrDefault(x => x.Sid == id && x.Chapnumber == id1.ToString());
@@ -73,6 +104,12 @@ namespace BookStory.Controllers
             }
             s.View += 1;
             context.SaveChanges();
+            List<Rating> listComments = null;
+            if (context.Ratings.Where(x => x.Ctid == c.Ctid) != null)
+            {
+                listComments = context.Ratings.Where(x => x.Ctid == c.Ctid).ToList();
+            }
+            ViewBag.ListComments = listComments;
             ViewBag.Chapter = c;
             return View();
         }
@@ -172,6 +209,54 @@ namespace BookStory.Controllers
             ViewBag.CurrentId = id;
             ViewBag.CurrentPage = id1;
             return View(SaveChapters.ToPagedList(pageNumber, pageSize));
+        }
+
+        public IActionResult RatingStory(int star, string comment, int sid)
+        {
+            User u = null;
+            string json = HttpContext.Session.GetString("user");
+            if (json != null) u = JsonConvert.DeserializeObject<User>(json);
+            if (u != null)
+            {
+                Rating r = new()
+                {
+                    Uid = u.Uid,
+                    CommentContent = comment,
+                    Sid = sid,
+                    Rating1 = star,
+                    CreatedAt = DateTime.Now
+                };
+                context.Add<Rating>(r);
+                context.SaveChanges();
+            } else
+            {
+                return RedirectToAction("Login", "User");
+            }
+            return RedirectToAction("Detail", "Story", new { id = sid });
+        }
+
+        public IActionResult CommentChapter(int ctid, string comment, int sid, int chapnumber)
+        {
+            User u = null;
+            string json = HttpContext.Session.GetString("user");
+            if (json != null) u = JsonConvert.DeserializeObject<User>(json);
+            if (u != null)
+            {
+                Rating r = new()
+                {
+                    Uid = u.Uid,
+                    CommentContent = comment,
+                    CreatedAt = DateTime.Now,
+                    Ctid = ctid
+                };
+                context.Add<Rating>(r);
+                context.SaveChanges();
+            }
+            else
+            {
+                return RedirectToAction("Login", "User");
+            }
+            return RedirectToAction("Content", "Story", new { id = sid, id1 = chapnumber });
         }
 
     }

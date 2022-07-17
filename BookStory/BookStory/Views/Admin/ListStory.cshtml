@@ -134,7 +134,7 @@
 
 @*Modal Story*@
 <div class="modal fade" id="modal-story">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">Thêm truyện</h4>
@@ -270,7 +270,7 @@
 
 @*Modal Edit Story*@
 <div class="modal fade" id="modal-edit">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">Chỉnh sửa truyện</h4>
@@ -328,7 +328,9 @@
                         </div>
                         <div class="form-group">
                             <label for="inputDescription">Mô tả ngắn</label>
-                            <textarea name="description" id="description-edit" class="form-control summernote" rows="8"></textarea>
+                            <textarea name="description" id="description-edit" class="form-control">
+                                <p id="content1"></p>
+                            </textarea>
                         </div>
                         <input type="submit" value="Lưu" class="btn btn-success">
                         @*<button type="button" class="btn btn-success" id="edit-story">Lưu</button>*@

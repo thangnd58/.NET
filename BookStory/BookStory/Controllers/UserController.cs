@@ -84,7 +84,7 @@ namespace BookStory.Controllers
             {
                 Random generator = new Random();
                 int r = generator.Next(100000, 1000000);
-                new MailHelper().SendMail("testdata05082001@gmail.com", "Xác minh từ hệ thống BookStory", $"Mã xác minh của bạn là {r}");
+                new MailHelper().SendMail(email, "Xác minh từ hệ thống BookStory", $"Mã xác minh của bạn là {r}");
                 HttpContext.Session.SetInt32("code", r);
                 HttpContext.Session.SetString("register-user", JsonConvert.SerializeObject(user));
                 return RedirectToAction("Verify", "User");
@@ -162,6 +162,24 @@ namespace BookStory.Controllers
                 message = "Đổi mật khẩu thành công";
             }
             ViewBag.Message = message;
+            return View();
+        }
+
+        public IActionResult ForgotPassword(string email)
+        {
+            User u = context.Users.FirstOrDefault(x => x.Email == email);
+            if (u!=null)
+            {
+                Random generator = new Random();
+                int r = generator.Next(100000, 1000000);
+                new MailHelper().SendMail(email, $"Mật khẩu mới của tài khoản {email}", $"Mật khẩu mới của bạn là {r}");
+                u.Password = r.ToString();
+                context.SaveChanges();
+                ViewBag.Message = "Đã gửi mật khẩu mới vào email, vui lòng kiểm tra";
+            } else
+            {
+                ViewBag.Message = "Email không tồn tại trong hệ thống!";
+            }
             return View();
         }
     }

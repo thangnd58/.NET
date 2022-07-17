@@ -57,6 +57,17 @@
             </div>
             <div class="col-xs-12 col-sm-8 col-md-8 desc">
                 <div class="desc-text desc-text-full" itemprop="description"><p>@Html.Raw(ViewBag.Story.Description)</p></div>
+                <div class="l-chapter">
+                    <div class="l-title">
+                        <h3>Các chương mới nhất</h3>
+                    </div>
+                    <ul class="l-chapters">
+                        @foreach (Chapter c in ViewBag.NewChapters)
+                        {
+                            <li><span class="glyphicon glyphicon-certificate"></span> <a href="/Story/Content/@c.Sid/@c.Chapnumber" title="@c.Subname"><span class="chapter-text"></span>@c.Subname</a></li>
+                        }
+                    </ul>
+                </div>
             </div>
         </div>
         <div class="col-xs-12">
@@ -80,6 +91,95 @@
                 }
             </div>
             @Html.PagedListPager(Model, id1 => Url.Action("Detail", new { id1 }))
+        </div>
+        <div class="panel-body">
+            <div class="rate">
+                Đánh giá của bạn
+                <div class="" data-score="6.7" style="cursor: pointer;">
+                    <img id="img1" onmouseout="rateOut(1)" onmouseover="rateIn(1)" onclick="rated(1)" src="//static.8cache.com/lib/raty/images/star-on.png" title="Không còn gì để nói...">&nbsp;
+                    <img id="img2" onmouseout="rateOut(2)" onmouseover="rateIn(2)" onclick="rated(2)" src="//static.8cache.com/lib/raty/images/star-off.png" title="WTF">&nbsp;
+                    <img id="img3" onmouseout="rateOut(3)" onmouseover="rateIn(3)" onclick="rated(3)" src="//static.8cache.com/lib/raty/images/star-off.png" title="Cái gì thế này ?!">&nbsp;
+                    <img id="img4" onmouseout="rateOut(4)" onmouseover="rateIn(4)" onclick="rated(4)" src="//static.8cache.com/lib/raty/images/star-off.png" title="Haizz">&nbsp;
+                    <img id="img5" onmouseout="rateOut(5)" onmouseover="rateIn(5)" onclick="rated(5)" src="//static.8cache.com/lib/raty/images/star-off.png" title="Tạm">&nbsp;
+                    <img id="img6" onmouseout="rateOut(6)" onmouseover="rateIn(6)" onclick="rated(6)" src="//static.8cache.com/lib/raty/images/star-off.png" title="Cũng được">&nbsp;
+                    <img id="img7" onmouseout="rateOut(7)" onmouseover="rateIn(7)" onclick="rated(7)" src="//static.8cache.com/lib/raty/images/star-off.png" title="Khá đấy">&nbsp;
+                    <img id="img8" onmouseout="rateOut(8)" onmouseover="rateIn(8)" onclick="rated(8)" src="//static.8cache.com/lib/raty/images/star-off.png" title="Được">&nbsp;
+                    <img id="img9" onmouseout="rateOut(9)" onmouseover="rateIn(9)" onclick="rated(9)" src="//static.8cache.com/lib/raty/images/star-off.png" title="Hay">&nbsp;
+                    <img id="img10" onmouseout="rateOut(10)" onmouseover="rateIn(10)" onclick="rated(10)" src="//static.8cache.com/lib/raty/images/star-off.png" title="Tuyệt đỉnh!">
+                    <input name="score" id="score" type="hidden">
+                </div>
+                <em class="rate-text"></em>
+                <div class="small" itemprop="aggregateRating" itemscope="">
+                    <em>Đánh giá: <strong><span itemprop="ratingValue">@ViewBag.Score</span></strong>/<span class="text-muted" itemprop="bestRating">10</span> từ <strong><span itemprop="ratingCount">@ViewBag.TotalRating</span> lượt</strong></em>
+                </div>
+            </div>
+            <div class="story-comment-wrapper">
+                <div class="media">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            <i class="fa fa-comments"></i>
+                            <span>Đang có @ViewBag.ListComments.Count bình luận</span>
+                        </h3><div class="clearfix">
+                        </div>
+                    </div>
+                    <div class="media-body" style="width: 100%;">
+                        <form action="/Story/RatingStory" method="post">
+                            <div>
+                                <input type="hidden" name="star" id="rating-star" value="@ViewBag.Rating">
+                                <input type="hidden" name="sid" value="@ViewBag.Story.Sid">
+                                <textarea name="comment" id="comment-content-area" class="form-control" maxlength="500"></textarea>
+                            </div>
+                            <div class="clearfix mt-15">
+                                <div class="pull-left">
+                                    <p> <small>Bạn cần đăng nhập để đánh giá và bình luận.</small></p>
+                                </div>
+                                <div class="pull-right" style="margin: 10px 0px">
+                                    <button type="submit" class="btn btn-sm btn-info" id="sky-comment">Gửi bình luận </button>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div id="list-comments-media" class="mt-10" style="">
+                    <div class="media">
+
+                        <div class="media-body">
+                            @if (ViewBag.ListComments != null)
+                            {
+                                foreach (Rating item in ViewBag.ListComments)
+                                {
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h4 class="media-heading pull-left">
+                                                @{
+                                                    StoryDBContext storyDBContext = new StoryDBContext();
+                                                    List<User> listU = storyDBContext.Users.ToList();
+                                                    foreach (User u in listU)
+                                                    {
+                                                        if(item.Uid == u.Uid)
+                                                        {
+                                                            <span>@u.Name</span>
+                                                        }
+                                                    }
+                                                }
+                                            </h4>
+                                            <div class="pull-right">
+                                                <small> <span class="text-muted"> <i class="fa fa-clock-o"></i>&nbsp;&nbsp; <time class="timer">@item.CreatedAt</time> </span> </small>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                        <div class="panel-body">
+                                            <span class="form-content">@item.CommentContent</span>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            <div class="list-childs"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="visible-md-block visible-lg-block col-md-3 text-center col-truyen-side">
@@ -106,9 +206,11 @@
             </div>
         }
         <div class="list list-truyen list-side col-xs-12">
+
             <div class="title-list">
                 <h4>Truyện đang hot</h4>
             </div>
+
             @for (int i = 0; i < ViewBag.StoryHighestView.Count; i++)
             {
                 <div class="row top-item">

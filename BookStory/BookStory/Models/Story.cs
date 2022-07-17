@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Web;
 
 #nullable disable
 
@@ -11,9 +10,9 @@ namespace BookStory.Models
         public Story()
         {
             Chapters = new HashSet<Chapter>();
+            Ratings = new HashSet<Rating>();
             StoriesAuthors = new HashSet<StoriesAuthor>();
             StoriesCategories = new HashSet<StoriesCategory>();
-            Vieweds = new HashSet<Viewed>();
         }
 
         public int Sid { get; set; }
@@ -28,8 +27,8 @@ namespace BookStory.Models
         public DateTime? UpdatedAt { get; set; }
 
         public virtual ICollection<Chapter> Chapters { get; set; }
+        public virtual ICollection<Rating> Ratings { get; set; }
         public virtual ICollection<StoriesAuthor> StoriesAuthors { get; set; }
         public virtual ICollection<StoriesCategory> StoriesCategories { get; set; }
-        public virtual ICollection<Viewed> Vieweds { get; set; }
     }
 }

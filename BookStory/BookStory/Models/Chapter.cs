@@ -9,8 +9,8 @@ namespace BookStory.Models
     {
         public Chapter()
         {
+            Ratings = new HashSet<Rating>();
             Readings = new HashSet<Reading>();
-            Vieweds = new HashSet<Viewed>();
         }
 
         public int Ctid { get; set; }
@@ -23,7 +23,7 @@ namespace BookStory.Models
         public DateTime? UpdatedAt { get; set; }
 
         public virtual Story SidNavigation { get; set; }
+        public virtual ICollection<Rating> Ratings { get; set; }
         public virtual ICollection<Reading> Readings { get; set; }
-        public virtual ICollection<Viewed> Vieweds { get; set; }
     }
 }

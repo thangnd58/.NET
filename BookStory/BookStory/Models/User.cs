@@ -9,8 +9,8 @@ namespace BookStory.Models
     {
         public User()
         {
+            Ratings = new HashSet<Rating>();
             Readings = new HashSet<Reading>();
-            Vieweds = new HashSet<Viewed>();
         }
 
         public int Uid { get; set; }
@@ -21,7 +21,7 @@ namespace BookStory.Models
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
 
+        public virtual ICollection<Rating> Ratings { get; set; }
         public virtual ICollection<Reading> Readings { get; set; }
-        public virtual ICollection<Viewed> Vieweds { get; set; }
     }
 }

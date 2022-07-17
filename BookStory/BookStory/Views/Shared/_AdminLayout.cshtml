@@ -262,6 +262,9 @@
             //Load chapter into modal for edit
             $('.chapterinfo1').click(function(){
                 var ctid = $(this).data('id');
+                $('#chaptercontent1').summernote({
+                    height: 380
+                });
                 $('#chapterid').val(ctid);
                 $.ajax({
                     url: '/Admin/GetChapterByCtid/',
@@ -271,7 +274,7 @@
                         $('#namechapter1').val(response.name)
                         $('#chapternumber1').val(response.chapnumber)
                         $('#subnamechapter1').val(response.subname)
-                        $('#chaptercontent1').val(response.content)
+                        $('#chaptercontent1').summernote('code', response.content)
                     }
                 });
                 $('#modal-edit-chapter').modal('show');
@@ -280,6 +283,9 @@
             //Load story into modal for update
             $('.storyinfo').click(function(){
                 var storyid = $(this).data('id');
+                $('#description-edit').summernote({
+                    height: 200
+                });
                 $.ajax({
                     url: '/Admin/GetStory/',
                     type: 'GET',
@@ -290,7 +296,7 @@
                         $('#status-edit').val(response.status)
                         $('#source-edit').val(response.source)
                         $('#keyword-edit').val(response.keyword)
-                        $('#description-edit').val(response.description)
+                        $('#description-edit').summernote('code', response.description)
                         $('#author-edit').val(response.authorid).change()
                         $('#category-edit').val(response.listcid).change()
                     }

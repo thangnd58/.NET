@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.Extensions.Configuration;
 
 #nullable disable
 
@@ -21,19 +20,19 @@ namespace BookStory.Models
         public virtual DbSet<Author> Authors { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Chapter> Chapters { get; set; }
+        public virtual DbSet<Rating> Ratings { get; set; }
         public virtual DbSet<Reading> Readings { get; set; }
         public virtual DbSet<StoriesAuthor> StoriesAuthors { get; set; }
         public virtual DbSet<StoriesCategory> StoriesCategories { get; set; }
         public virtual DbSet<Story> Stories { get; set; }
         public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<Viewed> Vieweds { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
-                optionsBuilder.UseSqlServer(config.GetConnectionString("MyConStr"));
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("Server=localhost;Database=StoryDB;user=sa;password=123456");
             }
         }
 
@@ -142,6 +141,32 @@ namespace BookStory.Models
                     .HasForeignKey(d => d.Sid)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Chapter_Stories");
+            });
+
+            modelBuilder.Entity<Rating>(entity =>
+            {
+                entity.HasKey(e => e.CommentId);
+
+                entity.ToTable("Rating");
+
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime");
+
+                entity.Property(e => e.Rating1).HasColumnName("Rating");
+
+                entity.HasOne(d => d.Ct)
+                    .WithMany(p => p.Ratings)
+                    .HasForeignKey(d => d.Ctid)
+                    .HasConstraintName("FK_Rating_Chapters");
+
+                entity.HasOne(d => d.SidNavigation)
+                    .WithMany(p => p.Ratings)
+                    .HasForeignKey(d => d.Sid)
+                    .HasConstraintName("FK_Rating_Stories");
+
+                entity.HasOne(d => d.UidNavigation)
+                    .WithMany(p => p.Ratings)
+                    .HasForeignKey(d => d.Uid)
+                    .HasConstraintName("FK_Rating_Users");
             });
 
             modelBuilder.Entity<Reading>(entity =>
@@ -297,39 +322,6 @@ namespace BookStory.Models
                 entity.Property(e => e.UpdatedAt)
                     .HasColumnType("datetime")
                     .HasColumnName("updated_at");
-            });
-
-            modelBuilder.Entity<Viewed>(entity =>
-            {
-                entity.HasKey(e => e.Vid);
-
-                entity.ToTable("Viewed");
-
-                entity.Property(e => e.Vid).HasColumnName("vid");
-
-                entity.Property(e => e.Ctid).HasColumnName("ctid");
-
-                entity.Property(e => e.Sid).HasColumnName("sid");
-
-                entity.Property(e => e.Uid).HasColumnName("uid");
-
-                entity.HasOne(d => d.Ct)
-                    .WithMany(p => p.Vieweds)
-                    .HasForeignKey(d => d.Ctid)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Viewed_Chapter");
-
-                entity.HasOne(d => d.SidNavigation)
-                    .WithMany(p => p.Vieweds)
-                    .HasForeignKey(d => d.Sid)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Viewed_Stories");
-
-                entity.HasOne(d => d.UidNavigation)
-                    .WithMany(p => p.Vieweds)
-                    .HasForeignKey(d => d.Uid)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Viewed_Users");
             });
 
             OnModelCreatingPartial(modelBuilder);

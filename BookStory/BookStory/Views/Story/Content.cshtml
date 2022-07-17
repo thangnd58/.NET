@@ -35,13 +35,7 @@
                 }
             }
             <div style="margin-top: 30px" class="chapter-nav" id="chapter-nav-top">
-                <input type="hidden" id="ten-truyen"
-                       value="me-vo-khong-loi-ve-914117"><input type="hidden" id="truyen-comment"
-                                                                value="me-vo-khong-loi-ve"><input type="hidden" id="truyen-id" value="22044"><input type="hidden" id="chapter-id" value="2834631"><input type="hidden" id="chapter-bnum"
-                                                                                                                                                                                                         value=""><input type="hidden" id="chapter-num" value="1"><input type="hidden"
-                                                                                                                                                                                                                                                                         id="chapter-sac" value="1"><input type="hidden" id="" value="1">
                 <div class="btn-group">
-
                     <a class="btn btn-success btn-chapter-nav @(ViewBag.Chapter.Chapnumber.Equals("1")?"disabled":"")"
                        href="/Story/Content/@ViewBag.Chapter.Sid/@(int.Parse(ViewBag.Chapter.Chapnumber) - 1)" id="prev_chap" data-cid="">
                         <span class="glyphicon glyphicon-chevron-left"></span> <span class="hidden-xs">
@@ -80,7 +74,7 @@
             <div style="margin-top: 30px" class="chapter-nav" id="chapter-nav-bot">
                 <div class="btn-group">
                     <a class="btn btn-success btn-chapter-nav @(ViewBag.Chapter.Chapnumber.Equals("1")?"disabled":"")"
-                       href="/Story/Content/@ViewBag.Chapter.Sid/@(int.Parse(ViewBag.Chapter.Chapnumber) - 1)" id="prev_chap" data-cid="">
+                       href="/Story/Content/@ViewBag.Chapter.Sid/@(int.Parse(ViewBag.Chapter.Chapnumber) - 1)">
                         <span class="glyphicon glyphicon-chevron-left"></span> <span class="hidden-xs">
                             Chương
                         </span>trước
@@ -93,11 +87,80 @@
                     </select>
                     <a class="btn btn-success btn-chapter-nav @(ViewBag.Chapter.Chapnumber.Equals(ViewBag.AllChapters.Count.ToString())?"disabled":"")"
                        href="/Story/Content/@ViewBag.Chapter.Sid/@(int.Parse(ViewBag.Chapter.Chapnumber) + 1)"
-                       id="next_chap" data-cid="2834632">
+                       >
                         <span class="hidden-xs">Chương </span>tiếp <span class="glyphicon glyphicon-chevron-right"></span>
                     </a>
                 </div>
+            </div>
+            <div class="panel-body">
+                <div class="story-comment-wrapper">
+                    <div class="media">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                <i class="fa fa-comments"></i>
+                                <span>Đang có @ViewBag.ListComments.Count bình luận</span>
+                            </h3><div class="clearfix">
+                            </div>
+                        </div>
+                        <div class="media-body" style="width: 100%;">
+                            <form action="/Story/CommentChapter" method="post">
+                                <div>
+                                    <input type="hidden" name="ctid" value="@ViewBag.Chapter.Ctid">
+                                    <input type="hidden" name="chapnumber" value="@ViewBag.Chapter.Chapnumber">
+                                    <input type="hidden" name="sid" value="@ViewBag.Chapter.Sid">
+                                    <textarea name="comment" id="comment-content-area" class="form-control" maxlength="500"></textarea>
+                                </div>
+                                <div class="clearfix mt-15">
+                                    <div class="pull-left">
+                                        <p> <small>Bạn cần đăng nhập để đánh giá và bình luận.</small></p>
+                                    </div>
+                                    <div class="pull-right" style="margin: 10px 0px">
+                                        <button type="submit" class="btn btn-sm btn-info" id="sky-comment">Gửi bình luận </button>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div id="list-comments-media" class="mt-10" style="">
+                        <div class="media">
 
+                            <div class="media-body">
+                                @if (ViewBag.ListComments != null)
+                                {
+                                    foreach (Rating item in ViewBag.ListComments)
+                                    {
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h4 class="media-heading pull-left">
+                                                    @{
+                                                        StoryDBContext storyDBContext = new StoryDBContext();
+                                                        List<User> listU = storyDBContext.Users.ToList();
+                                                        foreach (User u in listU)
+                                                        {
+                                                            if (item.Uid == u.Uid)
+                                                            {
+                                                                <span>@u.Name</span>
+                                                            }
+                                                        }
+                                                    }
+                                                </h4>
+                                                <div class="pull-right">
+                                                    <small> <span class="text-muted"> <i class="fa fa-clock-o"></i>&nbsp;&nbsp; <time class="timer">@item.CreatedAt</time> </span> </small>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                            <div class="panel-body">
+                                                <span class="form-content">@item.CommentContent</span>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                                <div class="list-childs"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

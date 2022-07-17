@@ -8,6 +8,8 @@
     <meta charset="UTF-8">
     <title>@ViewBag.Title</title>
     <link rel="stylesheet" href="~/style.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
 </head>
 
 <body id="body_chapter">
@@ -198,7 +200,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#">
+                                        <a href="/User/ForgotPassword">
                                             Quên mật khẩu
                                         </a>
                                     </li>
@@ -320,6 +322,26 @@
             }
 
             document.getElementsByClassName("timer")[i].innerHTML = output;
+        }
+
+        function rateIn(rating){
+            for(var i = 1; i <= rating; i++){
+                $("#img" + i).attr('src', '//static.8cache.com/lib/raty/images/star-on.png');
+            }
+        }
+        function rated(rating){
+            for(var i = 1; i <= rating; i++){
+                $("#img" + i).attr('src', '//static.8cache.com/lib/raty/images/star-on.png');
+            }
+
+            for(var i = rating + 1; i <= 10; i++){
+                $("#img" + i).attr('src', '//static.8cache.com/lib/raty/images/star-off.png');
+            }
+            document.getElementById('rating-star').value = rating;
+        }
+        var star = document.getElementById('rating-star').value;
+        for(var i = 1; i <= star; i++){
+            $("#img" + i).attr('src', '//static.8cache.com/lib/raty/images/star-on.png');
         }
     </script>
 </body>
