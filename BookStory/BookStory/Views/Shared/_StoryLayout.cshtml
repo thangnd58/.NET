@@ -1,13 +1,14 @@
-﻿@using BookStory.Models
+﻿﻿@using BookStory.Models
 @using Microsoft.AspNetCore.Http
 @using Newtonsoft.Json
 @using System
+<!DOCTYPE html>
 <html lang="vi">
-
-<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# book: http://ogp.me/ns/book# profile: http://ogp.me/ns/profile#">
+<head>
     <meta charset="UTF-8">
     <title>@ViewBag.Title</title>
     <link rel="stylesheet" href="~/style.css">
+    <link rel="stylesheet" href="~/style2.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
 </head>
@@ -277,14 +278,17 @@
             </ul>
         </div>
     </div>
-    <script src="~/main2.js"></script>
+    <script src="https://static.8cache.com/min/g/mainjs-14062022_2.js"></script><noscript>
+        <link rel="stylesheet" type="text/css" href="https://static.8cache.com/min/g/maincss-08122021_1.css" />
+    </noscript>
     <script>$('head').append('<link rel="stylesheet" type="text/css" href="https://static.8cache.com/min/g/maincss-08122021_1.css"/>');</script>
 
-    <script>
+    <script type="text/javascript">
            var a = document.getElementsByClassName("timer");
            for(let i = 0; i < a.length; i++){
                timeDifference(a[i].textContent, i);
            }
+
            function timeDifference(previous, i) {
             const date = new Date();
             var current = date.getTime();
@@ -322,7 +326,7 @@
             }
 
             document.getElementsByClassName("timer")[i].innerHTML = output;
-        }
+            }
 
         function rateIn(rating){
             for(var i = 1; i <= rating; i++){

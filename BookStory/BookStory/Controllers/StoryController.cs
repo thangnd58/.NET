@@ -24,25 +24,27 @@ namespace BookStory.Controllers
                 totalRating += Convert.ToInt32(item.Rating1);
             }
             double score = (double)totalRating / (numberRating * 10);
-            if(totalRating == 0)
+            if (totalRating == 0)
             {
                 score = 0;
             }
             ViewBag.Score = score * 10;
             ViewBag.TotalRating = numberRating;
-            List<Rating> listComments = context.Ratings.Where(x => x.Sid == id && x.CommentContent != null).ToList();
+            List<Rating> listComments = context.Ratings.OrderByDescending(x => x.CreatedAt).Where(x => x.Sid == id && x.CommentContent != null).Take(20).ToList();
             ViewBag.ListComments = listComments;
             User u = null;
             Rating r = null;
             string json = HttpContext.Session.GetString("user");
-            if (json != null) {
+            if (json != null)
+            {
                 u = JsonConvert.DeserializeObject<User>(json);
                 r = context.Ratings.OrderByDescending(x => x.CommentId).FirstOrDefault(x => x.Sid == id && x.Uid == u.Uid);
             }
-            if(r == null)
+            if (r == null)
             {
                 ViewBag.Rating = 1;
-            } else
+            }
+            else
             {
                 ViewBag.Rating = r.Rating1;
             }
@@ -107,7 +109,7 @@ namespace BookStory.Controllers
             List<Rating> listComments = null;
             if (context.Ratings.Where(x => x.Ctid == c.Ctid) != null)
             {
-                listComments = context.Ratings.Where(x => x.Ctid == c.Ctid).ToList();
+                listComments = context.Ratings.OrderByDescending(x => x.CreatedAt).Where(x => x.Ctid == c.Ctid).Take(20).ToList();
             }
             ViewBag.ListComments = listComments;
             ViewBag.Chapter = c;
@@ -160,28 +162,35 @@ namespace BookStory.Controllers
             User u = null;
             string json = HttpContext.Session.GetString("user");
             if (json != null) u = JsonConvert.DeserializeObject<User>(json);
-            List<Reading> readings = context.Readings.ToList();
-            int rid = 0;
-            if (readings.Count > 0)
+            if (u != null)
             {
-                rid = readings.ElementAt(readings.Count - 1).Rid;
+                List<Reading> readings = context.Readings.ToList();
+                int rid = 0;
+                if (readings.Count > 0)
+                {
+                    rid = readings.ElementAt(readings.Count - 1).Rid;
+                }
+                else
+                {
+                    rid = 1;
+                }
+                int ctid = context.Chapters.FirstOrDefault(x => x.Chapnumber.Equals(id1.ToString()) && x.Sid == id).Ctid;
+                int count = context.Readings.Where(x => x.Ctid == ctid && x.Uid == u.Uid).ToList().Count;
+                if (count == 0)
+                {
+                    Reading r = new();
+                    r.Rid = rid + 1;
+                    r.Uid = u.Uid;
+                    r.Ctid = ctid;
+                    context.Add<Reading>(r);
+                    context.SaveChanges();
+                }
             }
             else
             {
-                rid = 1;
+                return RedirectToAction("Login", "User");
             }
-            int ctid = context.Chapters.FirstOrDefault(x => x.Chapnumber.Equals(id1.ToString()) && x.Sid == id).Ctid;
-            int count = context.Readings.Where(x => x.Ctid == ctid && x.Uid == u.Uid).ToList().Count;
-            if (count == 0)
-            {
-                Reading r = new();
-                r.Rid = rid + 1;
-                r.Uid = u.Uid;
-                r.Ctid = ctid;
-                context.Add<Reading>(r);
-                context.SaveChanges();
-            }
-            return RedirectToAction("Content", "Story", new { id, id1 });
+            return RedirectToAction("Content", "Story", new {id, id1});
         }
 
         public IActionResult UnSave(int id, int id1, int? id2, int? id3)
@@ -193,9 +202,10 @@ namespace BookStory.Controllers
             if (id2 == null)
             {
                 return RedirectToAction("Content", "Story", new { id, id1 });
-            } else
+            }
+            else
             {
-                return RedirectToAction("ListSaved", "Story", new { id = id2, id1 = id3});
+                return RedirectToAction("ListSaved", "Story", new { id = id2, id1 = id3 });
             }
         }
 
@@ -228,7 +238,8 @@ namespace BookStory.Controllers
                 };
                 context.Add<Rating>(r);
                 context.SaveChanges();
-            } else
+            }
+            else
             {
                 return RedirectToAction("Login", "User");
             }

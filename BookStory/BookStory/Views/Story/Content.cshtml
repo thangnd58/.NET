@@ -10,12 +10,11 @@
     <div class="row">
         <div class="col-xs-12">
             <button type="button"
-                    class="btn btn-responsive btn-success toggle-nav-open ">
-                <span class="glyphicon glyphicon-menu-up glyphicon-menu-updownswitch"></span>
+                    class="btn btn-responsive btn-success toggle-nav-open">
+                <span class="glyphicon glyphicon-menu-updownswitch"></span>
             </button>
             <a class="truyen-title"
                href="/Story/Detail/@ViewBag.Chapter.Sid" title="@ViewBag.Chapter.Name">@ViewBag.Chapter.Name</a>
-
             <h2>
                 <a class="chapter-title" href="/Story/Content/@ViewBag.Chapter.Sid/@ViewBag.Chapter.Chapnumber"
                    title="@ViewBag.Chapter.Subname">
@@ -34,7 +33,12 @@
                     <a href="/Story/UnSave/@ViewBag.Chapter.Sid/@ViewBag.Chapter.Chapnumber"><button class="btn btn-success">Bỏ lưu chương</button></a>
                 }
             }
+            else
+            {
+                <a href="/Story/Save/@ViewBag.Chapter.Sid/@ViewBag.Chapter.Chapnumber"><button class="btn btn-success">Lưu chương</button></a>
+            }
             <div style="margin-top: 30px" class="chapter-nav" id="chapter-nav-top">
+                <input type="hidden" id="ten-truyen" value="co-vo-que-mua-tong-tai-tham-sau">
                 <div class="btn-group">
                     <a class="btn btn-success btn-chapter-nav @(ViewBag.Chapter.Chapnumber.Equals("1")?"disabled":"")"
                        href="/Story/Content/@ViewBag.Chapter.Sid/@(int.Parse(ViewBag.Chapter.Chapnumber) - 1)" id="prev_chap" data-cid="">
@@ -86,79 +90,80 @@
                         }
                     </select>
                     <a class="btn btn-success btn-chapter-nav @(ViewBag.Chapter.Chapnumber.Equals(ViewBag.AllChapters.Count.ToString())?"disabled":"")"
-                       href="/Story/Content/@ViewBag.Chapter.Sid/@(int.Parse(ViewBag.Chapter.Chapnumber) + 1)"
-                       >
+                       href="/Story/Content/@ViewBag.Chapter.Sid/@(int.Parse(ViewBag.Chapter.Chapnumber) + 1)">
                         <span class="hidden-xs">Chương </span>tiếp <span class="glyphicon glyphicon-chevron-right"></span>
                     </a>
                 </div>
             </div>
-            <div class="panel-body">
-                <div class="story-comment-wrapper">
-                    <div class="media">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">
-                                <i class="fa fa-comments"></i>
-                                <span>Đang có @ViewBag.ListComments.Count bình luận</span>
-                            </h3><div class="clearfix">
-                            </div>
-                        </div>
-                        <div class="media-body" style="width: 100%;">
-                            <form action="/Story/CommentChapter" method="post">
-                                <div>
-                                    <input type="hidden" name="ctid" value="@ViewBag.Chapter.Ctid">
-                                    <input type="hidden" name="chapnumber" value="@ViewBag.Chapter.Chapnumber">
-                                    <input type="hidden" name="sid" value="@ViewBag.Chapter.Sid">
-                                    <textarea name="comment" id="comment-content-area" class="form-control" maxlength="500"></textarea>
-                                </div>
-                                <div class="clearfix mt-15">
-                                    <div class="pull-left">
-                                        <p> <small>Bạn cần đăng nhập để đánh giá và bình luận.</small></p>
-                                    </div>
-                                    <div class="pull-right" style="margin: 10px 0px">
-                                        <button type="submit" class="btn btn-sm btn-info" id="sky-comment">Gửi bình luận </button>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </form>
-                        </div>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="story-comment-wrapper">
+            <div class="media">
+                <div class="panel-heading">
+                    <h3 class="panel-title pull-left">
+                        <i class="fa fa-comments"></i>
+                        <span>Đang có @ViewBag.ListComments.Count bình luận</span>
+                    </h3><div class="clearfix">
                     </div>
-                    <div id="list-comments-media" class="mt-10" style="">
-                        <div class="media">
-
-                            <div class="media-body">
-                                @if (ViewBag.ListComments != null)
-                                {
-                                    foreach (Rating item in ViewBag.ListComments)
-                                    {
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                                <h4 class="media-heading pull-left">
-                                                    @{
-                                                        StoryDBContext storyDBContext = new StoryDBContext();
-                                                        List<User> listU = storyDBContext.Users.ToList();
-                                                        foreach (User u in listU)
-                                                        {
-                                                            if (item.Uid == u.Uid)
-                                                            {
-                                                                <span>@u.Name</span>
-                                                            }
-                                                        }
-                                                    }
-                                                </h4>
-                                                <div class="pull-right">
-                                                    <small> <span class="text-muted"> <i class="fa fa-clock-o"></i>&nbsp;&nbsp; <time class="timer">@item.CreatedAt</time> </span> </small>
-                                                </div>
-                                                <div class="clearfix"></div>
-                                            </div>
-                                            <div class="panel-body">
-                                                <span class="form-content">@item.CommentContent</span>
-                                            </div>
-                                        </div>
-                                    }
-                                }
-                                <div class="list-childs"></div>
-                            </div>
+                </div>
+                <div class="media-body" style="width: 100%;">
+                    <form action="/Story/CommentChapter" method="post">
+                        <div>
+                            <input type="hidden" name="ctid" value="@ViewBag.Chapter.Ctid">
+                            <input type="hidden" name="chapnumber" value="@ViewBag.Chapter.Chapnumber">
+                            <input type="hidden" name="sid" value="@ViewBag.Chapter.Sid">
+                            <textarea name="comment" id="comment-content-area" class="form-control" maxlength="500" required></textarea>
                         </div>
+                        <div class="clearfix mt-15">
+                            <div class="pull-left">
+                                <p> <small>Bạn cần đăng nhập để đánh giá và bình luận.</small></p>
+                            </div>
+                            <div class="pull-right" style="margin: 10px 0px">
+                                <button type="submit" class="btn btn-sm btn-info" id="sky-comment">Gửi bình luận </button>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div id="list-comments-media" class="mt-10">
+                <div class="media">
+
+                    <div class="media-body">
+                        @if (ViewBag.ListComments != null)
+                        {
+                            foreach (Rating item in ViewBag.ListComments)
+                            {
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="media-heading pull-left">
+                                            @{
+                                                StoryDBContext storyDBContext = new StoryDBContext();
+                                                List<User> listU = storyDBContext.Users.ToList();
+                                                foreach (User u in listU)
+                                                {
+                                                    if (item.Uid == u.Uid)
+                                                    {
+                                                        <span>
+                                                            @u.Name
+                                                        </span>
+                                                    }
+                                                }
+                                            }
+                                        </h4>
+                                        <div class="pull-right">
+                                            <small> <span class="text-muted"> <i class="fa fa-clock-o"></i>&nbsp;&nbsp; <time class="timer">@item.CreatedAt</time> </span> </small>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="panel-body ">
+                                        <span class="form-content pull-left">@item.CommentContent</span>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        <div class="list-childs"></div>
                     </div>
                 </div>
             </div>

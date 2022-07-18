@@ -108,7 +108,7 @@
                                                 <button title="Thêm chương mới" data-id="@s.Sid" class="btn chapterinfo">
                                                     <i class="fa fa-plus"></i>
                                                 </button>
-                                                <button type="button" data-target="#modal-delete" data-toggle="modal" title="Xóa truyện" class="btn deletestory" data-id="@s.Sid">
+                                                <button type="button" data-toggle="modal" title="Xóa truyện" class="btn deletestory" data-id="@s.Sid">
                                                     <i class="fa fa-trash"></i>
                                                 </button>
                                             </td>
@@ -356,7 +356,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="#" method="post" id="form-add-chapter">
+                <form action="/Admin/AddChapter/" method="post" id="form-add-chapter">
                     <div class="card-body">
                         <div class="row">
                             <div class="form-group col-md-4">
@@ -377,32 +377,12 @@
                             <label for="inputDescription">Nội dung</label>
                             <textarea name="chaptercontent" id="chaptercontent" class="form-control summernote" rows="" required></textarea>
                         </div>
-                        @*<input type="submit" value="Lưu" class="btn btn-success">*@
-                        <button class="btn btn-success" id="add-chapter">Tạo</button>
+                        <input type="submit" value="Lưu" class="btn btn-success">
+                       @*<button class="btn btn-success" id="add-chapter">Tạo</button>*@ 
                     </div>
                     <!-- /.card-body -->
                     <!-- /.card -->
                 </form>
-            </div>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-</div>
-
-@*Modal Ask Delete*@
-<div class="modal fade" id="modal-delete">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="modal-body">
-                <p style="text-align: center; margin: 0px 10px 0px 10px;">Bạn có muốn xóa truyện và tất cả các chương của truyện này?</p>
-            </div>
-            <div class="modal-footer justify-content-between">
-                <form id="form-delete-story">
-                    <input type="hidden" value="" name="storyid" id="input-detele" />
-                    <button type="button" id="confirm-delete" class="btn btn-danger">Xóa</button>
-                </form>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
             </div>
         </div>
         <!-- /.modal-content -->

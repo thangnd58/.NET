@@ -43,7 +43,7 @@ namespace BookStory.Controllers
             ViewBag.Stories = stories;
             ViewBag.CurrentId = id;
             Dictionary<Chapter, List<Category>> listNewChapters = new();
-            foreach (Chapter c in context.Chapters.OrderByDescending(x => x.UpdatedAt).Take(24).ToList())
+            foreach (Chapter c in context.Chapters.OrderByDescending(x => x.CreatedAt).Take(24).ToList())
             {
                 listNewChapters.Add(c, GetCategoriesBySid(c.Sid));
             }

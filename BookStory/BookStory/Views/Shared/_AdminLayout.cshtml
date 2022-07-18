@@ -137,6 +137,7 @@
     <script src="~/plugins/select2/js/select2.full.min.js"></script>
     <!-- Summernote -->
     <script src="~/plugins/summernote/summernote-bs4.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Page specific script -->
     <script>
 
@@ -167,8 +168,13 @@
                     processData: false,
                     data: formData,
                     success: function() {
-                        alert("Add Story Successful")
-                        location.reload()
+                        Swal.fire(
+                          'Thành công',
+                          'Đã thêm truyện mới',
+                          'success'
+                        ).then(() =>{
+                            location.reload()
+                        })
                     }
                 });
             });
@@ -180,8 +186,13 @@
                     type: 'POST',
                     data: $('#form-add-author').serialize(),
                     success: function() {
-                        alert("Add Author Successful")
-                        location.reload()
+                        Swal.fire(
+                          'Thành công',
+                          'Đã thêm tác giả mới',
+                          'success'
+                        ).then(() =>{
+                            location.reload()
+                        })
                     }
                 });
             });
@@ -193,8 +204,13 @@
                     type: 'POST',
                     data: $('#form-add-category').serialize(),
                     success: function() {
-                        alert("Add Category Successful")
-                        location.reload()
+                        Swal.fire(
+                          'Thành công',
+                          'Đã thêm danh mục mới',
+                          'success'
+                        ).then(() =>{
+                            location.reload()
+                        })
                     }
                 });
             });
@@ -211,21 +227,60 @@
                     processData: false,
                     data: formData,
                     success: function() {
-                        alert("Edit Story Successful")
-                        location.reload()
+                        Swal.fire(
+                          'Thành công',
+                          'Đã cập nhật thông tin truyện',
+                          'success'
+                        ).then(() =>{
+                            location.reload()
+                        })
+                    }
+
+                });
+            });
+
+            //Add new chapter
+            $('#form-add-chapter').on('submit',function(e){
+                e.preventDefault();
+                var formData = new FormData(this);
+                $.ajax({
+                    url: $(this).attr('action'),
+                    type: 'POST',
+                    cache:false,
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    success: function() {
+                        Swal.fire(
+                          'Thành công',
+                          'Đã thêm chương mới',
+                          'success'
+                        ).then(() =>{
+                            location.reload()
+                        })
                     }
                 });
             });
 
-            //Add chapter
-            $('#add-chapter').click(function(){
+            //Edit chapter
+            $('#form-edit-chapter').on('submit',function(e){
+                e.preventDefault();
+                var formData = new FormData(this);
                 $.ajax({
-                    url: '/Admin/AddChapter/',
+                    url: $(this).attr('action'),
                     type: 'POST',
-                    data: $('#form-add-chapter').serialize(),
+                    cache:false,
+                    contentType: false,
+                    processData: false,
+                    data: formData,
                     success: function() {
-                        alert("Add Chapter Successful")
-                        location.reload()
+                        Swal.fire(
+                          'Thành công',
+                          'Đã cập nhật chương thành công',
+                          'success'
+                        ).then(() =>{
+                            location.reload()
+                        })
                     }
                 });
             });
@@ -244,19 +299,6 @@
                     }
                 });
                 $('#modal-addchapter').modal('show');
-            });
-
-            //Edit chapter
-            $('#edit-chapter').click(function(){
-                $.ajax({
-                    url: '/Admin/EditChapter/',
-                    type: 'POST',
-                    data: $('#form-edit-chapter').serialize(),
-                    success: function() {
-                        alert("Edit Chapter Successful")
-                        location.reload()
-                    }
-                });
             });
 
             //Load chapter into modal for edit
@@ -304,44 +346,67 @@
                 $('#modal-edit').modal('show');
             });
 
-            //Load storyid into ask modal
+            //Confirm delete story
             $('.deletestory').click(function(){
                 var storyid = $(this).data('id');
-                $('#input-detele').val(storyid);
-            });
-
-            //Confirm delete story
-            $('#confirm-delete').click(function(){
-                $.ajax({
+                Swal.fire({
+                  title: 'Bạn có muốn xóa truyện này không?',
+                  text: "Sẽ không thể khôi phục lại",
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  confirmButtonText: 'Có, xóa ngay!'
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    $.ajax({
                     url: '/Admin/DeleteStory/',
                     type: 'POST',
-                    data: $('#form-delete-story').serialize(),
+                    data: {storyid: storyid},
                     success: function() {
-                        alert("Delete Story Successful")
-                        location.reload()
+                        Swal.fire(
+                          'Thành công',
+                          'Đã xóa truyện',
+                          'success'
+                        ).then(() =>{
+                            location.reload()
+                        })
                     }
                 });
-            });
-
-            //Load chapterid into ask modal
-            $('.deletechapter').click(function(){
-                var chapterid = $(this).data('id');
-                $('#input-detele-chapter').val(chapterid);
+                }
+               })
             });
 
             //Confirm delete chapter
-            $('#confirm-delete-chapter').click(function(){
-                $.ajax({
+            $('.deletechapter').click(function(){
+                var chapterid = $(this).data('id');
+                Swal.fire({
+                  title: 'Bạn có muốn xóa chương này không?',
+                  text: "Sẽ không thể khôi phục lại",
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  confirmButtonText: 'Có, xóa ngay!',
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    $.ajax({
                     url: '/Admin/DeleteChapter/',
                     type: 'POST',
-                    data: $('#form-delete-chapter').serialize(),
+                    data: {chapterid: chapterid},
                     success: function() {
-                        alert("Delete Chapter Successful")
-                        location.reload()
+                        Swal.fire(
+                          'Thành công',
+                          'Đã xóa chương',
+                          'success'
+                        ).then(() =>{
+                            location.reload()
+                        })
                     }
                 });
+                }
+               })
             });
-
         });
 
         //Select2

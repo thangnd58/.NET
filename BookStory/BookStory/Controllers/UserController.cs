@@ -46,7 +46,6 @@ namespace BookStory.Controllers
                 ViewBag.Message = "Nhập sai email hoặc mật khẩu";
                 return View();
             }
-            return View();
         }
         [HttpGet]
         public IActionResult Register()
