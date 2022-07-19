@@ -23,7 +23,9 @@
                     <div class="row" itemscope>
                         <div class="col-xs-12">
                             <div>
-                                <a title="Bỏ lưu" href="/Story/UnSave/@c.Sid/@c.Chapnumber/@ViewBag.CurrentId/@ViewBag.CurrentPage"><button class="btn btn-danger">Xóa</button></a>
+                                <input type="hidden" value="@c.Sid" name="id" id="sid">
+                                <input type="hidden" value="@c.Chapnumber" name="id1" id="chapnumber">
+                                <button onclick="unsavechapter()" class="btn btn-danger">Bỏ lưu</button>
                                 <h3 class="truyen-title" itemprop="name">
                                     <a href="/Story/Content/@c.Sid/@c.Chapnumber"
                                title="@c.Name" itemprop="url">

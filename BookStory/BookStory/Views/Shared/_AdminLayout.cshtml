@@ -291,7 +291,7 @@
                 $('#sid-chapter').val(sid);
                 $.ajax({
                     url: '/Admin/GetChapter/',
-                    type: 'GET',
+                    type: 'POST',
                     data: {sid : sid},
                     success: function(response) {
                         $('#namechapter').val(response.name)
@@ -310,7 +310,7 @@
                 $('#chapterid').val(ctid);
                 $.ajax({
                     url: '/Admin/GetChapterByCtid/',
-                    type: 'GET',
+                    type: 'POST',
                     data: {ctid : ctid},
                     success: function(response) {
                         $('#namechapter1').val(response.name)
@@ -330,7 +330,7 @@
                 });
                 $.ajax({
                     url: '/Admin/GetStory/',
-                    type: 'GET',
+                    type: 'POST',
                     data: {storyid : storyid},
                     success: function(response) {
                         $('#sid-edit').val(response.sid)

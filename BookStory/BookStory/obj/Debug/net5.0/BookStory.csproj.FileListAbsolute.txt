@@ -83,3 +83,4 @@ D:\KY5\PRN211\.NET\BookStory\BookStory\bin\Debug\net5.0\X.PagedList.Mvc.Bootstra
 D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\scopedcss\bundle\BookStory.styles.css
 D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\staticwebassets\BookStory.StaticWebAssets.Manifest.cache
 D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\Razor\Views\User\ForgotPassword.cshtml.g.cs
+D:\KY5\PRN211\.NET\BookStory\BookStory\obj\Debug\net5.0\Razor\Views\Error\Message.cshtml.g.cs

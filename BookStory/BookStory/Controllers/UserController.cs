@@ -15,7 +15,14 @@ namespace BookStory.Controllers
         [HttpGet]
         public IActionResult Login()
         {
-            return View();
+            if (!VerifyUser())
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         [HttpPost]
@@ -50,7 +57,14 @@ namespace BookStory.Controllers
         [HttpGet]
         public IActionResult Register()
         {
-            return View();
+            if (!VerifyUser())
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         [HttpPost]
@@ -129,7 +143,14 @@ namespace BookStory.Controllers
         [HttpGet]
         public IActionResult ChangePassword()
         {
-            return View();
+            if (VerifyUser())
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         [HttpPost]
@@ -180,6 +201,15 @@ namespace BookStory.Controllers
                 ViewBag.Message = "Email không tồn tại trong hệ thống!";
             }
             return View();
+        }
+
+        public bool VerifyUser()
+        {
+            if(HttpContext.Session.GetString("user") == null)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

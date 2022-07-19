@@ -26,16 +26,20 @@
             {
                 if (ViewBag.IsSave == false)
                 {
-                    <a href="/Story/Save/@ViewBag.Chapter.Sid/@ViewBag.Chapter.Chapnumber"><button class="btn btn-success">Lưu chương</button></a>
+                    <input type="hidden" value="@ViewBag.Chapter.Sid" name="id" id="sid">
+                    <input type="hidden" value="@ViewBag.Chapter.Chapnumber" name="id1" id="chapnumber">
+                    <button onclick="savechapter()" class="btn btn-success">Lưu chương</button>
                 }
                 else
                 {
-                    <a href="/Story/UnSave/@ViewBag.Chapter.Sid/@ViewBag.Chapter.Chapnumber"><button class="btn btn-success">Bỏ lưu chương</button></a>
+                    <input type="hidden" value="@ViewBag.Chapter.Sid" name="id" id="sid">
+                    <input type="hidden" value="@ViewBag.Chapter.Chapnumber" name="id1" id="chapnumber">
+                    <button onclick="unsavechapter()" class="btn btn-success">Bỏ lưu chương</button>
                 }
             }
             else
             {
-                <a href="/Story/Save/@ViewBag.Chapter.Sid/@ViewBag.Chapter.Chapnumber"><button class="btn btn-success">Lưu chương</button></a>
+                <a href="/User/Login/"><button class="btn btn-success">Lưu chương</button></a>
             }
             <div style="margin-top: 30px" class="chapter-nav" id="chapter-nav-top">
                 <input type="hidden" id="ten-truyen" value="co-vo-que-mua-tong-tai-tham-sau">
@@ -68,12 +72,20 @@
             {
                 if (ViewBag.IsSave == false)
                 {
-                    <a href="/Story/Save/@ViewBag.Chapter.Sid/@ViewBag.Chapter.Chapnumber"><button class="btn btn-success">Lưu chương</button></a>
+                    <input type="hidden" value="@ViewBag.Chapter.Sid" name="id" id="sid">
+                    <input type="hidden" value="@ViewBag.Chapter.Chapnumber" name="id1" id="chapnumber">
+                    <button onclick="savechapter()" class="btn btn-success">Lưu chương</button>
                 }
                 else
                 {
-                    <a href="/Story/UnSave/@ViewBag.Chapter.Sid/@ViewBag.Chapter.Chapnumber"><button class="btn btn-success">Bỏ lưu chương</button></a>
+                    <input type="hidden" value="@ViewBag.Chapter.Sid" name="id" id="sid">
+                    <input type="hidden" value="@ViewBag.Chapter.Chapnumber" name="id1" id="chapnumber">
+                    <button onclick="unsavechapter()" class="btn btn-success">Bỏ lưu chương</button>
                 }
+            }
+            else
+            {
+                <a href="/User/Login/"><button class="btn btn-success">Lưu chương</button></a>
             }
             <div style="margin-top: 30px" class="chapter-nav" id="chapter-nav-bot">
                 <div class="btn-group">

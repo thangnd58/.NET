@@ -7,6 +7,7 @@ using System.Linq;
 using X.PagedList;
 using Microsoft.AspNetCore.Http;
 using System.Web;
+using Newtonsoft.Json;
 
 namespace BookStory.Controllers
 {
@@ -16,64 +17,119 @@ namespace BookStory.Controllers
 
         public IActionResult ListStory(int? id)
         {
-            List<Story> stories = context.Stories.ToList();
-            ViewBag.Stories = stories;
-            int totalView = 0;
-            foreach (Story story in stories)
+            try
             {
-                totalView += (int)story.View;
+                if (VerifyAdmin() == 1)
+                {
+                    List<Story> stories = context.Stories.ToList();
+                    ViewBag.Stories = stories;
+                    int totalView = 0;
+                    foreach (Story story in stories)
+                    {
+                        totalView += (int)story.View;
+                    }
+                    ViewBag.TotalView = totalView;
+                    ViewBag.TotalStory = stories.Count;
+                    ViewBag.TotalUser = context.Users.ToList().Count;
+                    ViewBag.Authors = context.Authors.ToList();
+                    ViewBag.Categories = context.Categories.ToList();
+                    _ = context.Chapters.ToList();
+                    if (id == null) id = 1;
+                    int pageSize = 20;
+                    int pageNumber = (id ?? 1);
+                    stories.Reverse();
+                    var storiesPage = stories;
+                    return View(storiesPage.ToPagedList(pageNumber, pageSize));
+                }
+                else if (VerifyAdmin() == 0)
+                {
+                    return RedirectToAction("Login", "User");
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Home");
+                }
             }
-            ViewBag.TotalView = totalView;
-            ViewBag.TotalStory = stories.Count;
-            ViewBag.TotalUser = context.Users.ToList().Count;
-            ViewBag.Authors = context.Authors.ToList();
-            ViewBag.Categories = context.Categories.ToList();
-            _ = context.Chapters.ToList();
-            if (id == null) id = 1;
-            int pageSize = 20;
-            int pageNumber = (id ?? 1);
-            stories.Reverse();
-            var storiesPage = stories;
-            return View(storiesPage.ToPagedList(pageNumber, pageSize));
+            catch (Exception ex)
+            {
+                return RedirectToAction("Message", "Error");
+            }
         }
 
         public IActionResult ListUser(int? id)
         {
-            List<Story> stories = context.Stories.ToList();
-            List<User> users = context.Users.ToList();
-            int totalView = 0;
-            foreach (Story story in stories)
+            try
             {
-                totalView += (int)story.View;
+                if (VerifyAdmin()==1)
+                {
+                    List<Story> stories = context.Stories.ToList();
+                    List<User> users = context.Users.ToList();
+                    int totalView = 0;
+                    foreach (Story story in stories)
+                    {
+                        totalView += (int)story.View;
+                    }
+                    ViewBag.TotalView = totalView;
+                    ViewBag.TotalStory = stories.Count;
+                    ViewBag.TotalUser = context.Users.ToList().Count;
+                    _ = context.Chapters.ToList();
+                    if (id == null) id = 1;
+                    int pageSize = 20;
+                    int pageNumber = (id ?? 1);
+                    users.Reverse();
+                    return View(users.ToPagedList(pageNumber, pageSize));
+                }
+                else if (VerifyAdmin() == 2)
+                {
+                    return RedirectToAction("Login", "User");
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Home");
+                }
             }
-            ViewBag.TotalView = totalView;
-            ViewBag.TotalStory = stories.Count;
-            ViewBag.TotalUser = context.Users.ToList().Count;
-            _ = context.Chapters.ToList();
-            if (id == null) id = 1;
-            int pageSize = 20;
-            int pageNumber = (id ?? 1);
-            users.Reverse();
-            return View(users.ToPagedList(pageNumber, pageSize));
+            catch (Exception ex)
+            {
+                return RedirectToAction("Message", "Error");
+            }
         }
 
         public IActionResult ListChapter(int? id)
         {
-            List<Story> stories = context.Stories.ToList();
-            List<Chapter> chapters = context.Chapters.OrderBy(x => x.Name).ToList();
-            int totalView = 0;
-            foreach (Story story in stories)
+            try
             {
-                totalView += (int)story.View;
+                if (VerifyAdmin()==1)
+                {
+                    List<Story> stories = context.Stories.ToList();
+                    List<Chapter> chapters = context.Chapters.OrderBy(x => x.Name).ToList();
+                    int totalView = 0;
+                    foreach (Story story in stories)
+                    {
+                        totalView += (int)story.View;
+                    }
+                    ViewBag.TotalView = totalView;
+                    ViewBag.TotalStory = stories.Count;
+                    ViewBag.TotalUser = context.Users.ToList().Count;
+                    _ = context.Chapters.ToList();
+                    if (id == null) id = 1;
+                    int pageSize = 20;
+                    int pageNumber = (id ?? 1);
+                    return View(chapters.ToPagedList(pageNumber, pageSize));
+                }
+                else if (VerifyAdmin() == 2)
+                {
+                    return RedirectToAction("Login", "User");
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Home");
+                }
             }
-            ViewBag.TotalView = totalView;
-            ViewBag.TotalStory = stories.Count;
-            ViewBag.TotalUser = context.Users.ToList().Count;
-            _ = context.Chapters.ToList();
-            if (id == null) id = 1;
-            int pageSize = 20;
-            int pageNumber = (id ?? 1);
-            return View(chapters.ToPagedList(pageNumber, pageSize));
+            catch (Exception ex)
+            {
+                return RedirectToAction("Message", "Error");
+            }
+
         }
 
         [HttpPost]
@@ -81,44 +137,68 @@ namespace BookStory.Controllers
         {
             try
             {
-                Category c = new()
+                if (VerifyAdmin() == 1)
                 {
-                    Title = category
-                };
-                context.Add<Category>(c);
-                context.SaveChanges();
+                    Category c = new()
+                    {
+                        Title = category
+                    };
+                    context.Add<Category>(c);
+                    context.SaveChanges();
+                    return RedirectToAction("ListStory", "Admin");
+                }
+                else if (VerifyAdmin() == 2)
+                {
+                    return RedirectToAction("Login", "User");
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Home");
+                }
             }
             catch (Exception ex)
             {
-
+                return RedirectToAction("Message", "Error");
             }
-            return RedirectToAction("ListStory", "Admin");
         }
 
         [HttpPost]
         public IActionResult DeleteStory(int storyid)
         {
-            List<StoriesAuthor> storiesAuthors = context.StoriesAuthors.Where(x => x.Sid == storyid).ToList();
-            List<StoriesCategory> storiesCategories = context.StoriesCategories.Where(x => x.Sid == storyid).ToList();
-            List<Chapter> chapters = context.Chapters.Where(x => x.Sid == storyid).ToList();
-            Story s = context.Stories.FirstOrDefault(x => x.Sid == storyid);
-            context.StoriesAuthors.RemoveRange(storiesAuthors);
-            context.StoriesCategories.RemoveRange(storiesCategories);
-            context.Chapters.RemoveRange(chapters);
-            context.Remove(s);
-            context.SaveChanges();
-            return RedirectToAction("ListStory", "Admin");
+            try
+            {
+                List<StoriesAuthor> storiesAuthors = context.StoriesAuthors.Where(x => x.Sid == storyid).ToList();
+                List<StoriesCategory> storiesCategories = context.StoriesCategories.Where(x => x.Sid == storyid).ToList();
+                List<Chapter> chapters = context.Chapters.Where(x => x.Sid == storyid).ToList();
+                Story s = context.Stories.FirstOrDefault(x => x.Sid == storyid);
+                context.StoriesAuthors.RemoveRange(storiesAuthors);
+                context.StoriesCategories.RemoveRange(storiesCategories);
+                context.Chapters.RemoveRange(chapters);
+                context.Remove(s);
+                context.SaveChanges();
+                return RedirectToAction("ListStory", "Admin");
+            } catch (Exception ex)
+            {
+                return RedirectToAction("Message", "Error");
+            }
         }
 
         [HttpPost]
         public IActionResult DeleteChapter(int chapterid)
         {
-            List<Reading> readings = context.Readings.Where(x => x.Ctid == chapterid).ToList();
-            Chapter chapter = context.Chapters.FirstOrDefault(x => x.Ctid == chapterid);
-            context.RemoveRange(readings);
-            context.Remove(chapter);
-            context.SaveChanges();
-            return RedirectToAction("ListChapter", "Admin");
+            try
+            {
+                List<Reading> readings = context.Readings.Where(x => x.Ctid == chapterid).ToList();
+                Chapter chapter = context.Chapters.FirstOrDefault(x => x.Ctid == chapterid);
+                context.RemoveRange(readings);
+                context.Remove(chapter);
+                context.SaveChanges();
+                return RedirectToAction("ListChapter", "Admin");
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Message", "Error");
+            }
         }
 
         [HttpPost]
@@ -133,24 +213,25 @@ namespace BookStory.Controllers
                 };
                 context.Add<Author>(a);
                 context.SaveChanges();
+                return RedirectToAction("ListStory", "Admin");
             }
             catch (Exception ex)
             {
-
+                return RedirectToAction("Message", "Error");
             }
-            return RedirectToAction("ListStory", "Admin");
+            
         }
 
         [HttpPost]
         public IActionResult AddStory(string name, int[] categories, int author, int status, string source, IFormFile image, string keyword, string description)
         {
-            string fullPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "StoriesImage", image.FileName);
-            using(var file = new FileStream(fullPath, FileMode.Create))
-            {
-                image.CopyTo(file);
-            }
             try
             {
+                string fullPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "StoriesImage", image.FileName);
+                using (var file = new FileStream(fullPath, FileMode.Create))
+                {
+                    image.CopyTo(file);
+                }
                 Story story = new()
                 {
                     Name = name,
@@ -184,24 +265,25 @@ namespace BookStory.Controllers
                 };
                 _ = context.Add(sa);
                 _ = context.SaveChanges();
+                return RedirectToAction("ListStory", "Admin");
             }
             catch (Exception ex)
             {
-
+                return RedirectToAction("Message", "Error");
             }
-            return RedirectToAction("ListStory", "Admin");
         }
 
         [HttpPost]
         public IActionResult EditStory(int sid, string name, int[] categories, int author, int status, string source, IFormFile image, string keyword, string description)
         {
-            string fullPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "StoriesImage", image.FileName);
-            using (var file = new FileStream(fullPath, FileMode.Create))
-            {
-                image.CopyTo(file);
-            }
+            
             try
             {
+                string fullPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "StoriesImage", image.FileName);
+                using (var file = new FileStream(fullPath, FileMode.Create))
+                {
+                    image.CopyTo(file);
+                }
                 var entity = context.Stories.FirstOrDefault(x => x.Sid == sid);
                 entity.Name = name;
                 entity.Source = source;
@@ -227,12 +309,12 @@ namespace BookStory.Controllers
                     context.Add<StoriesCategory>(sc);
                     context.SaveChanges();
                 }
+                return RedirectToAction("ListStory", "Admin");
             }
             catch (Exception ex)
             {
-
+                return RedirectToAction("Message", "Error");
             }
-            return RedirectToAction("ListStory", "Admin");
         }
 
         [HttpPost]
@@ -248,12 +330,13 @@ namespace BookStory.Controllers
                 entity.UpdatedAt = DateTime.Now;
                 context.Entry(entity).CurrentValues.SetValues(entity);
                 context.SaveChanges();
+                return RedirectToAction("ListChapter", "Admin");
             }
             catch (Exception ex)
             {
-
+                return RedirectToAction("Message", "Error");
             }
-            return RedirectToAction("ListChapter", "Admin");
+            
         }
 
         [HttpPost]
@@ -273,15 +356,15 @@ namespace BookStory.Controllers
                 };
                 context.Add<Chapter>(c);
                 context.SaveChanges();
+                return RedirectToAction("ListStory", "Admin");
             }
             catch (Exception ex)
             {
-
+                return RedirectToAction("Message", "Error");
             }
-            return RedirectToAction("ListStory", "Admin");
         }
 
-        [HttpGet]
+        [HttpPost]
         public JsonResult GetStory(int storyid)
         {
             try
@@ -311,7 +394,7 @@ namespace BookStory.Controllers
             return null;
         }
 
-        [HttpGet]
+        [HttpPost]
         public JsonResult GetChapter(int sid)
         {
             try
@@ -342,6 +425,7 @@ namespace BookStory.Controllers
             return null;
         }
 
+        [HttpPost]
         public JsonResult GetChapterByCtid(int ctid)
         {
             try
@@ -360,6 +444,25 @@ namespace BookStory.Controllers
 
             }
             return null;
+        }
+
+        public int VerifyAdmin()
+        {
+            User u = null;
+            string json = HttpContext.Session.GetString("user");
+            if (json != null) u = JsonConvert.DeserializeObject<User>(json);
+            if(u != null)
+            {
+                if (u.Role == 1)
+                {
+                    return 1;
+                }
+                else if (u.Role == 2)
+                {
+                    return 2;
+                }
+            } 
+            return 0;
         }
     }
 }
