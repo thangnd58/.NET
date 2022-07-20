@@ -6,6 +6,11 @@
     ViewBag.Title = "Content";
     Layout = "_StoryLayout";
 }
+@{
+    User u1 = null;
+    string json = Context.Session.GetString("user");
+    if (json != null) u1 = JsonConvert.DeserializeObject<User>(json);
+}
 <div id="chapter-big-container" class="container chapter">
     <div class="row">
         <div class="col-xs-12">
@@ -120,7 +125,7 @@
                     </div>
                 </div>
                 <div class="media-body" style="width: 100%;">
-                    <form action="/Story/CommentChapter" method="post">
+                    <form action="/Story/CommentChapter" method="post" id="comment-chapter">
                         <div>
                             <input type="hidden" name="ctid" value="@ViewBag.Chapter.Ctid">
                             <input type="hidden" name="chapnumber" value="@ViewBag.Chapter.Chapnumber">
@@ -132,7 +137,12 @@
                                 <p> <small>Bạn cần đăng nhập để đánh giá và bình luận.</small></p>
                             </div>
                             <div class="pull-right" style="margin: 10px 0px">
-                                <button type="submit" class="btn btn-sm btn-info" id="sky-comment">Gửi bình luận </button>
+                                @if(u1!=null){
+                                    <button type="submit" class="btn btn-sm btn-info" id="sky-comment">Gửi bình luận </button>
+                                } else
+                                {
+                                    <a href="/User/Login/" class="btn btn-sm btn-info">Đăng nhập để bình luận</a>
+                                }
                             </div>
                             <div class="clearfix"></div>
                         </div>
@@ -141,7 +151,6 @@
             </div>
             <div id="list-comments-media" class="mt-10">
                 <div class="media">
-
                     <div class="media-body">
                         @if (ViewBag.ListComments != null)
                         {
@@ -169,9 +178,26 @@
                                         </div>
                                         <div class="clearfix"></div>
                                     </div>
-                                    <div class="panel-body ">
-                                        <span class="form-content pull-left">@item.CommentContent</span>
-                                    </div>
+                                    <div class="panel-body">
+                                        <form action="/Story/EditComment/" method="post" class="form-edit-comment">
+                                                <input type="hidden" id="cmct@(item.CommentId)" value="@item.CommentContent">
+                                                <input type="hidden" name="cmid" id="cmid@(item.CommentId)" value="@item.CommentId">
+                                                <span class="form-content contentcm" id="commentcontent@(item.CommentId)">@item.CommentContent</span>
+
+                                                @if (u1 != null)
+                                                {
+                                                    if (u1.Uid == item.Uid)
+                                                    {
+                                                        <br>
+                                                        <textarea name="cmct" id="edit-content-area@(item.CommentId)" class="form-control edit-comment"></textarea>
+                                                        <br>
+                                                        <button id="edit-btn@(item.CommentId)" type="button" data-id="@item.CommentId" class="btn btn-primary btn-xs edit-btn">Sửa</button>
+                                                        <input id="save-btn@(item.CommentId)" type="submit" data-id="@item.CommentId" class="btn btn-success btn-xs save-btn" value="Lưu">
+                                                        <input id="cancel-btn@(item.CommentId)" type="button" data-id="@item.CommentId" class="btn btn-danger btn-xs cancel-btn" value="Hủy">
+                                                        <button type="button" data-id="@item.CommentId" class="btn btn-danger btn-xs delete-comment">Xóa</button>
+                                                    }
+                                                }
+                                            </form></div>
                                 </div>
                             }
                         }

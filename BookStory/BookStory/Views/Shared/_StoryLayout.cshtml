@@ -208,6 +208,14 @@
                                 }
                                 else
                                 {
+                                    @if (u.Role == 1)
+                                    {
+                                        <li>
+                                            <a href="/Admin/ListStory/">
+                                                Quản lý truyện
+                                            </a>
+                                        </li>
+                                    }
                                     <li>
                                         <a href="/Story/ListSaved/@u.Uid">
                                             Truyện đã lưu
@@ -280,6 +288,7 @@
     </div>
     <script src="~/main2.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script type="text/javascript">
            var a = document.getElementsByClassName("timer");
            for(let i = 0; i < a.length; i++){
@@ -340,56 +349,180 @@
             }
             document.getElementById('rating-star').value = rating;
         }
-        var star = document.getElementById('rating-star').value;
+        var star = $('#rating-star').val();
         for(var i = 1; i <= star; i++){
             $("#img" + i).attr('src', '//static.8cache.com/lib/raty/images/star-on.png');
         }
 
-        //Save chapter
-        function savechapter(){
-         var sid = $('#sid').val();
-         var chapnumber = $('#chapnumber').val();
-         
-                $.ajax({
-                    url: '/Story/Save/',
+        $(document).ready(function(){
+
+        $('.edit-comment').hide();
+        $('.save-btn').hide();
+        $('.cancel-btn').hide();
+        $('.edit-btn').click(function(){
+            var cmid = $(this).data('id');
+            $("#edit-content-area"+cmid).show();
+            $("#commentcontent"+cmid).hide();
+            $(this).hide();
+            $("#save-btn"+cmid).show();
+            $("#cancel-btn"+cmid).show();
+            $("#edit-content-area"+cmid).val($("#cmct"+cmid).val());
+            $("#cancel-btn"+cmid).click(function(){
+                $("#commentcontent"+cmid).show();
+                $("#edit-content-area"+cmid).hide();
+                $("#edit-btn"+cmid).show();
+                $("#save-btn"+cmid).hide();
+                $("#cancel-btn"+cmid).hide();
+            });
+        });
+
+        //delete comment story
+        $('.delete-comment').click(function(){
+                var cmid = $(this).data('id');
+                Swal.fire({
+                  title: 'Bạn có muốn xóa bình luận này không?',
+                  text: "Sẽ không thể khôi phục lại",
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  confirmButtonText: 'Có, xóa ngay!'
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    $.ajax({
+                    url: '/Story/DeleteComment/',
                     type: 'POST',
-                    data: {
-                        id : sid,
-                        id1 : chapnumber
-                    },
+                    data: {cmid : cmid},
                     success: function() {
                         Swal.fire(
                           'Thành công',
-                          'Đã lưu chương',
+                          'Đã xóa bình luận',
+                          'success'
+                        ).then(() =>{
+                            location.reload()
+                        })
+                    },
+                });
+                }
+                });
+        });
+
+        //edit-comment story
+        $('.form-edit-comment').on('submit',function(e){
+                e.preventDefault();
+                var formData = new FormData(this);
+                $.ajax({
+                    url: $(this).attr('action'),
+                    type: 'POST',
+                    cache:false,
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    success: function() {
+                        Swal.fire(
+                          'Thành công',
+                          'Đã chỉnh sửa bình luận',
+                          'success'
+                        ).then(() =>{
+                            location.reload()
+                        })
+                    }
+
+                });
+        });
+
+        //comment story
+        $('#comment-form').on('submit',function(e){
+                e.preventDefault();
+                var formData = new FormData(this);
+                $.ajax({
+                    url: $(this).attr('action'),
+                    type: 'POST',
+                    cache:false,
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    success: function() {
+                        Swal.fire(
+                          'Thành công',
+                          'Đã gửi bình luận',
                           'success'
                         ).then(() =>{
                             location.reload()
                         })
                     }
                 });
+        });
+
+        //comment story
+        $('#comment-chapter').on('submit',function(e){
+                e.preventDefault();
+                var formData = new FormData(this);
+                $.ajax({
+                    url: $(this).attr('action'),
+                    type: 'POST',
+                    cache:false,
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    success: function() {
+                        Swal.fire(
+                          'Thành công',
+                          'Đã gửi bình luận',
+                          'success'
+                        ).then(() =>{
+                            location.reload()
+                        })
+                    }
+                });
+        });
+
+
+        });
+        //Save chapter
+        function savechapter(){
+             var sid = $('#sid').val();
+             var chapnumber = $('#chapnumber').val();
+                    $.ajax({
+                        url: '/Story/Save/',
+                        type: 'POST',
+                        data: {
+                            id : sid,
+                            id1 : chapnumber
+                        },
+                        success: function() {
+                            Swal.fire(
+                              'Thành công',
+                              'Đã lưu chương',
+                              'success'
+                            ).then(() =>{
+                                location.reload()
+                            })
+                        }
+                    });
         }
 
         //UnSave chapter
         function unsavechapter(){
-         var sid = $('#sid').val();
-         var chapnumber = $('#chapnumber').val();
-                $.ajax({
-                    url: '/Story/UnSave/',
-                    type: 'POST',
-                    data: {
-                        id : sid,
-                        id1 : chapnumber
-                    },
-                    success: function() {
-                        Swal.fire(
-                          'Thành công',
-                          'Đã bỏ lưu chương',
-                          'success'
-                        ).then(() =>{
-                            location.reload()
-                        })
-                    }
-                });
+             var sid = $('#sid').val();
+             var chapnumber = $('#chapnumber').val();
+                    $.ajax({
+                        url: '/Story/UnSave/',
+                        type: 'POST',
+                        data: {
+                            id : sid,
+                            id1 : chapnumber
+                        },
+                        success: function() {
+                            Swal.fire(
+                              'Thành công',
+                              'Đã bỏ lưu chương',
+                              'success'
+                            ).then(() =>{
+                                location.reload()
+                            })
+                        }
+                    });
         }
     </script>
 </body>

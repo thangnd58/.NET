@@ -8,6 +8,11 @@
     ViewBag.Title = "Detail";
     Layout = "_StoryLayout";
 }
+@{
+    User u1 = null;
+    string json = Context.Session.GetString("user");
+    if (json != null) u1 = JsonConvert.DeserializeObject<User>(json);
+}
 <div class="container csstransforms3d" id="truyen">
     <div class="col-xs-12 col-sm-12 col-md-9 col-truyen-main">
         <div class="col-xs-12 col-info-desc" itemscope itemtype="">
@@ -123,7 +128,7 @@
                         </div>
                     </div>
                     <div class="media-body" style="width: 100%;">
-                        <form action="/Story/RatingStory" method="post">
+                        <form action="/Story/RatingStory" method="post" id="comment-form">
                             <div>
                                 <input type="hidden" name="star" id="rating-star" value="@ViewBag.Rating">
                                 <input type="hidden" name="sid" value="@ViewBag.Story.Sid">
@@ -134,7 +139,14 @@
                                     <p> <small>Bạn cần đăng nhập để đánh giá và bình luận.</small></p>
                                 </div>
                                 <div class="pull-right" style="margin: 10px 0px">
-                                    <button type="submit" class="btn btn-sm btn-info" id="sky-comment">Gửi bình luận </button>
+                                    @if (u1 != null)
+                                    {
+                                        <button type="submit" class="btn btn-sm btn-info" id="sky-comment">Gửi bình luận </button>
+                                    }
+                                    else
+                                    {
+                                        <a href="/User/Login" class="btn btn-sm btn-info">Đăng nhập để bình luận</a>
+                                    }
                                 </div>
                                 <div class="clearfix"></div>
                             </div>
@@ -143,7 +155,6 @@
                 </div>
                 <div id="list-comments-media" class="mt-10" style="">
                     <div class="media">
-
                         <div class="media-body">
                             @if (ViewBag.ListComments != null)
                             {
@@ -157,7 +168,7 @@
                                                     List<User> listU = storyDBContext.Users.ToList();
                                                     foreach (User u in listU)
                                                     {
-                                                        if(item.Uid == u.Uid)
+                                                        if (item.Uid == u.Uid)
                                                         {
                                                             <span>@u.Name</span>
                                                         }
@@ -170,7 +181,25 @@
                                             <div class="clearfix"></div>
                                         </div>
                                         <div class="panel-body">
-                                            <span class="form-content">@item.CommentContent</span>
+                                            <form action="/Story/EditComment/" method="post" class="form-edit-comment">
+                                                <input type="hidden" id="cmct@(item.CommentId)" value="@item.CommentContent">
+                                                <input type="hidden" name="cmid" id="cmid@(item.CommentId)" value="@item.CommentId">
+                                                <span class="form-content contentcm" id="commentcontent@(item.CommentId)">@item.CommentContent</span>
+
+                                                @if (u1 != null)
+                                                {
+                                                    if (u1.Uid == item.Uid)
+                                                    {
+                                                        <br>
+                                                        <textarea name="cmct" id="edit-content-area@(item.CommentId)" class="form-control edit-comment"></textarea>
+                                                        <br>
+                                                        <button id="edit-btn@(item.CommentId)" type="button" data-id="@item.CommentId" class="btn btn-primary btn-xs edit-btn">Sửa</button>
+                                                        <input id="save-btn@(item.CommentId)" type="submit" data-id="@item.CommentId" class="btn btn-success btn-xs save-btn" value="Lưu">
+                                                        <input id="cancel-btn@(item.CommentId)" type="button" data-id="@item.CommentId" class="btn btn-danger btn-xs cancel-btn" value="Hủy">
+                                                        <button type="button" data-id="@item.CommentId" class="btn btn-danger btn-xs delete-comment">Xóa</button>
+                                                    }
+                                                }
+                                            </form>
                                         </div>
                                     </div>
                                 }

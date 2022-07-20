@@ -307,6 +307,24 @@ namespace BookStory.Controllers
             return RedirectToAction("Content", "Story", new { id = sid, id1 = chapnumber });
         }
 
+        [HttpPost]
+        public IActionResult EditComment(int cmid, string cmct)
+        {
+            Rating r = context.Ratings.FirstOrDefault(x => x.CommentId == cmid);
+            r.CommentContent = cmct;
+            context.SaveChanges();
+            return RedirectToAction("Detail", "Story");
+        }
+
+        [HttpPost]
+        public IActionResult DeleteComment(int cmid)
+        {
+            Rating r = context.Ratings.FirstOrDefault(x => x.CommentId == cmid);
+            context.Remove(r);
+            context.SaveChanges();
+            return RedirectToAction("Detail", "Story");
+        }
+
         public bool VerifyUser()
         {
             if (HttpContext.Session.GetString("user") == null)
