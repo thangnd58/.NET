@@ -163,6 +163,15 @@ namespace BookStory.Controllers
         }
 
         [HttpPost]
+        public IActionResult EditCategory(int cid, string title)
+        {
+            Category c = context.Categories.FirstOrDefault(x => x.Cid == cid);
+            c.Title = title;
+            context.SaveChanges();
+            return RedirectToAction("ListStory", "Admin");
+        }
+
+        [HttpPost]
         public IActionResult DeleteStory(int storyid)
         {
             try
@@ -220,6 +229,15 @@ namespace BookStory.Controllers
                 return RedirectToAction("Message", "Error");
             }
             
+        }
+
+        [HttpPost]
+        public IActionResult EditAuthor(int aid, string authorName)
+        {
+            Author a = context.Authors.FirstOrDefault(x => x.Aid == aid);
+            a.Name = authorName;
+            context.SaveChanges();
+            return RedirectToAction("ListStory", "Admin");
         }
 
         [HttpPost]

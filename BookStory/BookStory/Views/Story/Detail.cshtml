@@ -98,24 +98,26 @@
             @Html.PagedListPager(Model, id1 => Url.Action("Detail", new { id1 }))
         </div>
         <div class="panel-body">
+            <input type="hidden" name="sid" id="rating-sid" value="@ViewBag.Story.Sid">
+            <input type="hidden" name="star" id="rating-star" value="@ViewBag.Rating">
             <div class="rate">
                 Đánh giá của bạn
-                <div class="" data-score="6.7" style="cursor: pointer;">
-                    <img id="img1" onmouseout="rateOut(1)" onmouseover="rateIn(1)" onclick="rated(1)" src="//static.8cache.com/lib/raty/images/star-on.png" title="Không còn gì để nói...">&nbsp;
-                    <img id="img2" onmouseout="rateOut(2)" onmouseover="rateIn(2)" onclick="rated(2)" src="//static.8cache.com/lib/raty/images/star-off.png" title="WTF">&nbsp;
-                    <img id="img3" onmouseout="rateOut(3)" onmouseover="rateIn(3)" onclick="rated(3)" src="//static.8cache.com/lib/raty/images/star-off.png" title="Cái gì thế này ?!">&nbsp;
-                    <img id="img4" onmouseout="rateOut(4)" onmouseover="rateIn(4)" onclick="rated(4)" src="//static.8cache.com/lib/raty/images/star-off.png" title="Haizz">&nbsp;
-                    <img id="img5" onmouseout="rateOut(5)" onmouseover="rateIn(5)" onclick="rated(5)" src="//static.8cache.com/lib/raty/images/star-off.png" title="Tạm">&nbsp;
-                    <img id="img6" onmouseout="rateOut(6)" onmouseover="rateIn(6)" onclick="rated(6)" src="//static.8cache.com/lib/raty/images/star-off.png" title="Cũng được">&nbsp;
-                    <img id="img7" onmouseout="rateOut(7)" onmouseover="rateIn(7)" onclick="rated(7)" src="//static.8cache.com/lib/raty/images/star-off.png" title="Khá đấy">&nbsp;
-                    <img id="img8" onmouseout="rateOut(8)" onmouseover="rateIn(8)" onclick="rated(8)" src="//static.8cache.com/lib/raty/images/star-off.png" title="Được">&nbsp;
-                    <img id="img9" onmouseout="rateOut(9)" onmouseover="rateIn(9)" onclick="rated(9)" src="//static.8cache.com/lib/raty/images/star-off.png" title="Hay">&nbsp;
-                    <img id="img10" onmouseout="rateOut(10)" onmouseover="rateIn(10)" onclick="rated(10)" src="//static.8cache.com/lib/raty/images/star-off.png" title="Tuyệt đỉnh!">
+                <div class="" data-score="@ViewBag.Rating" style="cursor: pointer;">
+                    <img id="img1"  onclick=@(u1!=null?"rated(1)":"redirectToLogin()") src="//static.8cache.com/lib/raty/images/star-on.png" title="Không còn gì để nói...">&nbsp;
+                    <img id="img2"  onclick=@(u1!=null?"rated(2)":"redirectToLogin()") src="//static.8cache.com/lib/raty/images/star-off.png" title="WTF">&nbsp;
+                    <img id="img3"  onclick=@(u1!=null?"rated(3)":"redirectToLogin()") src="//static.8cache.com/lib/raty/images/star-off.png" title="Cái gì thế này ?!">&nbsp;
+                    <img id="img4"  onclick=@(u1!=null?"rated(4)":"redirectToLogin()") src="//static.8cache.com/lib/raty/images/star-off.png" title="Haizz">&nbsp;
+                    <img id="img5"  onclick=@(u1!=null?"rated(5)":"redirectToLogin()") src="//static.8cache.com/lib/raty/images/star-off.png" title="Tạm">&nbsp;
+                    <img id="img6"  onclick=@(u1!=null?"rated(6)":"redirectToLogin()") src="//static.8cache.com/lib/raty/images/star-off.png" title="Cũng được">&nbsp;
+                    <img id="img7"  onclick=@(u1!=null?"rated(7)":"redirectToLogin()") src="//static.8cache.com/lib/raty/images/star-off.png" title="Khá đấy">&nbsp;
+                    <img id="img8"  onclick=@(u1!=null?"rated(8)":"redirectToLogin()") src="//static.8cache.com/lib/raty/images/star-off.png" title="Được">&nbsp;
+                    <img id="img9"  onclick=@(u1!=null?"rated(9)":"redirectToLogin()") src="//static.8cache.com/lib/raty/images/star-off.png" title="Hay">&nbsp;
+                    <img id="img10" onclick=@(u1!=null?"rated(10)":"redirectToLogin()") src="//static.8cache.com/lib/raty/images/star-off.png" title="Tuyệt đỉnh!">
                     <input name="score" id="score" type="hidden">
                 </div>
                 <em class="rate-text"></em>
                 <div class="small" itemprop="aggregateRating" itemscope="">
-                    <em>Đánh giá: <strong><span itemprop="ratingValue">@ViewBag.Score</span></strong>/<span class="text-muted" itemprop="bestRating">10</span> từ <strong><span itemprop="ratingCount">@ViewBag.TotalRating</span> lượt</strong></em>
+                    <em>Đánh giá: <strong><span itemprop="ratingValue">@String.Format("{0:0.0}", @ViewBag.Score)</span></strong>/<span class="text-muted" itemprop="bestRating">10</span> từ <strong><span itemprop="ratingCount">@ViewBag.TotalRating</span> lượt</strong></em>
                 </div>
             </div>
             <div class="story-comment-wrapper">
@@ -128,9 +130,8 @@
                         </div>
                     </div>
                     <div class="media-body" style="width: 100%;">
-                        <form action="/Story/RatingStory" method="post" id="comment-form">
+                        <form action="/Story/CommentStory" method="post" id="comment-form">
                             <div>
-                                <input type="hidden" name="star" id="rating-star" value="@ViewBag.Rating">
                                 <input type="hidden" name="sid" value="@ViewBag.Story.Sid">
                                 <textarea name="comment" id="comment-content-area" class="form-control" maxlength="500"></textarea>
                             </div>
@@ -180,12 +181,11 @@
                                             </div>
                                             <div class="clearfix"></div>
                                         </div>
-                                        <div class="panel-body">
+                                        <div class="panel-body numbercomment" id="loadmore">
                                             <form action="/Story/EditComment/" method="post" class="form-edit-comment">
                                                 <input type="hidden" id="cmct@(item.CommentId)" value="@item.CommentContent">
                                                 <input type="hidden" name="cmid" id="cmid@(item.CommentId)" value="@item.CommentId">
                                                 <span class="form-content contentcm" id="commentcontent@(item.CommentId)">@item.CommentContent</span>
-
                                                 @if (u1 != null)
                                                 {
                                                     if (u1.Uid == item.Uid)

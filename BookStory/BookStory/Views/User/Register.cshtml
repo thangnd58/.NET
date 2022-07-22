@@ -1,8 +1,68 @@
 ﻿@{
     ViewBag.Title = "Register";
-    Layout = "_UserLayout";
+    Layout = "_UserLayoutV2";
 }
-<div class="signup-content">
+<div class="register-box">
+  <div class="register-logo">
+    <a href="/Home/Index/"><b>Book</b>Story</a>
+  </div>
+
+  <div class="card">
+    <div class="card-body register-card-body">
+      <p class="login-box-msg">Đăng ký</p>
+
+      <form action="/User/Register/" method="post">
+        <div class="input-group mb-3">
+          <input type="text" name="name" class="form-control" placeholder="Họ tên của bạn" required>
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-user"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="email" name="email" class="form-control" placeholder="Email">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-envelope"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="password" name="pass" class="form-control" placeholder="Mật khẩu">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="password" name="re_pass" class="form-control" placeholder="Nhập lại mật khẩu">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <!-- /.col -->
+          <div class="col-12">
+            <button type="submit" class="btn btn-primary btn-block">Đăng ký</button>
+          </div>
+          <!-- /.col -->
+        </div>
+      </form>
+
+      <div class="social-auth-links text-center">
+        <p>@ViewBag.Message</p>
+      </div>
+
+      <a href="/User/Login/" class="text-center">Đã có tài khoản trong hệ thống</a>
+    </div>
+    <!-- /.form-box -->
+  </div><!-- /.card -->
+</div>
+@*<div class="signup-content">
     <div class="signup-form">
         <h2 class="form-title">Đăng ký</h2>
         <form method="POST" action="/User/Register" class="register-form" id="register-form">
@@ -34,4 +94,4 @@
         <figure><img src="~/images/signup-image.jpg" alt="sing up image"></figure>
         <a href="/User/Login" class="signup-image-link">I am already member</a>
     </div>
-</div>
+</div>*@

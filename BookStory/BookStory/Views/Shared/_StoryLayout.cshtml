@@ -332,13 +332,7 @@
             }
 
             document.getElementsByClassName("timer")[i].innerHTML = output;
-            }
-
-        function rateIn(rating){
-            for(var i = 1; i <= rating; i++){
-                $("#img" + i).attr('src', '//static.8cache.com/lib/raty/images/star-on.png');
-            }
-        }
+           }
         function rated(rating){
             for(var i = 1; i <= rating; i++){
                 $("#img" + i).attr('src', '//static.8cache.com/lib/raty/images/star-on.png');
@@ -348,6 +342,8 @@
                 $("#img" + i).attr('src', '//static.8cache.com/lib/raty/images/star-off.png');
             }
             document.getElementById('rating-star').value = rating;
+            Rating();
+
         }
         var star = $('#rating-star').val();
         for(var i = 1; i <= star; i++){
@@ -477,8 +473,35 @@
                 });
         });
 
-
         });
+
+        //login
+        function redirectToLogin(){
+            window.location.href = "/User/Login/";
+        }
+
+        //Rating
+        function Rating(){
+            var star = $('#rating-star').val();
+            var sid = $('#rating-sid').val();
+            $.ajax({
+                        url: '/Story/RatingStory/',
+                        type: 'POST',
+                        data: {
+                            star : star,
+                            sid : sid
+                        },
+                        success: function() {
+                            Swal.fire(
+                              'Thành công',
+                              'Đã đánh giá ' + star + ' sao thành công',
+                              'success'
+                            ).then(() =>{
+                                location.reload()
+                            })
+                        }
+                    });
+        }
         //Save chapter
         function savechapter(){
              var sid = $('#sid').val();
@@ -524,6 +547,8 @@
                         }
                     });
         }
+
+        
     </script>
 </body>
 

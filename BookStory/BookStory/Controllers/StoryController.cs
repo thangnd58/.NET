@@ -17,7 +17,6 @@ namespace BookStory.Controllers
         {
             try
             {
-                Story s = null;
                 int totalRating = 0;
                 List<Rating> listScore = context.Ratings.Where(x => x.Sid == id).ToList();
                 int numberRating = listScore.Count;
@@ -34,6 +33,7 @@ namespace BookStory.Controllers
                 ViewBag.TotalRating = numberRating;
                 List<Rating> listComments = context.Ratings.OrderByDescending(x => x.CreatedAt).Where(x => x.Sid == id && x.CommentContent != null).Take(20).ToList();
                 ViewBag.ListComments = listComments;
+                
                 User u = null;
                 Rating r = null;
                 string json = HttpContext.Session.GetString("user");
@@ -50,6 +50,7 @@ namespace BookStory.Controllers
                 {
                     ViewBag.Rating = r.Rating1;
                 }
+                Story s = null;
                 s = context.Stories.FirstOrDefault(x => x.Sid == id);
                 Author author = null;
                 author = context.Authors.FirstOrDefault(x => x.Aid == context.StoriesAuthors.FirstOrDefault(s => s.Sid == id).Aid);
@@ -258,7 +259,7 @@ namespace BookStory.Controllers
             }
         }
 
-        public IActionResult RatingStory(int star, string comment, int sid)
+        public IActionResult CommentStory(string comment, int sid)
         {
             User u = null;
             string json = HttpContext.Session.GetString("user");
@@ -270,7 +271,30 @@ namespace BookStory.Controllers
                     Uid = u.Uid,
                     CommentContent = comment,
                     Sid = sid,
+                    CreatedAt = DateTime.Now
+                };
+                context.Add<Rating>(r);
+                context.SaveChanges();
+            }
+            else
+            {
+                return RedirectToAction("Login", "User");
+            }
+            return RedirectToAction("Detail", "Story", new { id = sid });
+        }
+
+        public IActionResult RatingStory(int star, int sid)
+        {
+            User u = null;
+            string json = HttpContext.Session.GetString("user");
+            if (json != null) u = JsonConvert.DeserializeObject<User>(json);
+            if (u != null)
+            {
+                Rating r = new()
+                {
+                    Uid = u.Uid,
                     Rating1 = star,
+                    Sid = sid,
                     CreatedAt = DateTime.Now
                 };
                 context.Add<Rating>(r);

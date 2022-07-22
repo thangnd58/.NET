@@ -212,7 +212,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Thêm tác giả</h4>
+                <h4 class="modal-title">Thêm tác giả </h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -226,6 +226,47 @@
                         </div>
                         @*<input type="submit" value="Tạo" class="btn btn-success">*@
                         <button type="button" class="btn btn-success" id="add-author">Tạo</button>
+                        <button id="edit-author-btn" type="button" data-toggle="modal" data-target="#modal-edit-author" class="btn btn-success">Sửa tên tác giả</button>
+                    </div>
+                    <!-- /.card-body -->
+                </form>
+            </div>
+
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+@*Modal Edit Author*@
+<div class="modal fade" id="modal-edit-author">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Sửa thông tin tác giả</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="#" method="post" id="form-edit-author">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <select id="authorSelect" class="form-control select2">
+                                <option value="0">Chọn tác giả</option>
+                                @foreach (Author item in ViewBag.Authors)
+                                {
+                                    <option value="@item.Aid">@item.Name</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEstimatedBudget">Tên tác giả</label>
+                            <input type="hidden" id="edit-author-id" class="form-control">
+                            <input type="text" id="edit-author-name" class="form-control" required>
+                        </div>
+                        @*<input type="submit" value="Tạo" class="btn btn-success">*@
+                        <button type="button" class="btn btn-success" id="edit-author">Sửa</button>
                     </div>
                     <!-- /.card-body -->
                 </form>
@@ -256,9 +297,51 @@
                         </div>
                         @*<input type="submit" value="Tạo" class="btn btn-success">*@
                         <button type="button" class="btn btn-success" id="add-category">Tạo</button>
+                        <button id="edit-category-btn" type="button" data-toggle="modal" data-target="#modal-edit-category" class="btn btn-success">Sửa danh mục</button>
+
                     </div>
                     <!-- /.card-body -->
 
+                </form>
+            </div>
+
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+@*Modal Edit Category*@
+<div class="modal fade" id="modal-edit-category">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Sửa thông tin danh mục</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="#" method="post" id="form-edit-category">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <select id="categorySelect" class="form-control select2">
+                                <option value="0">Chọn danh mục</option>
+                                @foreach (Category item in ViewBag.Categories)
+                                {
+                                    <option value="@item.Cid">@item.Title</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEstimatedBudget">Danh mục</label>
+                            <input type="hidden" id="edit-category-id" class="form-control">
+                            <input type="text" id="edit-category-name" class="form-control" required>
+                        </div>
+                        @*<input type="submit" value="Tạo" class="btn btn-success">*@
+                        <button type="button" class="btn btn-success" id="edit-category">Sửa</button>
+                    </div>
+                    <!-- /.card-body -->
                 </form>
             </div>
 
@@ -329,7 +412,7 @@
                         <div class="form-group">
                             <label for="inputDescription">Mô tả ngắn</label>
                             <textarea name="description" id="description-edit" class="form-control">
-                                <p id="content1"></p>
+                            <p id="content1"></p>
                             </textarea>
                         </div>
                         <input type="submit" value="Lưu" class="btn btn-success">
@@ -378,7 +461,7 @@
                             <textarea name="chaptercontent" id="chaptercontent" class="form-control summernote" rows="" required></textarea>
                         </div>
                         <input type="submit" value="Lưu" class="btn btn-success">
-                       @*<button class="btn btn-success" id="add-chapter">Tạo</button>*@ 
+                        @*<button class="btn btn-success" id="add-chapter">Tạo</button>*@
                     </div>
                     <!-- /.card-body -->
                     <!-- /.card -->
@@ -389,3 +472,5 @@
     </div>
     <!-- /.modal-dialog -->
 </div>
+
+

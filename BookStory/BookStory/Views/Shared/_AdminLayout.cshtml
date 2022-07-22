@@ -407,6 +407,65 @@
                 }
                })
             });
+
+            //LoadAuthorsForEdit
+            $('#authorSelect').change(function(){
+                var authorName = $('#authorSelect :selected' ).text();
+                $('#edit-author-name').val(authorName);
+                $('#edit-author-id').val($(this).val());
+            });
+            //EditAuthor
+            $('#edit-author').click(function(){
+                var aid = $('#edit-author-id').val();
+                var newAuthorName = $('#edit-author-name').val();
+                $.ajax({
+                    url: '/Admin/EditAuthor/',
+                    type: 'POST',
+                    data: {
+                        aid: aid,
+                        authorName: newAuthorName
+                    },
+                    success: function() {
+                        Swal.fire(
+                          'Thành công',
+                          'Đã chỉnh sửa tác giả',
+                          'success'
+                        ).then(() =>{
+                            location.reload()
+                        })
+                    }
+                });
+            });
+
+            //LoadCategoriesForEdit
+            $('#categorySelect').change(function(){
+                var categoryName = $('#categorySelect :selected' ).text();
+                $('#edit-category-name').val(categoryName);
+                $('#edit-category-id').val($(this).val());
+            });
+            //EditAuthor
+            $('#edit-category').click(function(){
+                var cid = $('#edit-category-id').val();
+                var newCategoryName = $('#edit-category-name').val();
+                $.ajax({
+                    url: '/Admin/EditCategory/',
+                    type: 'POST',
+                    data: {
+                        cid: cid,
+                        title: newCategoryName
+                    },
+                    success: function() {
+                        Swal.fire(
+                          'Thành công',
+                          'Đã chỉnh sửa danh mục',
+                          'success'
+                        ).then(() =>{
+                            location.reload()
+                        })
+                    }
+                });
+            });
+
         });
 
         //Select2

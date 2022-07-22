@@ -185,6 +185,13 @@ namespace BookStory.Controllers
             return View();
         }
 
+        [HttpGet]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
         public IActionResult ForgotPassword(string email)
         {
             User u = context.Users.FirstOrDefault(x => x.Email == email);
