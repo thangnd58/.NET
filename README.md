@@ -5,12 +5,18 @@ The product development model is MVC.
 Using C#, .Net Framework core 5.0, Asp .Net Core, Html, Css, Javascript, for development.
 Here are some pictures of the project.
 ```
-![This is an image](/images/1.png)
-![This is an image](/images/2.png)
-![This is an image](/images/3.png)
-![This is an image](/images/4.png)
-![This is an image](/images/5.png)
-![This is an image](/images/6.png)
-![This is an image](/images/7.png)
-![This is an image](/images/8.png)
+![This is an image](/Images/1.png)
+![This is an image](/Images/2.png)
+![This is an image](/Images/3.png)
+![This is an image](/Images/4.png)
+![This is an image](/Images/5.png)
+![This is an image](/Images/6.png)
+![This is an image](/Images/7.png)
+![This is an image](/Images/8.png)
+![This is an image](/Images/9.png)
+![This is an image](/Images/10.png)
+![This is an image](/Images/11.png)
+![This is an image](/Images/12.png)
+![This is an image](/Images/13.png)
+![This is an image](/Images/14.png)
 
